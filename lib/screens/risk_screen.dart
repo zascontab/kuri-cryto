@@ -1,134 +1,323 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/risk_sentinel_card.dart';
 import '../l10n/l10n.dart';
+import '../providers/risk_sentinel_provider.dart';
+import '../providers/risk_provider.dart';
 
 /// Risk monitor screen with Risk Sentinel state
-class RiskScreen extends StatefulWidget {
+class RiskScreen extends ConsumerStatefulWidget {
   const RiskScreen({super.key});
 
   @override
-  State<RiskScreen> createState() => _RiskScreenState();
+  ConsumerState<RiskScreen> createState() => _RiskScreenState();
 }
 
-class _RiskScreenState extends State<RiskScreen> {
-  Timer? _refreshTimer;
-  bool _isLoading = false;
+class _RiskScreenState extends ConsumerState<RiskScreen> {
+  bool _isProcessing = false;
 
-  // Mock data - replace with actual API calls
-  double _dailyDrawdown = 2.3;
-  double _weeklyDrawdown = 4.8;
-  double _monthlyDrawdown = 8.5;
-  double _maxDailyDrawdown = 5.0;
-  double _maxWeeklyDrawdown = 10.0;
-  double _maxMonthlyDrawdown = 15.0;
-  double _totalExposure = 3500.0;
-  double _maxExposure = 5000.0;
-  int _consecutiveLosses = 2;
-  int _maxConsecutiveLosses = 5;
-  String _riskMode = 'Normal';
-  bool _killSwitchActive = false;
-
-  // Risk limits
-  double _maxPositionSize = 1000.0;
-  double _maxTotalExposure = 5000.0;
-  double _stopLossPercent = 2.0;
-  double _takeProfitPercent = 3.0;
-  double _maxDailyLoss = 250.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _startAutoRefresh();
-    _loadData();
+  Future<void> _onRefresh() async {
+    await ref.read(riskSentinelProvider.notifier).refresh();
+    await ref.read(riskLimitsProvider.notifier).refresh();
   }
 
-  @override
-  void dispose() {
-    _refreshTimer?.cancel();
-    super.dispose();
-  }
+  Future<void> _toggleKillSwitch(bool currentlyActive) async {
+    if (_isProcessing) return;
 
-  void _startAutoRefresh() {
-    _refreshTimer = Timer.periodic(
-      const Duration(seconds: 5),
-      (timer) => _loadData(),
+    final l10n = L10n.of(context);
+
+    // Show confirmation dialog
+    final confirmed = await _showKillSwitchConfirmationDialog(
+      context,
+      currentlyActive,
     );
-  }
 
-  Future<void> _loadData() async {
-    if (_isLoading) return;
+    if (!confirmed || !mounted) return;
 
-    setState(() => _isLoading = true);
+    // Heavy haptic feedback for critical action
+    HapticFeedback.heavyImpact();
 
-    // TODO: Replace with actual API call
-    // Example: final data = await riskService.getSentinelState();
-    await Future.delayed(const Duration(milliseconds: 500));
+    setState(() => _isProcessing = true);
 
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        // Update with real data
-      });
+    try {
+      final notifier = ref.read(riskSentinelProvider.notifier);
+      final success = currentlyActive
+          ? await notifier.deactivateKillSwitch()
+          : await notifier.activateKillSwitch('Manual activation by user');
+
+      if (!mounted) return;
+
+      if (success) {
+        // Success feedback
+        HapticFeedback.mediumImpact();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              currentlyActive
+                  ? l10n.killSwitchDeactivated
+                  : l10n.killSwitchActivated,
+            ),
+            backgroundColor:
+                currentlyActive ? const Color(0xFF4CAF50) : const Color(0xFFF44336),
+            duration: const Duration(seconds: 3),
+            action: SnackBarAction(
+              label: l10n.ok,
+              textColor: Colors.white,
+              onPressed: () {},
+            ),
+          ),
+        );
+      } else {
+        throw Exception('Failed to toggle kill switch');
+      }
+    } catch (e) {
+      if (!mounted) return;
+
+      // Error feedback
+      HapticFeedback.heavyImpact();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(l10n.errorOccurred(error: e.toString())),
+          backgroundColor: const Color(0xFFF44336),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: l10n.dismiss,
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isProcessing = false);
+      }
     }
   }
 
-  Future<void> _onRefresh() async {
-    await _loadData();
+  Future<bool> _showKillSwitchConfirmationDialog(
+    BuildContext context,
+    bool currentlyActive,
+  ) async {
+    final l10n = L10n.of(context);
+
+    if (currentlyActive) {
+      // Double confirmation for deactivation
+      return await _showDoubleConfirmationDialog(context);
+    } else {
+      // Single confirmation for activation with warnings
+      return await _showActivationConfirmationDialog(context);
+    }
   }
 
-  void _toggleKillSwitch() {
-    HapticFeedback.heavyImpact();
-
-    // TODO: Replace with actual API call
-    setState(() {
-      _killSwitchActive = !_killSwitchActive;
-    });
-
+  Future<bool> _showActivationConfirmationDialog(BuildContext context) async {
     final l10n = L10n.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _killSwitchActive
-              ? l10n.killSwitchActivated
-              : l10n.killSwitchDeactivated,
+
+    final result = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: const Icon(
+          Icons.warning_amber_rounded,
+          color: Color(0xFFF44336),
+          size: 64,
         ),
-        backgroundColor: _killSwitchActive
-            ? const Color(0xFFF44336)
-            : const Color(0xFF4CAF50),
-        duration: const Duration(seconds: 3),
+        title: Text(
+          l10n.activateKillSwitch,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.killSwitchWarning,
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 16),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF44336).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: const Color(0xFFF44336).withValues(alpha: 0.3),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildWarningItem(l10n.allTradingWillStop),
+                  const SizedBox(height: 8),
+                  _buildWarningItem(l10n.allPositionsWillClose),
+                  const SizedBox(height: 8),
+                  _buildWarningItem(l10n.requiresManualReactivation),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.areYouSure,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFFF44336),
+            ),
+            child: Text(l10n.activate),
+          ),
+        ],
       ),
+    );
+
+    return result ?? false;
+  }
+
+  Future<bool> _showDoubleConfirmationDialog(BuildContext context) async {
+    final l10n = L10n.of(context);
+
+    // First confirmation
+    final firstConfirmation = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        icon: const Icon(
+          Icons.info_outline,
+          color: Colors.blue,
+          size: 48,
+        ),
+        title: Text(l10n.deactivateKillSwitch),
+        content: Text(l10n.thisWillResumeTrading),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: Colors.blue,
+            ),
+            child: Text(l10n.continue_),
+          ),
+        ],
+      ),
+    );
+
+    if (firstConfirmation != true || !context.mounted) return false;
+
+    // Second confirmation
+    final secondConfirmation = await showDialog<bool>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        icon: const Icon(
+          Icons.check_circle_outline,
+          color: Color(0xFF4CAF50),
+          size: 48,
+        ),
+        title: Text(l10n.confirmDeactivation),
+        content: Text(l10n.confirmResumeTrading),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(l10n.cancel),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: FilledButton.styleFrom(
+              backgroundColor: const Color(0xFF4CAF50),
+            ),
+            child: Text(l10n.resume),
+          ),
+        ],
+      ),
+    );
+
+    return secondConfirmation ?? false;
+  }
+
+  Widget _buildWarningItem(String text) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Icon(
+          Icons.circle,
+          size: 8,
+          color: Color(0xFFF44336),
+        ),
+        const SizedBox(width: 8),
+        Expanded(
+          child: Text(
+            text,
+            style: const TextStyle(fontSize: 14),
+          ),
+        ),
+      ],
     );
   }
 
-  void _editRiskLimits() {
+  void _editRiskLimits(dynamic limits) {
     HapticFeedback.lightImpact();
 
     showDialog(
       context: context,
       builder: (context) => _RiskLimitsDialog(
-        maxPositionSize: _maxPositionSize,
-        maxTotalExposure: _maxTotalExposure,
-        stopLossPercent: _stopLossPercent,
-        takeProfitPercent: _takeProfitPercent,
-        maxDailyLoss: _maxDailyLoss,
-        onSave: (limits) {
-          setState(() {
-            _maxPositionSize = limits['maxPositionSize']!;
-            _maxTotalExposure = limits['maxTotalExposure']!;
-            _stopLossPercent = limits['stopLossPercent']!;
-            _takeProfitPercent = limits['takeProfitPercent']!;
-            _maxDailyLoss = limits['maxDailyLoss']!;
-          });
-
+        maxPositionSize: limits.parameters.maxPositionSizeUsd,
+        maxTotalExposure: limits.parameters.maxTotalExposureUsd,
+        stopLossPercent: limits.parameters.stopLossPercent,
+        takeProfitPercent: limits.parameters.takeProfitPercent,
+        maxDailyLoss: limits.parameters.maxDailyLossUsd,
+        maxConsecutiveLosses: limits.parameters.maxConsecutiveLosses,
+        onSave: (newLimits) async {
           final l10n = L10n.of(context);
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(l10n.riskLimitsUpdated),
-              backgroundColor: const Color(0xFF4CAF50),
-            ),
-          );
+
+          try {
+            // Create RiskParameters object
+            final riskParams = RiskParameters(
+              maxPositionSizeUsd: newLimits['maxPositionSize']!,
+              maxTotalExposureUsd: newLimits['maxTotalExposure']!,
+              stopLossPercent: newLimits['stopLossPercent']!,
+              takeProfitPercent: newLimits['takeProfitPercent']!,
+              maxDailyLossUsd: newLimits['maxDailyLoss']!,
+              maxConsecutiveLosses: newLimits['maxConsecutiveLosses']!.toInt(),
+            );
+
+            // Update via provider
+            final success = await ref
+                .read(riskLimitsUpdaterProvider.notifier)
+                .updateLimits(riskParams);
+
+            if (!mounted) return;
+
+            if (success) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(l10n.riskLimitsUpdated),
+                  backgroundColor: const Color(0xFF4CAF50),
+                ),
+              );
+            }
+          } catch (e) {
+            if (!mounted) return;
+
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(l10n.errorOccurred(error: e.toString())),
+                backgroundColor: const Color(0xFFF44336),
+              ),
+            );
+          }
         },
       ),
     );
@@ -164,11 +353,16 @@ class _RiskScreenState extends State<RiskScreen> {
   }
 
   Widget _buildRiskModeOption(String mode, String description, Color color) {
-    final isSelected = _riskMode == mode;
+    final riskStateAsync = ref.watch(riskSentinelProvider);
+    final currentMode = riskStateAsync.maybeWhen(
+      data: (state) => state.riskMode,
+      orElse: () => 'Normal',
+    );
+    final isSelected = currentMode == mode;
 
     return SimpleDialogOption(
       onPressed: () {
-        setState(() => _riskMode = mode);
+        // TODO: Implement API endpoint to change risk mode
         Navigator.pop(context);
 
         HapticFeedback.mediumImpact();
@@ -223,189 +417,299 @@ class _RiskScreenState extends State<RiskScreen> {
     final theme = Theme.of(context);
     final l10n = L10n.of(context);
 
+    final riskStateAsync = ref.watch(riskSentinelProvider);
+    final limitsAsync = ref.watch(riskLimitsProvider);
+
     return RefreshIndicator(
       onRefresh: _onRefresh,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Risk Sentinel Card
-          RiskSentinelCard(
-            dailyDrawdown: _dailyDrawdown,
-            weeklyDrawdown: _weeklyDrawdown,
-            monthlyDrawdown: _monthlyDrawdown,
-            maxDailyDrawdown: _maxDailyDrawdown,
-            maxWeeklyDrawdown: _maxWeeklyDrawdown,
-            maxMonthlyDrawdown: _maxMonthlyDrawdown,
-            totalExposure: _totalExposure,
-            maxExposure: _maxExposure,
-            consecutiveLosses: _consecutiveLosses,
-            maxConsecutiveLosses: _maxConsecutiveLosses,
-            riskMode: _riskMode,
-            killSwitchActive: _killSwitchActive,
-            onKillSwitch: _toggleKillSwitch,
-          ),
+      child: riskStateAsync.when(
+        data: (riskState) {
+          return ListView(
+            padding: const EdgeInsets.all(16),
+            children: [
+              // Kill Switch Active Banner
+              if (riskState.killSwitchActive)
+                _buildKillSwitchBanner(l10n),
 
-          const SizedBox(height: 20),
+              // Risk Sentinel Card
+              RiskSentinelCard(
+                dailyDrawdown: riskState.currentDrawdownDaily,
+                weeklyDrawdown: riskState.currentDrawdownWeekly,
+                monthlyDrawdown: riskState.currentDrawdownMonthly,
+                maxDailyDrawdown: riskState.maxDailyDrawdown,
+                maxWeeklyDrawdown: riskState.maxWeeklyDrawdown,
+                maxMonthlyDrawdown: riskState.maxMonthlyDrawdown,
+                totalExposure: riskState.totalExposure,
+                maxExposure: riskState.maxTotalExposure,
+                consecutiveLosses: riskState.consecutiveLosses,
+                maxConsecutiveLosses: riskState.maxConsecutiveLosses,
+                riskMode: riskState.riskMode,
+                killSwitchActive: riskState.killSwitchActive,
+                isProcessing: _isProcessing,
+                onKillSwitch: () => _toggleKillSwitch(riskState.killSwitchActive),
+              ),
 
-          // Risk Limits Card
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.rule,
-                            color: theme.colorScheme.primary,
+              const SizedBox(height: 20),
+
+              // Risk Limits Card
+              limitsAsync.when(
+                data: (limits) => Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.rule,
+                                  color: theme.colorScheme.primary,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  l10n.riskLimits,
+                                  style: theme.textTheme.titleLarge?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.edit),
+                              onPressed: () => _editRiskLimits(limits),
+                              tooltip: l10n.editLimits,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        _buildLimitRow(
+                          l10n.maxPositionSize,
+                          '\$${limits.parameters.maxPositionSizeUsd.toStringAsFixed(0)}',
+                          theme,
+                        ),
+                        _buildLimitRow(
+                          l10n.maxTotalExposure,
+                          '\$${limits.parameters.maxTotalExposureUsd.toStringAsFixed(0)}',
+                          theme,
+                        ),
+                        _buildLimitRow(
+                          l10n.stopLossPercent,
+                          '${limits.parameters.stopLossPercent.toStringAsFixed(1)}%',
+                          theme,
+                        ),
+                        _buildLimitRow(
+                          l10n.takeProfitPercent,
+                          '${limits.parameters.takeProfitPercent.toStringAsFixed(1)}%',
+                          theme,
+                        ),
+                        _buildLimitRow(
+                          l10n.maxDailyLoss,
+                          '\$${limits.parameters.maxDailyLossUsd.toStringAsFixed(0)}',
+                          theme,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                loading: () => const Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: EdgeInsets.all(16.0),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                ),
+                error: (error, _) => Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text('Error: $error'),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Risk Mode Selector
+              Card(
+                elevation: 2,
+                child: InkWell(
+                  onTap: _changeRiskMode,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.tune,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10n.riskMode,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  l10n.tapToChangeMode,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 6,
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            l10n.riskLimits,
-                            style: theme.textTheme.titleLarge?.copyWith(
+                          decoration: BoxDecoration(
+                            color: _getRiskModeColor(riskState.riskMode)
+                                .withValues(alpha: 0.2),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            riskState.riskMode,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: _getRiskModeColor(riskState.riskMode),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.edit),
-                        onPressed: _editRiskLimits,
-                        tooltip: l10n.editLimits,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  _buildLimitRow(
-                    l10n.maxPositionSize,
-                    '\$${_maxPositionSize.toStringAsFixed(0)}',
-                    theme,
-                  ),
-                  _buildLimitRow(
-                    l10n.maxTotalExposure,
-                    '\$${_maxTotalExposure.toStringAsFixed(0)}',
-                    theme,
-                  ),
-                  _buildLimitRow(
-                    l10n.stopLossPercent,
-                    '${_stopLossPercent.toStringAsFixed(1)}%',
-                    theme,
-                  ),
-                  _buildLimitRow(
-                    l10n.takeProfitPercent,
-                    '${_takeProfitPercent.toStringAsFixed(1)}%',
-                    theme,
-                  ),
-                  _buildLimitRow(
-                    l10n.maxDailyLoss,
-                    '\$${_maxDailyLoss.toStringAsFixed(0)}',
-                    theme,
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // Risk Mode Selector
-          Card(
-            elevation: 2,
-            child: InkWell(
-              onTap: _changeRiskMode,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.tune,
-                          color: theme.colorScheme.primary,
                         ),
-                        const SizedBox(width: 8),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 16),
+
+              // Exposure by Symbol Card
+              if (riskState.exposureBySymbol.isNotEmpty)
+                Card(
+                  elevation: 2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
+                            Icon(
+                              Icons.pie_chart,
+                              color: theme.colorScheme.primary,
+                            ),
+                            const SizedBox(width: 8),
                             Text(
-                              l10n.riskMode,
+                              l10n.exposureBySymbol,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              l10n.tapToChangeMode,
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                color: theme.colorScheme.onSurfaceVariant,
-                              ),
-                            ),
                           ],
                         ),
+                        const SizedBox(height: 16),
+                        ...riskState.exposureBySymbol.entries
+                            .map((entry) => Padding(
+                                  padding: const EdgeInsets.only(bottom: 8),
+                                  child: _buildExposureBar(
+                                    entry.key,
+                                    entry.value,
+                                    riskState.maxTotalExposure,
+                                    theme,
+                                  ),
+                                ))
+                            .toList(),
                       ],
                     ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: BoxDecoration(
-                        color: _getRiskModeColor().withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        _riskMode,
-                        style: theme.textTheme.labelMedium?.copyWith(
-                          color: _getRiskModeColor(),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
+            ],
+          );
+        },
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (error, stack) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error_outline, size: 64, color: Colors.red),
+                const SizedBox(height: 16),
+                Text(
+                  'Error loading risk data',
+                  style: theme.textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  error.toString(),
+                  style: theme.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                FilledButton.icon(
+                  onPressed: _onRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+    );
+  }
 
-          const SizedBox(height: 16),
-
-          // Exposure by Symbol Card
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.pie_chart,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.exposureBySymbol,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+  Widget _buildKillSwitchBanner(L10n l10n) {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF44336).withValues(alpha: 0.15),
+        border: Border.all(
+          color: const Color(0xFFF44336),
+          width: 2,
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.warning_rounded,
+            color: Color(0xFFF44336),
+            size: 32,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.killSwitchActive,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFF44336),
                   ),
-                  const SizedBox(height: 16),
-                  _buildExposureBar('BTC-USDT', 1500.0, theme),
-                  const SizedBox(height: 8),
-                  _buildExposureBar('ETH-USDT', 1200.0, theme),
-                  const SizedBox(height: 8),
-                  _buildExposureBar('DOGE-USDT', 800.0, theme),
-                ],
-              ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.tradingDisabled,
+                  style: const TextStyle(fontSize: 14),
+                ),
+              ],
             ),
           ),
         ],
@@ -436,8 +740,13 @@ class _RiskScreenState extends State<RiskScreen> {
     );
   }
 
-  Widget _buildExposureBar(String symbol, double exposure, ThemeData theme) {
-    final percentage = exposure / _maxExposure;
+  Widget _buildExposureBar(
+    String symbol,
+    double exposure,
+    double maxExposure,
+    ThemeData theme,
+  ) {
+    final percentage = maxExposure > 0 ? exposure / maxExposure : 0.0;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -475,8 +784,8 @@ class _RiskScreenState extends State<RiskScreen> {
     );
   }
 
-  Color _getRiskModeColor() {
-    switch (_riskMode) {
+  Color _getRiskModeColor(String mode) {
+    switch (mode) {
       case 'Conservative':
         return const Color(0xFF4CAF50);
       case 'Aggressive':
@@ -494,6 +803,7 @@ class _RiskLimitsDialog extends StatefulWidget {
   final double stopLossPercent;
   final double takeProfitPercent;
   final double maxDailyLoss;
+  final int maxConsecutiveLosses;
   final Function(Map<String, double>) onSave;
 
   const _RiskLimitsDialog({
@@ -502,6 +812,7 @@ class _RiskLimitsDialog extends StatefulWidget {
     required this.stopLossPercent,
     required this.takeProfitPercent,
     required this.maxDailyLoss,
+    required this.maxConsecutiveLosses,
     required this.onSave,
   });
 
@@ -516,6 +827,7 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
   late TextEditingController _stopLossController;
   late TextEditingController _takeProfitController;
   late TextEditingController _maxDailyLossController;
+  late TextEditingController _maxConsecutiveLossesController;
 
   @override
   void initState() {
@@ -535,6 +847,9 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
     _maxDailyLossController = TextEditingController(
       text: widget.maxDailyLoss.toStringAsFixed(0),
     );
+    _maxConsecutiveLossesController = TextEditingController(
+      text: widget.maxConsecutiveLosses.toString(),
+    );
   }
 
   @override
@@ -544,6 +859,7 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
     _stopLossController.dispose();
     _takeProfitController.dispose();
     _maxDailyLossController.dispose();
+    _maxConsecutiveLossesController.dispose();
     super.dispose();
   }
 
@@ -555,6 +871,7 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
         'stopLossPercent': double.parse(_stopLossController.text),
         'takeProfitPercent': double.parse(_takeProfitController.text),
         'maxDailyLoss': double.parse(_maxDailyLossController.text),
+        'maxConsecutiveLosses': double.parse(_maxConsecutiveLossesController.text),
       };
 
       Navigator.pop(context);
@@ -668,6 +985,25 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
                   final val = double.tryParse(value);
                   if (val == null || val <= 0) {
                     return l10n.pleaseEnterValidAmount;
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _maxConsecutiveLossesController,
+                decoration: InputDecoration(
+                  labelText: l10n.maxConsecutiveLosses,
+                  border: const OutlineInputBorder(),
+                ),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return l10n.pleaseEnterValue;
+                  }
+                  final val = int.tryParse(value);
+                  if (val == null || val <= 0) {
+                    return 'Please enter a valid number';
                   }
                   return null;
                 },

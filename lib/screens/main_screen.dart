@@ -5,6 +5,13 @@ import 'positions_screen.dart';
 import 'strategies_screen.dart';
 import 'risk_screen.dart';
 import 'settings_screen.dart';
+import 'multi_timeframe_screen.dart';
+import 'backtest_screen.dart';
+import 'optimization_screen.dart';
+import 'trading_pairs_screen.dart';
+import 'alerts_screen.dart';
+import 'execution_stats_screen.dart';
+import 'performance_charts_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../l10n/l10n.dart';
 
@@ -148,13 +155,77 @@ class _MainScreenState extends State<MainScreen> {
               child: Column(
                 children: [
                   ListTile(
+                    leading: const Icon(Icons.analytics),
+                    title: Text(l10n.multiTimeframeAnalysis),
+                    subtitle: Text(l10n.technicalAnalysisMultipleTimeframes),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const MultiTimeframeScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.history),
+                    title: Text(l10n.backtesting),
+                    subtitle: Text(l10n.testStrategiesWithHistoricalData),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const BacktestScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.tune),
+                    title: Text(l10n.parameterOptimization),
+                    subtitle: Text(l10n.optimizeStrategyParameters),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const OptimizationScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
                     leading: const Icon(Icons.speed),
                     title: Text(l10n.executionStats),
                     subtitle: Text(l10n.viewLatencyPerformance),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      // Navigate to execution stats
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ExecutionStatsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.show_chart),
+                    title: Text(l10n.performanceCharts),
+                    subtitle: Text(l10n.detailedCharts),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const PerformanceChartsScreen(),
+                        ),
+                      );
                     },
                   ),
                   const Divider(height: 1),
@@ -165,7 +236,11 @@ class _MainScreenState extends State<MainScreen> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      // Navigate to pairs management
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const TradingPairsScreen(),
+                        ),
+                      );
                     },
                   ),
                   const Divider(height: 1),
@@ -176,7 +251,11 @@ class _MainScreenState extends State<MainScreen> {
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       HapticFeedback.lightImpact();
-                      // Navigate to alerts
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AlertsScreen(),
+                        ),
+                      );
                     },
                   ),
                 ],

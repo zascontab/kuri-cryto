@@ -6,6 +6,13 @@ import 'l10n/l10n.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart' as theme_provider;
 import 'screens/main_screen.dart';
+import 'models/adapters/position_adapter.dart';
+import 'models/adapters/trade_adapter.dart';
+import 'models/adapters/strategy_adapter.dart';
+import 'models/adapters/risk_state_adapter.dart';
+import 'models/adapters/metrics_adapter.dart';
+import 'models/adapters/system_status_adapter.dart';
+import 'services/cache_service.dart';
 
 /// Punto de entrada principal de la aplicación Kuri Crypto
 void main() async {
@@ -15,9 +22,17 @@ void main() async {
   // Inicializar Hive para almacenamiento local
   await Hive.initFlutter();
 
-  // TODO: Registrar adaptadores de Hive aquí
-  // Hive.registerAdapter(UserAdapter());
-  // Hive.registerAdapter(OrderAdapter());
+  // Registrar adaptadores de Hive para caché local
+  Hive.registerAdapter(PositionAdapter());
+  Hive.registerAdapter(TradeAdapter());
+  Hive.registerAdapter(StrategyAdapter());
+  Hive.registerAdapter(StrategyPerformanceAdapter());
+  Hive.registerAdapter(RiskStateAdapter());
+  Hive.registerAdapter(MetricsAdapter());
+  Hive.registerAdapter(SystemStatusAdapter());
+
+  // Inicializar el servicio de caché
+  await CacheService().init();
 
   // Ejecutar la aplicación envuelta en ProviderScope para Riverpod
   runApp(

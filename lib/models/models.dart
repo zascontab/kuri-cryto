@@ -11,3 +11,4 @@ export 'risk_state.dart';
 export 'metrics.dart';
 export 'system_status.dart';
 export 'trade.dart';
+export 'trading_pair.dart';

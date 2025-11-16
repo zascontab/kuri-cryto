@@ -1,191 +1,214 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/strategy_card.dart';
 import '../l10n/l10n.dart';
+import '../providers/strategy_provider.dart';
+import '../models/strategy.dart';
 
 /// Strategies screen for controlling trading strategies
-class StrategiesScreen extends StatefulWidget {
+class StrategiesScreen extends ConsumerStatefulWidget {
   const StrategiesScreen({super.key});
 
   @override
-  State<StrategiesScreen> createState() => _StrategiesScreenState();
+  ConsumerState<StrategiesScreen> createState() => _StrategiesScreenState();
 }
 
-class _StrategiesScreenState extends State<StrategiesScreen> {
-  bool _isLoading = false;
+class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
+  Future<void> _onRefresh() async {
+    ref.invalidate(strategiesProvider);
+    await ref.read(strategiesProvider.future);
+  }
 
-  // Mock data - replace with actual API calls
-  final List<_StrategyData> _strategies = [
-    _StrategyData(
-      name: 'RSI Scalping',
-      isActive: true,
-      weight: 0.25,
-      totalTrades: 150,
-      winRate: 68.5,
-      totalPnl: 245.80,
-      description: 'Trades based on RSI overbought/oversold conditions',
-      config: {
-        'period': 14,
-        'oversold': 25,
-        'overbought': 75,
-      },
-    ),
-    _StrategyData(
-      name: 'MACD Scalping',
-      isActive: true,
-      weight: 0.30,
-      totalTrades: 120,
-      winRate: 62.3,
-      totalPnl: 189.50,
-      description: 'Trades based on MACD crossovers and divergence',
-      config: {
-        'fast_period': 12,
-        'slow_period': 26,
-        'signal_period': 9,
-      },
-    ),
-    _StrategyData(
-      name: 'Bollinger Scalping',
-      isActive: true,
-      weight: 0.20,
-      totalTrades: 95,
-      winRate: 71.2,
-      totalPnl: 167.30,
-      description: 'Trades based on Bollinger Bands price action',
-      config: {
-        'period': 20,
-        'std_dev': 2.0,
-      },
-    ),
-    _StrategyData(
-      name: 'Volume Scalping',
-      isActive: false,
-      weight: 0.15,
-      totalTrades: 78,
-      winRate: 58.9,
-      totalPnl: 92.40,
-      description: 'Trades based on unusual volume patterns',
-      config: {
-        'volume_threshold': 1.5,
-        'lookback_periods': 20,
-      },
-    ),
-    _StrategyData(
-      name: 'AI Scalping',
-      isActive: true,
-      weight: 0.10,
-      totalTrades: 45,
-      winRate: 75.6,
-      totalPnl: 312.90,
-      description: 'ML-based trading using multiple indicators',
-      config: {
-        'model_version': 'v2.1',
-        'confidence_threshold': 0.75,
-      },
-    ),
-  ];
+  void _toggleStrategy(String name, bool currentValue) async {
+    HapticFeedback.mediumImpact();
+    final l10n = L10n.of(context);
+
+    try {
+      await ref.read(strategyTogglerProvider.notifier).toggle(name);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              !currentValue
+                  ? l10n.strategyActivated(name: name)
+                  : l10n.strategyDeactivated(name: name),
+            ),
+            backgroundColor: const Color(0xFF4CAF50),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: const Color(0xFFF44336),
+            action: SnackBarAction(
+              label: l10n.retry,
+              textColor: Colors.white,
+              onPressed: () => _toggleStrategy(name, currentValue),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  void _showStrategyDetails(Strategy strategy) {
+    HapticFeedback.lightImpact();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => DraggableScrollableSheet(
+        initialChildSize: 0.6,
+        minChildSize: 0.4,
+        maxChildSize: 0.9,
+        expand: false,
+        builder: (context, scrollController) {
+          return _StrategyDetailsSheet(
+            strategy: strategy,
+            scrollController: scrollController,
+          );
+        },
+      ),
+    );
+  }
+
+  void _configureStrategy(Strategy strategy) {
+    HapticFeedback.lightImpact();
+
+    showDialog(
+      context: context,
+      builder: (context) => _StrategyConfigDialog(strategy: strategy),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = L10n.of(context);
 
+    final strategiesAsync = ref.watch(strategiesProvider);
+    final stats = ref.watch(strategyStatsProvider);
+
     return RefreshIndicator(
       onRefresh: _onRefresh,
-      child: ListView(
-        padding: const EdgeInsets.all(16),
-        children: [
-          // Summary card
-          Card(
-            elevation: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.analytics,
-                        color: theme.colorScheme.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        l10n.strategiesOverview,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      _buildSummaryMetric(
-                        l10n.active,
-                        _strategies.where((s) => s.isActive).length.toString(),
-                        theme,
-                        const Color(0xFF4CAF50),
-                      ),
-                      _buildSummaryMetric(
-                        l10n.totalTrades,
-                        _strategies
-                            .map((s) => s.totalTrades)
-                            .reduce((a, b) => a + b)
-                            .toString(),
-                        theme,
-                      ),
-                      _buildSummaryMetric(
-                        l10n.avgWinRate,
-                        '${(_strategies.map((s) => s.winRate).reduce((a, b) => a + b) / _strategies.length).toStringAsFixed(1)}%',
-                        theme,
-                      ),
-                      _buildSummaryMetric(
-                        l10n.totalPnl,
-                        '+\$${_strategies.map((s) => s.totalPnl).reduce((a, b) => a + b).toStringAsFixed(2)}',
-                        theme,
-                        const Color(0xFF4CAF50),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-
-          // Strategies list
-          Text(
-            l10n.availableStrategies,
-            style: theme.textTheme.titleMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          if (_isLoading)
-            const Center(
+      child: strategiesAsync.when(
+        data: (strategies) => ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            // Summary card
+            Card(
+              elevation: 2,
               child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: CircularProgressIndicator(),
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.analytics,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          l10n.strategiesOverview,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildSummaryMetric(
+                          l10n.active,
+                          stats.activeStrategies.toString(),
+                          theme,
+                          const Color(0xFF4CAF50),
+                        ),
+                        _buildSummaryMetric(
+                          l10n.totalTrades,
+                          strategies
+                              .map((s) => s.performance?.totalTrades ?? 0)
+                              .reduce((a, b) => a + b)
+                              .toString(),
+                          theme,
+                        ),
+                        _buildSummaryMetric(
+                          l10n.avgWinRate,
+                          '${stats.combinedWinRate.toStringAsFixed(1)}%',
+                          theme,
+                        ),
+                        _buildSummaryMetric(
+                          l10n.totalPnl,
+                          '+\$${stats.combinedPnl.toStringAsFixed(2)}',
+                          theme,
+                          const Color(0xFF4CAF50),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            )
-          else
-            ..._strategies.map((strategy) {
+            ),
+            const SizedBox(height: 16),
+
+            // Strategies list
+            Text(
+              l10n.availableStrategies,
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            ...strategies.map((strategy) {
               return StrategyCard(
                 name: strategy.name,
-                isActive: strategy.isActive,
+                isActive: strategy.active,
                 weight: strategy.weight,
-                totalTrades: strategy.totalTrades,
-                winRate: strategy.winRate,
-                totalPnl: strategy.totalPnl,
-                onToggle: (value) => _toggleStrategy(strategy.name, value),
+                totalTrades: strategy.performance?.totalTrades ?? 0,
+                winRate: strategy.performance?.winRate ?? 0.0,
+                totalPnl: strategy.performance?.totalPnl ?? 0.0,
+                onToggle: (value) => _toggleStrategy(strategy.name, strategy.active),
                 onTap: () => _showStrategyDetails(strategy),
                 onConfigure: () => _configureStrategy(strategy),
               );
             }).toList(),
-        ],
+          ],
+        ),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(Icons.error, color: Colors.red, size: 64),
+                const SizedBox(height: 16),
+                Text(
+                  'Error: ${e.toString()}',
+                  style: const TextStyle(color: Colors.red),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24),
+                ElevatedButton.icon(
+                  onPressed: _onRefresh,
+                  icon: const Icon(Icons.refresh),
+                  label: Text(l10n.retry),
+                ),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -215,98 +238,11 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
       ],
     );
   }
-
-  Future<void> _onRefresh() async {
-    setState(() => _isLoading = true);
-
-    // TODO: Replace with actual API call
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    if (mounted) {
-      setState(() => _isLoading = false);
-    }
-  }
-
-  void _toggleStrategy(String name, bool value) {
-    HapticFeedback.mediumImpact();
-
-    // TODO: Replace with actual API call
-    setState(() {
-      final strategy = _strategies.firstWhere((s) => s.name == name);
-      strategy.isActive = value;
-    });
-
-    final l10n = L10n.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          value
-              ? l10n.strategyActivated(name: name)
-              : l10n.strategyDeactivated(name: name),
-        ),
-        backgroundColor: const Color(0xFF4CAF50),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _showStrategyDetails(_StrategyData strategy) {
-    HapticFeedback.lightImpact();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) => DraggableScrollableSheet(
-        initialChildSize: 0.6,
-        minChildSize: 0.4,
-        maxChildSize: 0.9,
-        expand: false,
-        builder: (context, scrollController) {
-          return _StrategyDetailsSheet(
-            strategy: strategy,
-            scrollController: scrollController,
-          );
-        },
-      ),
-    );
-  }
-
-  void _configureStrategy(_StrategyData strategy) {
-    HapticFeedback.lightImpact();
-
-    showDialog(
-      context: context,
-      builder: (context) => _StrategyConfigDialog(strategy: strategy),
-    );
-  }
-}
-
-// Mock data class
-class _StrategyData {
-  final String name;
-  bool isActive;
-  final double weight;
-  final int totalTrades;
-  final double winRate;
-  final double totalPnl;
-  final String description;
-  final Map<String, dynamic> config;
-
-  _StrategyData({
-    required this.name,
-    required this.isActive,
-    required this.weight,
-    required this.totalTrades,
-    required this.winRate,
-    required this.totalPnl,
-    required this.description,
-    required this.config,
-  });
 }
 
 // Strategy details sheet
 class _StrategyDetailsSheet extends StatelessWidget {
-  final _StrategyData strategy;
+  final Strategy strategy;
   final ScrollController scrollController;
 
   const _StrategyDetailsSheet({
@@ -318,6 +254,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final l10n = L10n.of(context);
+    final performance = strategy.performance;
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -332,7 +269,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            strategy.description,
+            strategy.description ?? 'No description available',
             style: theme.textTheme.bodyMedium?.copyWith(
               color: theme.colorScheme.onSurfaceVariant,
             ),
@@ -347,20 +284,29 @@ class _StrategyDetailsSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          _buildMetricRow(l10n.totalTrades, strategy.totalTrades.toString(), theme),
-          _buildMetricRow(l10n.winRate, '${strategy.winRate.toStringAsFixed(1)}%', theme),
-          _buildMetricRow(l10n.totalPnl, '+\$${strategy.totalPnl.toStringAsFixed(2)}', theme),
-          _buildMetricRow(l10n.weight, '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
-          _buildMetricRow(
-            l10n.avgWin,
-            '\$${((strategy.totalPnl / strategy.totalTrades) * (strategy.winRate / 100)).toStringAsFixed(2)}',
-            theme,
-          ),
-          _buildMetricRow(
-            l10n.avgLoss,
-            '-\$${((strategy.totalPnl / strategy.totalTrades) * ((100 - strategy.winRate) / 100)).abs().toStringAsFixed(2)}',
-            theme,
-          ),
+          if (performance != null) ...[
+            _buildMetricRow(l10n.totalTrades, performance.totalTrades.toString(), theme),
+            _buildMetricRow(l10n.winRate, '${performance.winRate.toStringAsFixed(1)}%', theme),
+            _buildMetricRow(l10n.totalPnl, '+\$${performance.totalPnl.toStringAsFixed(2)}', theme),
+            _buildMetricRow(l10n.weight, '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
+            _buildMetricRow(
+              l10n.avgWin,
+              '\$${performance.avgWin.toStringAsFixed(2)}',
+              theme,
+            ),
+            _buildMetricRow(
+              l10n.avgLoss,
+              '-\$${performance.avgLoss.abs().toStringAsFixed(2)}',
+              theme,
+            ),
+          ] else ...[
+            Text(
+              'No performance data available',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
           const SizedBox(height: 24),
           const Divider(),
           const SizedBox(height: 16),
@@ -371,13 +317,21 @@ class _StrategyDetailsSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          ...strategy.config.entries.map((entry) {
-            return _buildMetricRow(
-              entry.key.replaceAll('_', ' ').toUpperCase(),
-              entry.value.toString(),
-              theme,
-            );
-          }).toList(),
+          if (strategy.config != null && strategy.config!.isNotEmpty)
+            ...strategy.config!.entries.map((entry) {
+              return _buildMetricRow(
+                entry.key.replaceAll('_', ' ').toUpperCase(),
+                entry.value.toString(),
+                theme,
+              );
+            }).toList()
+          else
+            Text(
+              'No configuration available',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
         ],
       ),
     );
@@ -408,16 +362,16 @@ class _StrategyDetailsSheet extends StatelessWidget {
 }
 
 // Strategy configuration dialog
-class _StrategyConfigDialog extends StatefulWidget {
-  final _StrategyData strategy;
+class _StrategyConfigDialog extends ConsumerStatefulWidget {
+  final Strategy strategy;
 
   const _StrategyConfigDialog({required this.strategy});
 
   @override
-  State<_StrategyConfigDialog> createState() => _StrategyConfigDialogState();
+  ConsumerState<_StrategyConfigDialog> createState() => _StrategyConfigDialogState();
 }
 
-class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
+class _StrategyConfigDialogState extends ConsumerState<_StrategyConfigDialog> {
   final _formKey = GlobalKey<FormState>();
   late Map<String, TextEditingController> _controllers;
 
@@ -425,7 +379,7 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
   void initState() {
     super.initState();
     _controllers = {};
-    widget.strategy.config.forEach((key, value) {
+    widget.strategy.config?.forEach((key, value) {
       _controllers[key] = TextEditingController(text: value.toString());
     });
   }
@@ -436,20 +390,51 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
     super.dispose();
   }
 
-  void _save() {
+  void _save() async {
     if (_formKey.currentState!.validate()) {
       HapticFeedback.mediumImpact();
 
-      // TODO: Replace with actual API call
-      Navigator.pop(context);
+      // Convert controllers to config map
+      final config = <String, dynamic>{};
+      _controllers.forEach((key, controller) {
+        final value = controller.text;
+        // Try to parse as number, otherwise keep as string
+        config[key] = double.tryParse(value) ?? int.tryParse(value) ?? value;
+      });
 
-      final l10n = L10n.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.strategyConfigUpdated),
-          backgroundColor: const Color(0xFF4CAF50),
-        ),
-      );
+      try {
+        await ref.read(strategyConfigUpdaterProvider.notifier).updateConfig(
+          strategyName: widget.strategy.name,
+          config: config,
+        );
+
+        if (mounted) {
+          Navigator.pop(context);
+
+          final l10n = L10n.of(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.strategyConfigUpdated),
+              backgroundColor: const Color(0xFF4CAF50),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          final l10n = L10n.of(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${e.toString()}'),
+              backgroundColor: const Color(0xFFF44336),
+              action: SnackBarAction(
+                label: l10n.retry,
+                textColor: Colors.white,
+                onPressed: _save,
+              ),
+            ),
+          );
+        }
+      }
     }
   }
 

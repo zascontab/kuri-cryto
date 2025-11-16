@@ -14,7 +14,7 @@ import '../models/risk_state.dart';
 /// - Activate/deactivate kill switch
 class RiskService {
   final ApiClient _apiClient;
-  static const String _basePath = '/scalping/risk';
+  static const String _basePath = '/api/v1/risk';
 
   RiskService(this._apiClient);
 

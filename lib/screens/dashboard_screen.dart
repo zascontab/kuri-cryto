@@ -1,73 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:async';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n.dart';
 import '../widgets/metric_card.dart';
+import '../providers/system_provider.dart';
 
 /// Dashboard screen showing system status and key metrics
-class DashboardScreen extends StatefulWidget {
+class DashboardScreen extends ConsumerStatefulWidget {
   const DashboardScreen({super.key});
 
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  ConsumerState<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
-  Timer? _refreshTimer;
-  bool _isLoading = false;
-  bool _isEngineRunning = false;
-
-  // Mock data - replace with actual API calls
-  String _uptime = '2h 30m';
-  String _healthStatus = 'healthy';
-  double _totalPnl = 125.50;
-  double _dailyPnlChange = 12.3;
-  double _winRate = 65.5;
-  int _activePositions = 3;
-  double _avgLatency = 45.2;
-
-  @override
-  void initState() {
-    super.initState();
-    _startAutoRefresh();
-    _loadData();
-  }
-
-  @override
-  void dispose() {
-    _refreshTimer?.cancel();
-    super.dispose();
-  }
-
-  void _startAutoRefresh() {
-    _refreshTimer = Timer.periodic(
-      const Duration(seconds: 5),
-      (timer) => _loadData(),
-    );
-  }
-
-  Future<void> _loadData() async {
-    if (_isLoading) return;
-
-    setState(() => _isLoading = true);
-
-    // TODO: Replace with actual API call
-    // Example: final data = await scalpingService.getStatus();
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    if (mounted) {
-      setState(() {
-        _isLoading = false;
-        // Update with real data
-      });
-    }
-  }
+class _DashboardScreenState extends ConsumerState<DashboardScreen> {
+  bool _isTogglingEngine = false;
 
   Future<void> _onRefresh() async {
-    await _loadData();
+    ref.invalidate(systemStatusProvider);
+    ref.invalidate(metricsProvider);
+    ref.invalidate(healthProvider);
+
+    // Wait for providers to reload
+    await Future.wait([
+      ref.read(systemStatusProvider.future),
+      ref.read(metricsProvider.future),
+      ref.read(healthProvider.future),
+    ]);
   }
 
-  void _toggleEngine() {
+  void _toggleEngine(bool isRunning) {
     HapticFeedback.mediumImpact();
     final l10n = L10n.of(context);
 
@@ -75,15 +37,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
       context: context,
       builder: (context) => AlertDialog(
         icon: Icon(
-          _isEngineRunning ? Icons.stop_circle : Icons.play_circle_filled,
+          isRunning ? Icons.stop_circle : Icons.play_circle_filled,
           size: 48,
-          color: _isEngineRunning
+          color: isRunning
               ? const Color(0xFFF44336)
               : const Color(0xFF4CAF50),
         ),
-        title: Text(_isEngineRunning ? l10n.stopEngine : l10n.startEngine),
+        title: Text(isRunning ? l10n.stopEngine : l10n.startEngine),
         content: Text(
-          _isEngineRunning ? l10n.stopEngineMessage : l10n.startEngineMessage,
+          isRunning ? l10n.stopEngineMessage : l10n.startEngineMessage,
         ),
         actions: [
           TextButton(
@@ -93,51 +55,73 @@ class _DashboardScreenState extends State<DashboardScreen> {
           FilledButton(
             onPressed: () {
               Navigator.pop(context);
-              _performEngineToggle();
+              _performEngineToggle(isRunning);
             },
             style: FilledButton.styleFrom(
-              backgroundColor: _isEngineRunning
+              backgroundColor: isRunning
                   ? const Color(0xFFF44336)
                   : const Color(0xFF4CAF50),
             ),
-            child: Text(_isEngineRunning ? l10n.stop : l10n.start),
+            child: Text(isRunning ? l10n.stop : l10n.start),
           ),
         ],
       ),
     );
   }
 
-  Future<void> _performEngineToggle() async {
-    setState(() => _isLoading = true);
+  Future<void> _performEngineToggle(bool isRunning) async {
+    if (_isTogglingEngine) return;
 
-    // TODO: Replace with actual API call
-    // Example: await scalpingService.toggleEngine(!_isEngineRunning);
-    await Future.delayed(const Duration(seconds: 1));
+    setState(() => _isTogglingEngine = true);
 
-    if (mounted) {
-      setState(() {
-        _isEngineRunning = !_isEngineRunning;
-        _isLoading = false;
-      });
+    try {
+      final notifier = ref.read(systemStatusProvider.notifier);
 
-      HapticFeedback.heavyImpact();
-      final l10n = L10n.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _isEngineRunning
-                ? l10n.engineStartedSuccess
-                : l10n.engineStoppedSuccess,
+      if (isRunning) {
+        await notifier.stopEngine();
+      } else {
+        await notifier.startEngine();
+      }
+
+      if (mounted) {
+        HapticFeedback.heavyImpact();
+        final l10n = L10n.of(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              isRunning
+                  ? l10n.engineStoppedSuccess
+                  : l10n.engineStartedSuccess,
+            ),
+            backgroundColor: const Color(0xFF4CAF50),
+            duration: const Duration(seconds: 2),
           ),
-          backgroundColor: const Color(0xFF4CAF50),
-          duration: const Duration(seconds: 2),
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final l10n = L10n.of(context);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: const Color(0xFFF44336),
+            action: SnackBarAction(
+              label: l10n.retry,
+              textColor: Colors.white,
+              onPressed: () => _performEngineToggle(isRunning),
+            ),
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isTogglingEngine = false);
+      }
     }
   }
 
-  Color _getHealthColor() {
-    switch (_healthStatus.toLowerCase()) {
+  Color _getHealthColor(String status) {
+    switch (status.toLowerCase()) {
       case 'healthy':
         return const Color(0xFF4CAF50);
       case 'degraded':
@@ -153,238 +137,333 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final l10n = L10n.of(context);
+
+    final systemStatusAsync = ref.watch(systemStatusProvider);
+    final metricsAsync = ref.watch(metricsProvider);
+    final healthAsync = ref.watch(healthProvider);
 
     return RefreshIndicator(
       onRefresh: _onRefresh,
       child: Scaffold(
-        body: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            // System Status Card
-            Card(
-              elevation: 3,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        body: systemStatusAsync.when(
+          data: (systemStatus) {
+            final isEngineRunning = systemStatus.isRunning;
+
+            return ListView(
+              padding: const EdgeInsets.all(16),
+              children: [
+                // System Status Card
+                Card(
+                  elevation: 3,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: Row(
-                            children: [
-                              Icon(
-                                _isEngineRunning
-                                    ? Icons.play_circle_filled
-                                    : Icons.stop_circle,
-                                size: 32,
-                                color: _isEngineRunning
-                                    ? const Color(0xFF4CAF50)
-                                    : Colors.grey,
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      L10n.of(context).scalpingEngine,
-                                      style: theme.textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    isEngineRunning
+                                        ? Icons.play_circle_filled
+                                        : Icons.stop_circle,
+                                    size: 32,
+                                    color: isEngineRunning
+                                        ? const Color(0xFF4CAF50)
+                                        : Colors.grey,
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          l10n.scalpingEngine,
+                                          style: theme.textTheme.titleLarge?.copyWith(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          isEngineRunning
+                                              ? l10n.running
+                                              : l10n.stopped,
+                                          style: theme.textTheme.bodyMedium?.copyWith(
+                                            color: colorScheme.onSurfaceVariant,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    const SizedBox(height: 4),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            healthAsync.when(
+                              data: (health) => Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: _getHealthColor(health.status).withValues(alpha: 0.2),
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: 8,
+                                      height: 8,
+                                      decoration: BoxDecoration(
+                                        color: _getHealthColor(health.status),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 6),
                                     Text(
-                                      _isEngineRunning
-                                          ? L10n.of(context).running
-                                          : L10n.of(context).stopped,
-                                      style: theme.textTheme.bodyMedium?.copyWith(
-                                        color: colorScheme.onSurfaceVariant,
+                                      health.status.toUpperCase(),
+                                      style: theme.textTheme.labelSmall?.copyWith(
+                                        color: _getHealthColor(health.status),
+                                        fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
+                              loading: () => const SizedBox(
+                                width: 16,
+                                height: 16,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                              error: (_, __) => const Icon(Icons.error, color: Colors.red),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 6,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _getHealthColor().withValues(alpha: 0.2),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                        const SizedBox(height: 16),
+                        const Divider(),
+                        const SizedBox(height: 12),
+                        metricsAsync.when(
+                          data: (metrics) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Container(
-                                width: 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: _getHealthColor(),
-                                  shape: BoxShape.circle,
-                                ),
+                              _buildStatusInfo(
+                                l10n.uptime,
+                                systemStatus.uptime,
+                                theme,
                               ),
-                              const SizedBox(width: 6),
-                              Text(
-                                _healthStatus.toUpperCase(),
-                                style: theme.textTheme.labelSmall?.copyWith(
-                                  color: _getHealthColor(),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              _buildStatusInfo(
+                                l10n.activePositions,
+                                metrics.activePositions.toString(),
+                                theme,
+                              ),
+                              _buildStatusInfo(
+                                l10n.avgLatency,
+                                '${metrics.avgLatency.toStringAsFixed(0)}${l10n.ms}',
+                                theme,
                               ),
                             ],
+                          ),
+                          loading: () => const Center(
+                            child: Padding(
+                              padding: EdgeInsets.all(16.0),
+                              child: CircularProgressIndicator(),
+                            ),
+                          ),
+                          error: (e, _) => Center(
+                            child: Text(
+                              'Error: ${e.toString()}',
+                              style: const TextStyle(color: Colors.red),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
-                    const Divider(),
-                    const SizedBox(height: 12),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildStatusInfo(
-                            L10n.of(context).uptime, _uptime, theme),
-                        _buildStatusInfo(
-                          L10n.of(context).activePositions,
-                          _activePositions.toString(),
-                          theme,
-                        ),
-                        _buildStatusInfo(
-                          L10n.of(context).avgLatency,
-                          '${_avgLatency.toStringAsFixed(0)}${L10n.of(context).ms}',
-                          theme,
-                        ),
-                      ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+
+                // Metrics Grid
+                Text(
+                  l10n.keyMetrics,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                metricsAsync.when(
+                  data: (metrics) => GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 1.4,
+                    children: [
+                      MetricCard(
+                        icon: Icons.attach_money,
+                        title: l10n.totalPnl,
+                        value:
+                            '${metrics.totalPnl >= 0 ? '+' : ''}\$${metrics.totalPnl.toStringAsFixed(2)}',
+                        change:
+                            '${metrics.dailyPnl >= 0 ? '+' : ''}${metrics.dailyPnl.toStringAsFixed(1)}% ${l10n.today}',
+                        changeColor: metrics.dailyPnl >= 0
+                            ? const Color(0xFF4CAF50)
+                            : const Color(0xFFF44336),
+                        isLoading: false,
+                      ),
+                      MetricCard(
+                        icon: Icons.percent,
+                        title: l10n.winRate,
+                        value: '${metrics.winRate.toStringAsFixed(1)}%',
+                        change: metrics.winRate >= 50
+                            ? l10n.aboveTarget
+                            : l10n.belowTarget,
+                        changeColor: metrics.winRate >= 50
+                            ? const Color(0xFF4CAF50)
+                            : const Color(0xFFF44336),
+                        isLoading: false,
+                      ),
+                      MetricCard(
+                        icon: Icons.account_balance_wallet,
+                        title: l10n.activePositions,
+                        value: metrics.activePositions.toString(),
+                        change: l10n.openTrades,
+                        isLoading: false,
+                      ),
+                      MetricCard(
+                        icon: Icons.speed,
+                        title: l10n.avgLatency,
+                        value: '${metrics.avgLatency.toStringAsFixed(0)}${l10n.ms}',
+                        change: metrics.avgLatency < 100
+                            ? l10n.excellent
+                            : l10n.good,
+                        changeColor: metrics.avgLatency < 100
+                            ? const Color(0xFF4CAF50)
+                            : Colors.orange,
+                        isLoading: false,
+                      ),
+                    ],
+                  ),
+                  loading: () => const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(48.0),
+                      child: CircularProgressIndicator(),
                     ),
-                  ],
+                  ),
+                  error: (e, _) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        children: [
+                          const Icon(Icons.error, color: Colors.red, size: 48),
+                          const SizedBox(height: 16),
+                          Text(
+                            'Error: ${e.toString()}',
+                            style: const TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton.icon(
+                            onPressed: _onRefresh,
+                            icon: const Icon(Icons.refresh),
+                            label: Text(l10n.retry),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            const SizedBox(height: 20),
 
-            // Metrics Grid
-            Text(
-              L10n.of(context).keyMetrics,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
+                const SizedBox(height: 20),
 
-            GridView.count(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              crossAxisCount: 2,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 1.4,
-              children: [
-                MetricCard(
-                  icon: Icons.attach_money,
-                  title: L10n.of(context).totalPnl,
-                  value:
-                      '${_totalPnl >= 0 ? '+' : ''}\$${_totalPnl.toStringAsFixed(2)}',
-                  change:
-                      '${_dailyPnlChange >= 0 ? '+' : ''}${_dailyPnlChange.toStringAsFixed(1)}% ${L10n.of(context).today}',
-                  changeColor: _dailyPnlChange >= 0
-                      ? const Color(0xFF4CAF50)
-                      : const Color(0xFFF44336),
-                  isLoading: _isLoading,
+                // Quick Actions
+                Text(
+                  l10n.quickActions,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                MetricCard(
-                  icon: Icons.percent,
-                  title: L10n.of(context).winRate,
-                  value: '${_winRate.toStringAsFixed(1)}%',
-                  change: _winRate >= 50
-                      ? L10n.of(context).aboveTarget
-                      : L10n.of(context).belowTarget,
-                  changeColor: _winRate >= 50
-                      ? const Color(0xFF4CAF50)
-                      : const Color(0xFFF44336),
-                  isLoading: _isLoading,
-                ),
-                MetricCard(
-                  icon: Icons.account_balance_wallet,
-                  title: L10n.of(context).activePositions,
-                  value: _activePositions.toString(),
-                  change: L10n.of(context).openTrades,
-                  isLoading: _isLoading,
-                ),
-                MetricCard(
-                  icon: Icons.speed,
-                  title: L10n.of(context).avgLatency,
-                  value: '${_avgLatency.toStringAsFixed(0)}${L10n.of(context).ms}',
-                  change: _avgLatency < 100
-                      ? L10n.of(context).excellent
-                      : L10n.of(context).good,
-                  changeColor: _avgLatency < 100
-                      ? const Color(0xFF4CAF50)
-                      : Colors.orange,
-                  isLoading: _isLoading,
+                const SizedBox(height: 12),
+
+                Card(
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: const Icon(Icons.refresh),
+                        title: Text(l10n.refreshData),
+                        subtitle: Text(l10n.lastUpdatedNow),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          _onRefresh();
+                        },
+                      ),
+                      const Divider(height: 1),
+                      ListTile(
+                        leading: const Icon(Icons.analytics),
+                        title: Text(l10n.viewAnalytics),
+                        subtitle: Text(l10n.detailedCharts),
+                        trailing: const Icon(Icons.chevron_right),
+                        onTap: () {
+                          HapticFeedback.lightImpact();
+                          // Navigate to analytics
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
-            ),
-
-            const SizedBox(height: 20),
-
-            // Quick Actions
-            Text(
-              L10n.of(context).quickActions,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 12),
-
-            Card(
+            );
+          },
+          loading: () => const Center(child: CircularProgressIndicator()),
+          error: (e, _) => Center(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ListTile(
-                    leading: const Icon(Icons.refresh),
-                    title: Text(L10n.of(context).refreshData),
-                    subtitle: Text(L10n.of(context).lastUpdatedNow),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      _onRefresh();
-                    },
+                  const Icon(Icons.error, color: Colors.red, size: 64),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Error: ${e.toString()}',
+                    style: const TextStyle(color: Colors.red),
+                    textAlign: TextAlign.center,
                   ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.analytics),
-                    title: Text(L10n.of(context).viewAnalytics),
-                    subtitle: Text(L10n.of(context).detailedCharts),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      // Navigate to analytics
-                    },
+                  const SizedBox(height: 24),
+                  ElevatedButton.icon(
+                    onPressed: _onRefresh,
+                    icon: const Icon(Icons.refresh),
+                    label: Text(l10n.retry),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: _toggleEngine,
-          icon: Icon(
-            _isEngineRunning ? Icons.stop : Icons.play_arrow,
           ),
-          label: Text(_isEngineRunning
-              ? L10n.of(context).stopEngine
-              : L10n.of(context).startEngine),
-          backgroundColor: _isEngineRunning
-              ? const Color(0xFFF44336)
-              : const Color(0xFF4CAF50),
-          foregroundColor: Colors.white,
+        ),
+        floatingActionButton: systemStatusAsync.maybeWhen(
+          data: (systemStatus) => FloatingActionButton.extended(
+            onPressed: _isTogglingEngine
+                ? null
+                : () => _toggleEngine(systemStatus.isRunning),
+            icon: Icon(
+              systemStatus.isRunning ? Icons.stop : Icons.play_arrow,
+            ),
+            label: Text(systemStatus.isRunning
+                ? l10n.stopEngine
+                : l10n.startEngine),
+            backgroundColor: systemStatus.isRunning
+                ? const Color(0xFFF44336)
+                : const Color(0xFF4CAF50),
+            foregroundColor: Colors.white,
+          ),
+          orElse: () => null,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),

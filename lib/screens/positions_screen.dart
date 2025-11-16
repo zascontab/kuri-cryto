@@ -1,100 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/position_card.dart';
 import '../l10n/l10n.dart';
+import '../providers/position_provider.dart';
+import '../providers/services_provider.dart';
+import '../models/position.dart';
 
 /// Positions screen with tabs for open and closed positions
-class PositionsScreen extends StatefulWidget {
+class PositionsScreen extends ConsumerStatefulWidget {
   const PositionsScreen({super.key});
 
   @override
-  State<PositionsScreen> createState() => _PositionsScreenState();
+  ConsumerState<PositionsScreen> createState() => _PositionsScreenState();
 }
 
-class _PositionsScreenState extends State<PositionsScreen>
+class _PositionsScreenState extends ConsumerState<PositionsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  bool _isLoading = false;
 
-  // Mock data - replace with actual API calls
-  final List<_PositionData> _openPositions = [
-    _PositionData(
-      id: '1',
-      symbol: 'BTC-USDT',
-      side: 'long',
-      entryPrice: 43250.00,
-      currentPrice: 43580.00,
-      size: 1000.0,
-      leverage: 5.0,
-      stopLoss: 42800.00,
-      takeProfit: 44000.00,
-      unrealizedPnl: 76.28,
-      strategy: 'RSI Scalping',
-      openTime: DateTime.now().subtract(const Duration(minutes: 15)),
-      status: 'open',
-    ),
-    _PositionData(
-      id: '2',
-      symbol: 'ETH-USDT',
-      side: 'short',
-      entryPrice: 2280.50,
-      currentPrice: 2265.20,
-      size: 500.0,
-      leverage: 3.0,
-      stopLoss: 2310.00,
-      takeProfit: 2200.00,
-      unrealizedPnl: 33.74,
-      strategy: 'MACD Scalping',
-      openTime: DateTime.now().subtract(const Duration(hours: 1)),
-      status: 'open',
-    ),
-    _PositionData(
-      id: '3',
-      symbol: 'DOGE-USDT',
-      side: 'long',
-      entryPrice: 0.08500,
-      currentPrice: 0.08350,
-      size: 200.0,
-      leverage: 2.0,
-      stopLoss: 0.08200,
-      takeProfit: 0.08900,
-      unrealizedPnl: -3.53,
-      strategy: 'Volume Scalping',
-      openTime: DateTime.now().subtract(const Duration(minutes: 45)),
-      status: 'open',
-    ),
-  ];
-
-  final List<_PositionData> _closedPositions = [
-    _PositionData(
-      id: '4',
-      symbol: 'BTC-USDT',
-      side: 'long',
-      entryPrice: 42800.00,
-      currentPrice: 43100.00,
-      size: 500.0,
-      leverage: 5.0,
-      stopLoss: 42500.00,
-      takeProfit: 43500.00,
-      unrealizedPnl: 35.05,
-      strategy: 'Bollinger Scalping',
-      openTime: DateTime.now().subtract(const Duration(hours: 3)),
-      status: 'closed',
-    ),
-    _PositionData(
-      id: '5',
-      symbol: 'SOL-USDT',
-      side: 'short',
-      entryPrice: 105.20,
-      currentPrice: 106.50,
-      size: 300.0,
-      leverage: 4.0,
-      unrealizedPnl: -14.82,
-      strategy: 'AI Scalping',
-      openTime: DateTime.now().subtract(const Duration(hours: 5)),
-      status: 'closed',
-    ),
-  ];
+  // Store open positions from stream
+  final List<Position> _openPositions = [];
 
   @override
   void initState() {
@@ -109,71 +35,149 @@ class _PositionsScreenState extends State<PositionsScreen>
   }
 
   Future<void> _onRefresh() async {
-    setState(() => _isLoading = true);
+    // Refresh history (stream auto-updates)
+    ref.invalidate(positionHistoryProvider);
+    await ref.read(positionHistoryProvider().future);
+  }
 
-    // TODO: Replace with actual API call
-    await Future.delayed(const Duration(milliseconds: 800));
+  void _closePosition(String positionId) async {
+    HapticFeedback.heavyImpact();
+    final l10n = L10n.of(context);
 
-    if (mounted) {
-      setState(() => _isLoading = false);
+    try {
+      await ref.read(positionCloserProvider.notifier).closePosition(positionId);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.closingPosition(positionId: positionId)),
+            backgroundColor: const Color(0xFF4CAF50),
+            duration: const Duration(seconds: 2),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: const Color(0xFFF44336),
+            action: SnackBarAction(
+              label: l10n.retry,
+              textColor: Colors.white,
+              onPressed: () => _closePosition(positionId),
+            ),
+          ),
+        );
+      }
     }
   }
 
-  void _closePosition(String positionId) {
-    HapticFeedback.heavyImpact();
-
-    // TODO: Replace with actual API call
-    final l10n = L10n.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.closingPosition(positionId: positionId)),
-        duration: const Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _editSLTP(String positionId) {
+  void _editSLTP(String positionId, Position position) {
     HapticFeedback.lightImpact();
 
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => _SLTPEditSheet(positionId: positionId),
-    );
-  }
-
-  void _moveToBreakeven(String positionId) {
-    HapticFeedback.mediumImpact();
-
-    // TODO: Replace with actual API call
-    final l10n = L10n.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.movingStopLossBreakeven),
-        duration: const Duration(seconds: 2),
-        backgroundColor: const Color(0xFF4CAF50),
+      builder: (context) => _SLTPEditSheet(
+        positionId: positionId,
+        position: position,
       ),
     );
   }
 
-  void _enableTrailing(String positionId) {
+  void _moveToBreakeven(String positionId) async {
     HapticFeedback.mediumImpact();
-
-    // TODO: Replace with actual API call
     final l10n = L10n.of(context);
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(l10n.enablingTrailingStop),
-        duration: const Duration(seconds: 2),
-        backgroundColor: const Color(0xFF4CAF50),
-      ),
-    );
+
+    try {
+      await ref.read(breakevenMoverProvider.notifier).moveToBreakeven(positionId);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.movingStopLossBreakeven),
+            duration: const Duration(seconds: 2),
+            backgroundColor: const Color(0xFF4CAF50),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: const Color(0xFFF44336),
+            action: SnackBarAction(
+              label: l10n.retry,
+              textColor: Colors.white,
+              onPressed: () => _moveToBreakeven(positionId),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  void _enableTrailing(String positionId) async {
+    HapticFeedback.mediumImpact();
+    final l10n = L10n.of(context);
+
+    try {
+      // Use default 0.5% trailing distance
+      await ref.read(trailingStopEnablerProvider.notifier).enableTrailingStop(
+        positionId: positionId,
+        distancePercent: 0.5,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(l10n.enablingTrailingStop),
+            duration: const Duration(seconds: 2),
+            backgroundColor: const Color(0xFF4CAF50),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: ${e.toString()}'),
+            backgroundColor: const Color(0xFFF44336),
+            action: SnackBarAction(
+              label: l10n.retry,
+              textColor: Colors.white,
+              onPressed: () => _enableTrailing(positionId),
+            ),
+          ),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     final l10n = L10n.of(context);
+
+    // Listen to position stream and update local list
+    ref.listen<AsyncValue<Position>>(positionsProvider, (previous, next) {
+      next.whenData((position) {
+        setState(() {
+          // Update or add position
+          final index = _openPositions.indexWhere((p) => p.id == position.id);
+          if (index >= 0) {
+            if (position.status == 'open') {
+              _openPositions[index] = position;
+            } else {
+              _openPositions.removeAt(index);
+            }
+          } else if (position.status == 'open') {
+            _openPositions.add(position);
+          }
+        });
+      });
+    });
 
     return Column(
       children: [
@@ -188,10 +192,10 @@ class _PositionsScreenState extends State<PositionsScreen>
           child: TabBarView(
             controller: _tabController,
             children: [
-              // Open Positions Tab
-              _buildPositionsList(_openPositions, isOpen: true),
-              // History Tab
-              _buildPositionsList(_closedPositions, isOpen: false),
+              // Open Positions Tab (WebSocket stream)
+              _buildOpenPositionsList(),
+              // History Tab (REST API)
+              _buildHistoryList(),
             ],
           ),
         ),
@@ -199,44 +203,136 @@ class _PositionsScreenState extends State<PositionsScreen>
     );
   }
 
-  Widget _buildPositionsList(
-    List<_PositionData> positions, {
-    required bool isOpen,
-  }) {
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
+  Widget _buildOpenPositionsList() {
+    final positionsStream = ref.watch(positionsProvider);
 
-    if (positions.isEmpty) {
-      return _buildEmptyState(isOpen);
-    }
+    return positionsStream.when(
+      data: (_) {
+        // Stream is connected, show cached positions
+        if (_openPositions.isEmpty) {
+          return _buildEmptyState(true);
+        }
 
-    return RefreshIndicator(
-      onRefresh: _onRefresh,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        itemCount: positions.length,
-        itemBuilder: (context, index) {
-          final position = positions[index];
-          return PositionCard(
-            symbol: position.symbol,
-            side: position.side,
-            entryPrice: position.entryPrice,
-            currentPrice: position.currentPrice,
-            size: position.size,
-            leverage: position.leverage,
-            stopLoss: position.stopLoss,
-            takeProfit: position.takeProfit,
-            unrealizedPnl: position.unrealizedPnl,
-            strategy: position.strategy,
-            openTime: position.openTime,
-            status: position.status,
-            onClose: isOpen ? () => _closePosition(position.id) : null,
-            onEditSLTP: isOpen ? () => _editSLTP(position.id) : null,
-            onBreakeven: isOpen ? () => _moveToBreakeven(position.id) : null,
-            onTrailing: isOpen ? () => _enableTrailing(position.id) : null,
-          );
-        },
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount: _openPositions.length,
+            itemBuilder: (context, index) {
+              final position = _openPositions[index];
+              return PositionCard(
+                symbol: position.symbol,
+                side: position.side,
+                entryPrice: position.entryPrice,
+                currentPrice: position.currentPrice,
+                size: position.size,
+                leverage: position.leverage,
+                stopLoss: position.stopLoss,
+                takeProfit: position.takeProfit,
+                unrealizedPnl: position.unrealizedPnl,
+                strategy: position.strategy,
+                openTime: position.openTime,
+                status: position.status,
+                onClose: () => _closePosition(position.id),
+                onEditSLTP: () => _editSLTP(position.id, position),
+                onBreakeven: () => _moveToBreakeven(position.id),
+                onTrailing: () => _enableTrailing(position.id),
+              );
+            },
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, stack) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error, color: Colors.red, size: 64),
+              const SizedBox(height: 16),
+              Text(
+                'Error: ${e.toString()}',
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Reconnect WebSocket
+                  ref.read(websocketServiceProvider).connect();
+                },
+                icon: const Icon(Icons.refresh),
+                label: Text(L10n.of(context).retry),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHistoryList() {
+    final historyAsync = ref.watch(positionHistoryProvider());
+
+    return historyAsync.when(
+      data: (positions) {
+        if (positions.isEmpty) {
+          return _buildEmptyState(false);
+        }
+
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView.builder(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            itemCount: positions.length,
+            itemBuilder: (context, index) {
+              final position = positions[index];
+              return PositionCard(
+                symbol: position.symbol,
+                side: position.side,
+                entryPrice: position.entryPrice,
+                currentPrice: position.currentPrice,
+                size: position.size,
+                leverage: position.leverage,
+                stopLoss: position.stopLoss,
+                takeProfit: position.takeProfit,
+                unrealizedPnl: position.unrealizedPnl,
+                strategy: position.strategy,
+                openTime: position.openTime,
+                status: position.status,
+                onClose: null,
+                onEditSLTP: null,
+                onBreakeven: null,
+                onTrailing: null,
+              );
+            },
+          ),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (e, _) => Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error, color: Colors.red, size: 64),
+              const SizedBox(height: 16),
+              Text(
+                'Error: ${e.toString()}',
+                style: const TextStyle(color: Colors.red),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              ElevatedButton.icon(
+                onPressed: _onRefresh,
+                icon: const Icon(Icons.refresh),
+                label: Text(L10n.of(context).retry),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -275,53 +371,35 @@ class _PositionsScreenState extends State<PositionsScreen>
   }
 }
 
-// Mock data class
-class _PositionData {
-  final String id;
-  final String symbol;
-  final String side;
-  final double entryPrice;
-  final double currentPrice;
-  final double size;
-  final double leverage;
-  final double? stopLoss;
-  final double? takeProfit;
-  final double unrealizedPnl;
-  final String strategy;
-  final DateTime openTime;
-  final String status;
-
-  _PositionData({
-    required this.id,
-    required this.symbol,
-    required this.side,
-    required this.entryPrice,
-    required this.currentPrice,
-    required this.size,
-    required this.leverage,
-    this.stopLoss,
-    this.takeProfit,
-    required this.unrealizedPnl,
-    required this.strategy,
-    required this.openTime,
-    required this.status,
-  });
-}
-
 // Bottom sheet for editing SL/TP
-class _SLTPEditSheet extends StatefulWidget {
+class _SLTPEditSheet extends ConsumerStatefulWidget {
   final String positionId;
+  final Position position;
 
-  const _SLTPEditSheet({required this.positionId});
+  const _SLTPEditSheet({
+    required this.positionId,
+    required this.position,
+  });
 
   @override
-  State<_SLTPEditSheet> createState() => _SLTPEditSheetState();
+  ConsumerState<_SLTPEditSheet> createState() => _SLTPEditSheetState();
 }
 
-class _SLTPEditSheetState extends State<_SLTPEditSheet> {
+class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
   final _formKey = GlobalKey<FormState>();
-  final _stopLossController = TextEditingController(text: '42800.00');
-  final _takeProfitController = TextEditingController(text: '44000.00');
+  late TextEditingController _stopLossController;
+  late TextEditingController _takeProfitController;
+
+  @override
+  void initState() {
+    super.initState();
+    _stopLossController = TextEditingController(
+      text: widget.position.stopLoss?.toStringAsFixed(2) ?? '',
+    );
+    _takeProfitController = TextEditingController(
+      text: widget.position.takeProfit?.toStringAsFixed(2) ?? '',
+    );
+  }
 
   @override
   void dispose() {
@@ -330,20 +408,47 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
     super.dispose();
   }
 
-  void _save() {
+  void _save() async {
     if (_formKey.currentState!.validate()) {
       HapticFeedback.mediumImpact();
 
-      // TODO: Replace with actual API call
-      Navigator.pop(context);
+      final stopLoss = double.tryParse(_stopLossController.text);
+      final takeProfit = double.tryParse(_takeProfitController.text);
 
-      final l10n = L10n.of(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(l10n.slTpUpdatedSuccess),
-          backgroundColor: const Color(0xFF4CAF50),
-        ),
-      );
+      try {
+        await ref.read(slTpUpdaterProvider.notifier).updateSlTp(
+          positionId: widget.positionId,
+          stopLoss: stopLoss,
+          takeProfit: takeProfit,
+        );
+
+        if (mounted) {
+          Navigator.pop(context);
+
+          final l10n = L10n.of(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(l10n.slTpUpdatedSuccess),
+              backgroundColor: const Color(0xFF4CAF50),
+            ),
+          );
+        }
+      } catch (e) {
+        if (mounted) {
+          final l10n = L10n.of(context);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Error: ${e.toString()}'),
+              backgroundColor: const Color(0xFFF44336),
+              action: SnackBarAction(
+                label: l10n.retry,
+                textColor: Colors.white,
+                onPressed: _save,
+              ),
+            ),
+          );
+        }
+      }
     }
   }
 
@@ -382,7 +487,7 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterStopLoss;
+                    return null; // Optional field
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {
@@ -403,7 +508,7 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterTakeProfit;
+                    return null; // Optional field
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {

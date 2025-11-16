@@ -267,4 +267,82 @@ class ScalpingService {
       rethrow;
     }
   }
+
+  /// Get active trading pairs
+  ///
+  /// Returns a list of currently active trading pairs being monitored
+  /// by the scalping engine.
+  ///
+  /// Example:
+  /// ```dart
+  /// final pairs = await scalpingService.getActivePairs();
+  /// for (var pair in pairs) {
+  ///   print('${pair['exchange']}/${pair['symbol']}');
+  /// }
+  /// ```
+  Future<List<Map<String, dynamic>>> getActivePairs() async {
+    try {
+      developer.log('Fetching active trading pairs...', name: 'ScalpingService');
+
+      final response = await _apiClient.get<Map<String, dynamic>>('$_basePath/pairs/active');
+
+      if (response['success'] == true && response['data'] != null) {
+        final pairs = (response['data'] as List)
+            .map((pair) => pair as Map<String, dynamic>)
+            .toList();
+        developer.log('Active pairs retrieved: ${pairs.length}', name: 'ScalpingService');
+        return pairs;
+      }
+
+      throw ApiException(
+        message: 'Invalid response format',
+        code: 'INVALID_RESPONSE',
+      );
+    } catch (e) {
+      developer.log('Error getting active pairs: $e', name: 'ScalpingService', error: e);
+      rethrow;
+    }
+  }
+
+  /// Get available trading pairs for an exchange
+  ///
+  /// Returns a list of available trading pairs that can be added
+  /// for the specified exchange.
+  ///
+  /// Parameters:
+  /// - [exchange]: Exchange name (e.g., 'kucoin', 'binance')
+  ///
+  /// Example:
+  /// ```dart
+  /// final pairs = await scalpingService.getAvailablePairs('kucoin');
+  /// for (var pair in pairs) {
+  ///   print(pair['symbol']);
+  /// }
+  /// ```
+  Future<List<Map<String, dynamic>>> getAvailablePairs(String exchange) async {
+    try {
+      developer.log('Fetching available pairs for $exchange...', name: 'ScalpingService');
+
+      final response = await _apiClient.get<Map<String, dynamic>>(
+        '$_basePath/pairs/available',
+        queryParameters: {'exchange': exchange},
+      );
+
+      if (response['success'] == true && response['data'] != null) {
+        final pairs = (response['data'] as List)
+            .map((pair) => pair as Map<String, dynamic>)
+            .toList();
+        developer.log('Available pairs retrieved: ${pairs.length}', name: 'ScalpingService');
+        return pairs;
+      }
+
+      throw ApiException(
+        message: 'Invalid response format',
+        code: 'INVALID_RESPONSE',
+      );
+    } catch (e) {
+      developer.log('Error getting available pairs: $e', name: 'ScalpingService', error: e);
+      rethrow;
+    }
+  }
 }

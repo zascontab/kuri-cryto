@@ -15,6 +15,7 @@ class RiskSentinelCard extends StatelessWidget {
   final int maxConsecutiveLosses;
   final String riskMode; // 'Conservative', 'Normal', 'Aggressive'
   final bool killSwitchActive;
+  final bool isProcessing;
   final VoidCallback? onKillSwitch;
 
   const RiskSentinelCard({
@@ -31,6 +32,7 @@ class RiskSentinelCard extends StatelessWidget {
     required this.maxConsecutiveLosses,
     required this.riskMode,
     required this.killSwitchActive,
+    this.isProcessing = false,
     this.onKillSwitch,
   });
 
@@ -217,18 +219,27 @@ class RiskSentinelCard extends StatelessWidget {
                 width: double.infinity,
                 height: 56,
                 child: FilledButton.icon(
-                  onPressed: () {
-                    HapticFeedback.heavyImpact();
-                    _showKillSwitchConfirmation(context);
-                  },
-                  icon: Icon(
-                    killSwitchActive ? Icons.play_arrow : Icons.warning,
-                    size: 24,
-                  ),
+                  onPressed: isProcessing ? null : onKillSwitch,
+                  icon: isProcessing
+                      ? const SizedBox(
+                          width: 20,
+                          height: 20,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        )
+                      : Icon(
+                          killSwitchActive ? Icons.play_arrow : Icons.warning,
+                          size: 24,
+                        ),
                   label: Text(
-                    killSwitchActive
-                        ? 'Deactivate Kill Switch'
-                        : 'Activate Kill Switch',
+                    isProcessing
+                        ? 'Processing...'
+                        : killSwitchActive
+                            ? 'Deactivate Kill Switch'
+                            : 'Activate Kill Switch',
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -239,6 +250,8 @@ class RiskSentinelCard extends StatelessWidget {
                         ? const Color(0xFF4CAF50)
                         : const Color(0xFFF44336),
                     foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.grey,
+                    disabledForegroundColor: Colors.white70,
                   ),
                 ),
               ),
@@ -289,50 +302,6 @@ class RiskSentinelCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  void _showKillSwitchConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        icon: Icon(
-          killSwitchActive ? Icons.play_arrow : Icons.warning,
-          color: killSwitchActive
-              ? const Color(0xFF4CAF50)
-              : const Color(0xFFF44336),
-          size: 48,
-        ),
-        title: Text(
-          killSwitchActive
-              ? 'Deactivate Kill Switch'
-              : 'Activate Kill Switch',
-        ),
-        content: Text(
-          killSwitchActive
-              ? 'This will resume all trading operations. Are you sure?'
-              : 'This will immediately stop all trading and close all open positions. This action cannot be undone. Are you sure?',
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-              HapticFeedback.heavyImpact();
-              onKillSwitch?.call();
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: killSwitchActive
-                  ? const Color(0xFF4CAF50)
-                  : const Color(0xFFF44336),
-            ),
-            child: Text(killSwitchActive ? 'Resume' : 'Stop All'),
-          ),
-        ],
-      ),
     );
   }
 }
