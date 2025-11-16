@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
+import '../l10n/l10n.dart';
 import '../widgets/metric_card.dart';
 
 /// Dashboard screen showing system status and key metrics
@@ -188,7 +189,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Scalping Engine',
+                                      L10n.of(context).scalpingEngine,
                                       style: theme.textTheme.titleLarge?.copyWith(
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -196,7 +197,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     ),
                                     const SizedBox(height: 4),
                                     Text(
-                                      _isEngineRunning ? 'Running' : 'Stopped',
+                                      _isEngineRunning
+                                          ? L10n.of(context).running
+                                          : L10n.of(context).stopped,
                                       style: theme.textTheme.bodyMedium?.copyWith(
                                         color: colorScheme.onSurfaceVariant,
                                       ),
@@ -247,15 +250,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildStatusInfo('Uptime', _uptime, theme),
                         _buildStatusInfo(
-                          'Positions',
+                            L10n.of(context).uptime, _uptime, theme),
+                        _buildStatusInfo(
+                          L10n.of(context).activePositions,
                           _activePositions.toString(),
                           theme,
                         ),
                         _buildStatusInfo(
-                          'Latency',
-                          '${_avgLatency.toStringAsFixed(0)}ms',
+                          L10n.of(context).avgLatency,
+                          '${_avgLatency.toStringAsFixed(0)}${L10n.of(context).ms}',
                           theme,
                         ),
                       ],
@@ -285,7 +289,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 MetricCard(
                   icon: Icons.attach_money,
-                  title: 'Total P&L',
+                  title: L10n.of(context).totalPnl,
                   value:
                       '${_totalPnl >= 0 ? '+' : ''}\$${_totalPnl.toStringAsFixed(2)}',
                   change:
@@ -297,7 +301,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 MetricCard(
                   icon: Icons.percent,
-                  title: 'Win Rate',
+                  title: L10n.of(context).winRate,
                   value: '${_winRate.toStringAsFixed(1)}%',
                   change: _winRate >= 50 ? 'Above target' : 'Below target',
                   changeColor: _winRate >= 50
@@ -307,15 +311,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
                 MetricCard(
                   icon: Icons.account_balance_wallet,
-                  title: 'Active Positions',
+                  title: L10n.of(context).activePositions,
                   value: _activePositions.toString(),
                   change: 'Open trades',
                   isLoading: _isLoading,
                 ),
                 MetricCard(
                   icon: Icons.speed,
-                  title: 'Avg Latency',
-                  value: '${_avgLatency.toStringAsFixed(0)}ms',
+                  title: L10n.of(context).avgLatency,
+                  value: '${_avgLatency.toStringAsFixed(0)}${L10n.of(context).ms}',
                   change: _avgLatency < 100 ? 'Excellent' : 'Good',
                   changeColor: _avgLatency < 100
                       ? const Color(0xFF4CAF50)

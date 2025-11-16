@@ -1,0 +1,101 @@
+{
+  "@@locale": "es",
+  "@@last_modified": "2025-01-16",
+  "scalpingEngine": "Motor de Scalping",
+  "@scalpingEngine": {
+    "type": "String"
+  },
+  "running": "En ejecución",
+  "@running": {
+    "type": "String"
+  },
+  "stopped": "Detenido",
+  "@stopped": {
+    "type": "String"
+  },
+  "healthy": "Saludable",
+  "@healthy": {
+    "type": "String"
+  },
+  "degraded": "Degradado",
+  "@degraded": {
+    "type": "String"
+  },
+  "down": "Caído",
+  "@down": {
+    "type": "String"
+  },
+  "uptime": "Tiempo activo",
+  "@uptime": {
+    "type": "String"
+  },
+  "activePositions": "Posiciones Activas",
+  "@activePositions": {
+    "type": "String"
+  },
+  "totalTrades": "Operaciones Totales",
+  "@totalTrades": {
+    "type": "String"
+  },
+  "startEngine": "Iniciar Motor",
+  "@startEngine": {
+    "type": "String"
+  },
+  "stopEngine": "Detener Motor",
+  "@stopEngine": {
+    "type": "String"
+  },
+  "startEngineConfirmation": "¿Estás seguro de que quieres iniciar el motor de trading?",
+  "@startEngineConfirmation": {
+    "type": "String"
+  },
+  "stopEngineConfirmation": "¿Estás seguro de que quieres detener el motor de trading? Todas las posiciones se cerrarán.",
+  "@stopEngineConfirmation": {
+    "type": "String"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "type": "String"
+  },
+  "start": "Iniciar",
+  "@start": {
+    "type": "String"
+  },
+  "stop": "Detener",
+  "@stop": {
+    "type": "String"
+  },
+  "tradingMetrics": "Métricas de Trading",
+  "@tradingMetrics": {
+    "type": "String"
+  },
+  "totalPnl": "P&L Total",
+  "@totalPnl": {
+    "type": "String"
+  },
+  "dailyPnl": "P&L Diario",
+  "@dailyPnl": {
+    "type": "String"
+  },
+  "winRate": "Tasa de Acierto",
+  "@winRate": {
+    "type": "String"
+  },
+  "avgLatency": "Latencia Promedio",
+  "@avgLatency": {
+    "type": "String"
+  },
+  "ms": "ms",
+  "@ms": {
+    "description": "abreviatura de milisegundos",
+    "type": "String"
+  },
+  "loading": "Cargando...",
+  "@loading": {
+    "type": "String"
+  },
+  "errorLoadingData": "Error al cargar datos",
+  "@errorLoadingData": {
+    "type": "String"
+  }
+}
