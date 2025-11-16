@@ -1,0 +1,514 @@
+{
+  "@@locale": "es",
+  "@@last_modified": "2025-01-16",
+  "scalpingEngine": "Motor de Scalping",
+  "@scalpingEngine": {
+    "type": "String"
+  },
+  "running": "En ejecución",
+  "@running": {
+    "type": "String"
+  },
+  "stopped": "Detenido",
+  "@stopped": {
+    "type": "String"
+  },
+  "healthy": "Saludable",
+  "@healthy": {
+    "type": "String"
+  },
+  "degraded": "Degradado",
+  "@degraded": {
+    "type": "String"
+  },
+  "down": "Caído",
+  "@down": {
+    "type": "String"
+  },
+  "uptime": "Tiempo activo",
+  "@uptime": {
+    "type": "String"
+  },
+  "activePositions": "Posiciones Activas",
+  "@activePositions": {
+    "type": "String"
+  },
+  "totalTrades": "Operaciones Totales",
+  "@totalTrades": {
+    "type": "String"
+  },
+  "startEngine": "Iniciar Motor",
+  "@startEngine": {
+    "type": "String"
+  },
+  "stopEngine": "Detener Motor",
+  "@stopEngine": {
+    "type": "String"
+  },
+  "startEngineConfirmation": "¿Estás seguro de que quieres iniciar el motor de trading?",
+  "@startEngineConfirmation": {
+    "type": "String"
+  },
+  "stopEngineConfirmation": "¿Estás seguro de que quieres detener el motor de trading? Todas las posiciones se cerrarán.",
+  "@stopEngineConfirmation": {
+    "type": "String"
+  },
+  "cancel": "Cancelar",
+  "@cancel": {
+    "type": "String"
+  },
+  "start": "Iniciar",
+  "@start": {
+    "type": "String"
+  },
+  "stop": "Detener",
+  "@stop": {
+    "type": "String"
+  },
+  "tradingMetrics": "Métricas de Trading",
+  "@tradingMetrics": {
+    "type": "String"
+  },
+  "totalPnl": "P&L Total",
+  "@totalPnl": {
+    "type": "String"
+  },
+  "dailyPnl": "P&L Diario",
+  "@dailyPnl": {
+    "type": "String"
+  },
+  "winRate": "Tasa de Acierto",
+  "@winRate": {
+    "type": "String"
+  },
+  "avgLatency": "Latencia Promedio",
+  "@avgLatency": {
+    "type": "String"
+  },
+  "ms": "ms",
+  "@ms": {
+    "description": "abreviatura de milisegundos",
+    "type": "String"
+  },
+  "loading": "Cargando...",
+  "@loading": {
+    "type": "String"
+  },
+  "errorLoadingData": "Error al cargar datos",
+  "@errorLoadingData": {
+    "type": "String"
+  },
+  "stopEngineMessage": "Esto detendrá el motor de scalping. Las posiciones abiertas permanecerán activas. ¿Continuar?",
+  "@stopEngineMessage": {
+    "type": "String"
+  },
+  "startEngineMessage": "Esto iniciará el motor de scalping y comenzará a operar. ¿Continuar?",
+  "@startEngineMessage": {
+    "type": "String"
+  },
+  "engineStartedSuccess": "Motor iniciado exitosamente",
+  "@engineStartedSuccess": {
+    "type": "String"
+  },
+  "engineStoppedSuccess": "Motor detenido exitosamente",
+  "@engineStoppedSuccess": {
+    "type": "String"
+  },
+  "keyMetrics": "Métricas Clave",
+  "@keyMetrics": {
+    "type": "String"
+  },
+  "today": "hoy",
+  "@today": {
+    "type": "String"
+  },
+  "aboveTarget": "Sobre objetivo",
+  "@aboveTarget": {
+    "type": "String"
+  },
+  "belowTarget": "Bajo objetivo",
+  "@belowTarget": {
+    "type": "String"
+  },
+  "openTrades": "Operaciones abiertas",
+  "@openTrades": {
+    "type": "String"
+  },
+  "excellent": "Excelente",
+  "@excellent": {
+    "type": "String"
+  },
+  "good": "Bueno",
+  "@good": {
+    "type": "String"
+  },
+  "quickActions": "Acciones Rápidas",
+  "@quickActions": {
+    "type": "String"
+  },
+  "refreshData": "Actualizar Datos",
+  "@refreshData": {
+    "type": "String"
+  },
+  "lastUpdatedNow": "Actualizado hace un momento",
+  "@lastUpdatedNow": {
+    "type": "String"
+  },
+  "viewAnalytics": "Ver Análisis",
+  "@viewAnalytics": {
+    "type": "String"
+  },
+  "detailedCharts": "Gráficos de rendimiento detallados",
+  "@detailedCharts": {
+    "type": "String"
+  },
+  "settings": "Configuración",
+  "@settings": {
+    "type": "String"
+  },
+  "language": "Idioma",
+  "@language": {
+    "type": "String"
+  },
+  "selectLanguage": "Seleccionar Idioma",
+  "@selectLanguage": {
+    "type": "String"
+  },
+  "english": "Inglés",
+  "@english": {
+    "type": "String"
+  },
+  "spanish": "Español",
+  "@spanish": {
+    "type": "String"
+  },
+  "openPositions": "Posiciones Abiertas",
+  "@openPositions": {
+    "type": "String"
+  },
+  "history": "Historial",
+  "@history": {
+    "type": "String"
+  },
+  "closingPosition": "Cerrando posición {positionId}...",
+  "@closingPosition": {
+    "type": "String",
+    "placeholders": {
+      "positionId": {
+        "type": "String"
+      }
+    }
+  },
+  "movingStopLossBreakeven": "Moviendo stop loss a punto de equilibrio...",
+  "@movingStopLossBreakeven": {
+    "type": "String"
+  },
+  "enablingTrailingStop": "Activando trailing stop...",
+  "@enablingTrailingStop": {
+    "type": "String"
+  },
+  "noOpenPositions": "Sin Posiciones Abiertas",
+  "@noOpenPositions": {
+    "type": "String"
+  },
+  "startEngineToTrade": "Inicia el motor para comenzar a operar",
+  "@startEngineToTrade": {
+    "type": "String"
+  },
+  "closedPositionsHere": "Tus posiciones cerradas aparecerán aquí",
+  "@closedPositionsHere": {
+    "type": "String"
+  },
+  "slTpUpdatedSuccess": "SL/TP actualizado exitosamente",
+  "@slTpUpdatedSuccess": {
+    "type": "String"
+  },
+  "editStopLossTakeProfit": "Editar Stop Loss y Take Profit",
+  "@editStopLossTakeProfit": {
+    "type": "String"
+  },
+  "stopLoss": "Stop Loss",
+  "@stopLoss": {
+    "type": "String"
+  },
+  "priceCloseIfLosing": "Precio para cerrar posición si está perdiendo",
+  "@priceCloseIfLosing": {
+    "type": "String"
+  },
+  "pleaseEnterStopLoss": "Por favor ingresa el precio de stop loss",
+  "@pleaseEnterStopLoss": {
+    "type": "String"
+  },
+  "pleaseEnterValidPrice": "Por favor ingresa un precio válido",
+  "@pleaseEnterValidPrice": {
+    "type": "String"
+  },
+  "takeProfit": "Take Profit",
+  "@takeProfit": {
+    "type": "String"
+  },
+  "priceCloseIfWinning": "Precio para cerrar posición si está ganando",
+  "@priceCloseIfWinning": {
+    "type": "String"
+  },
+  "pleaseEnterTakeProfit": "Por favor ingresa el precio de take profit",
+  "@pleaseEnterTakeProfit": {
+    "type": "String"
+  },
+  "save": "Guardar",
+  "@save": {
+    "type": "String"
+  },
+  "killSwitchActivated": "Kill Switch ACTIVADO - Todo el trading detenido",
+  "@killSwitchActivated": {
+    "type": "String"
+  },
+  "killSwitchDeactivated": "Kill Switch desactivado - Trading reanudado",
+  "@killSwitchDeactivated": {
+    "type": "String"
+  },
+  "selectRiskMode": "Seleccionar Modo de Riesgo",
+  "@selectRiskMode": {
+    "type": "String"
+  },
+  "conservative": "Conservador",
+  "@conservative": {
+    "type": "String"
+  },
+  "lowerRiskSmallerPositions": "Menor riesgo, posiciones más pequeñas",
+  "@lowerRiskSmallerPositions": {
+    "type": "String"
+  },
+  "normal": "Normal",
+  "@normal": {
+    "type": "String"
+  },
+  "balancedRiskReward": "Riesgo y recompensa equilibrados",
+  "@balancedRiskReward": {
+    "type": "String"
+  },
+  "aggressive": "Agresivo",
+  "@aggressive": {
+    "type": "String"
+  },
+  "higherRiskLargerPositions": "Mayor riesgo, posiciones más grandes",
+  "@higherRiskLargerPositions": {
+    "type": "String"
+  },
+  "riskModeChanged": "Modo de riesgo cambiado a {mode}",
+  "@riskModeChanged": {
+    "type": "String",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "riskLimitsUpdated": "Límites de riesgo actualizados exitosamente",
+  "@riskLimitsUpdated": {
+    "type": "String"
+  },
+  "riskLimits": "Límites de Riesgo",
+  "@riskLimits": {
+    "type": "String"
+  },
+  "editLimits": "Editar límites",
+  "@editLimits": {
+    "type": "String"
+  },
+  "maxPositionSize": "Tamaño Máximo de Posición",
+  "@maxPositionSize": {
+    "type": "String"
+  },
+  "maxTotalExposure": "Exposición Total Máxima",
+  "@maxTotalExposure": {
+    "type": "String"
+  },
+  "stopLossPercent": "Stop Loss %",
+  "@stopLossPercent": {
+    "type": "String"
+  },
+  "takeProfitPercent": "Take Profit %",
+  "@takeProfitPercent": {
+    "type": "String"
+  },
+  "maxDailyLoss": "Pérdida Diaria Máxima",
+  "@maxDailyLoss": {
+    "type": "String"
+  },
+  "riskMode": "Modo de Riesgo",
+  "@riskMode": {
+    "type": "String"
+  },
+  "tapToChangeMode": "Toca para cambiar de modo",
+  "@tapToChangeMode": {
+    "type": "String"
+  },
+  "exposureBySymbol": "Exposición por Símbolo",
+  "@exposureBySymbol": {
+    "type": "String"
+  },
+  "editRiskLimits": "Editar Límites de Riesgo",
+  "@editRiskLimits": {
+    "type": "String"
+  },
+  "pleaseEnterValue": "Por favor ingresa un valor",
+  "@pleaseEnterValue": {
+    "type": "String"
+  },
+  "pleaseEnterValidAmount": "Por favor ingresa una cantidad válida",
+  "@pleaseEnterValidAmount": {
+    "type": "String"
+  },
+  "pleaseEnterValidPercentage": "Por favor ingresa un porcentaje válido",
+  "@pleaseEnterValidPercentage": {
+    "type": "String"
+  },
+  "strategiesOverview": "Resumen de Estrategias",
+  "@strategiesOverview": {
+    "type": "String"
+  },
+  "active": "Activo",
+  "@active": {
+    "type": "String"
+  },
+  "avgWinRate": "Tasa de Acierto Promedio",
+  "@avgWinRate": {
+    "type": "String"
+  },
+  "availableStrategies": "Estrategias Disponibles",
+  "@availableStrategies": {
+    "type": "String"
+  },
+  "strategyActivated": "Estrategia \"{name}\" activada",
+  "@strategyActivated": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "strategyDeactivated": "Estrategia \"{name}\" desactivada",
+  "@strategyDeactivated": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceMetrics": "Métricas de Rendimiento",
+  "@performanceMetrics": {
+    "type": "String"
+  },
+  "weight": "Peso",
+  "@weight": {
+    "type": "String"
+  },
+  "avgWin": "Ganancia Promedio",
+  "@avgWin": {
+    "type": "String"
+  },
+  "avgLoss": "Pérdida Promedio",
+  "@avgLoss": {
+    "type": "String"
+  },
+  "configuration": "Configuración",
+  "@configuration": {
+    "type": "String"
+  },
+  "strategyConfigUpdated": "Configuración de estrategia actualizada",
+  "@strategyConfigUpdated": {
+    "type": "String"
+  },
+  "configureStrategy": "Configurar {name}",
+  "@configureStrategy": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tradingDashboard": "Panel de Trading",
+  "@tradingDashboard": {
+    "type": "String"
+  },
+  "positions": "Posiciones",
+  "@positions": {
+    "type": "String"
+  },
+  "strategies": "Estrategias",
+  "@strategies": {
+    "type": "String"
+  },
+  "riskMonitor": "Monitor de Riesgo",
+  "@riskMonitor": {
+    "type": "String"
+  },
+  "more": "Más",
+  "@more": {
+    "type": "String"
+  },
+  "tradingMCP": "Trading MCP",
+  "@tradingMCP": {
+    "type": "String"
+  },
+  "home": "Inicio",
+  "@home": {
+    "type": "String"
+  },
+  "risk": "Riesgo",
+  "@risk": {
+    "type": "String"
+  },
+  "executionStats": "Estadísticas de Ejecución",
+  "@executionStats": {
+    "type": "String"
+  },
+  "viewLatencyPerformance": "Ver latencia y rendimiento",
+  "@viewLatencyPerformance": {
+    "type": "String"
+  },
+  "tradingPairs": "Pares de Trading",
+  "@tradingPairs": {
+    "type": "String"
+  },
+  "manageTradingPairs": "Administrar pares de trading",
+  "@manageTradingPairs": {
+    "type": "String"
+  },
+  "alerts": "Alertas",
+  "@alerts": {
+    "type": "String"
+  },
+  "configureNotifications": "Configurar notificaciones",
+  "@configureNotifications": {
+    "type": "String"
+  },
+  "appPreferences": "Preferencias de la aplicación",
+  "@appPreferences": {
+    "type": "String"
+  },
+  "about": "Acerca de",
+  "@about": {
+    "type": "String"
+  },
+  "appInformation": "Información de la aplicación",
+  "@appInformation": {
+    "type": "String"
+  },
+  "appVersion": "1.0.0",
+  "@appVersion": {
+    "type": "String"
+  },
+  "appDescription": "Plataforma avanzada de automatización de trading de criptomonedas",
+  "@appDescription": {
+    "type": "String"
+  },
+  "backendVersion": "Backend: Trading MCP Server v1.0.0",
+  "@backendVersion": {
+    "type": "String"
+  }
+}
