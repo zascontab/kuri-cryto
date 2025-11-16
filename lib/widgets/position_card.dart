@@ -126,7 +126,7 @@ class _PositionCardState extends State<PositionCard>
                               vertical: 4,
                             ),
                             decoration: BoxDecoration(
-                              color: _getSideColor().withOpacity(0.2),
+                              color: _getSideColor().withValues(alpha: 0.2),
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(

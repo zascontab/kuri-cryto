@@ -178,7 +178,7 @@ class _RiskScreenState extends State<RiskScreen> {
       child: Container(
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: isSelected ? color.withOpacity(0.2) : null,
+          color: isSelected ? color.withValues(alpha: 0.2) : null,
           borderRadius: BorderRadius.circular(8),
           border: isSelected ? Border.all(color: color, width: 2) : null,
         ),
@@ -350,7 +350,7 @@ class _RiskScreenState extends State<RiskScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: _getRiskModeColor().withOpacity(0.2),
+                        color: _getRiskModeColor().withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: Text(

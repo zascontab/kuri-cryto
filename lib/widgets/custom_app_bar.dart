@@ -66,7 +66,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   boxShadow: isConnected
                       ? [
                           BoxShadow(
-                            color: const Color(0xFF4CAF50).withOpacity(0.5),
+                            color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
                             blurRadius: 8,
                             spreadRadius: 2,
                           ),
@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               vertical: 6,
             ),
             decoration: BoxDecoration(
-              color: _getStatusColor().withOpacity(0.2),
+              color: _getStatusColor().withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(16),
               border: Border.all(
                 color: _getStatusColor(),

@@ -92,7 +92,7 @@ class RiskSentinelCard extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: _getRiskModeColor().withOpacity(0.2),
+                    color: _getRiskModeColor().withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
@@ -192,7 +192,7 @@ class RiskSentinelCard extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     color: consecutiveLosses >= maxConsecutiveLosses - 1
-                        ? const Color(0xFFF44336).withOpacity(0.2)
+                        ? const Color(0xFFF44336).withValues(alpha: 0.2)
                         : colorScheme.surfaceVariant,
                     borderRadius: BorderRadius.circular(12),
                   ),

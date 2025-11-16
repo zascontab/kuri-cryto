@@ -214,7 +214,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Text(
               'Cargando...',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onBackground.withOpacity(0.6),
+                    color: colorScheme.onBackground.withValues(alpha: 0.6),
                   ),
             ),
           ],

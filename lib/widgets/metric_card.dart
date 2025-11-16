@@ -27,7 +27,7 @@ class MetricCard extends StatelessWidget {
     return Card(
       elevation: 2,
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(12.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -36,43 +36,52 @@ class MetricCard extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  size: 24,
+                  size: 20,
                   color: colorScheme.primary,
                 ),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
                     title,
-                    style: theme.textTheme.bodyMedium?.copyWith(
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
                     overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
             if (isLoading)
-              const CircularProgressIndicator.adaptive()
+              const SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+              )
             else ...[
-              TweenAnimationBuilder<double>(
-                tween: Tween(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeOut,
-                builder: (context, value, child) {
-                  return Opacity(
-                    opacity: value,
-                    child: Transform.translate(
-                      offset: Offset(0, 10 * (1 - value)),
-                      child: child,
+              Flexible(
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(begin: 0.0, end: 1.0),
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.easeOut,
+                  builder: (context, animValue, child) {
+                    return Opacity(
+                      opacity: animValue,
+                      child: Transform.translate(
+                        offset: Offset(0, 5 * (1 - animValue)),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Text(
+                    value,
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
                     ),
-                  );
-                },
-                child: Text(
-                  value,
-                  style: theme.textTheme.headlineSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: colorScheme.onSurface,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ),
@@ -82,9 +91,9 @@ class MetricCard extends StatelessWidget {
                   tween: Tween(begin: 0.0, end: 1.0),
                   duration: const Duration(milliseconds: 600),
                   curve: Curves.easeOut,
-                  builder: (context, value, child) {
+                  builder: (context, animValue, child) {
                     return Opacity(
-                      opacity: value,
+                      opacity: animValue,
                       child: child,
                     );
                   },
@@ -94,6 +103,8 @@ class MetricCard extends StatelessWidget {
                       color: changeColor ?? colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w500,
                     ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],
