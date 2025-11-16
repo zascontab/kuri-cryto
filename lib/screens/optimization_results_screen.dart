@@ -620,7 +620,7 @@ class _OptimizationResultsScreenState
             if (results.length > 20) ...[
               const SizedBox(height: 8),
               Text(
-                '${l10n.showing} 20 ${l10n.of} ${results.length} ${l10n.results}',
+                '${l10n.showing} 20 ${l10n.ofLabel} ${results.length} ${l10n.results}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

@@ -549,7 +549,7 @@ class L10nEn extends L10n {
   String get showing => 'Showing';
 
   @override
-  String get of => 'of';
+  String get ofLabel => 'of';
 
   @override
   String get trades => 'trades';
@@ -1161,8 +1161,7 @@ class L10nEn extends L10n {
   @override
   String get edit => 'Edit';
 
-  @override
-  String get delete => 'Delete';
+ 
 
   @override
   String get errorLoadingConfiguration => 'Error Loading Configuration';
@@ -1201,8 +1200,6 @@ class L10nEn extends L10n {
   @override
   String get alertType => 'Alert Type';
 
-  @override
-  String get pleaseEnterValidNumber => 'Please enter a valid number';
 
   @override
   String get severity => 'Severity';

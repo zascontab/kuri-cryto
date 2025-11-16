@@ -6,7 +6,7 @@ part of 'alert_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$alertsHash() => r'a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0';
+String _$alertsHash() => r'49dfe2eeb5a4f96ac931861a4bd08586109cdec7';
 
 /// Provider for real-time alerts stream via WebSocket
 ///
@@ -27,7 +27,7 @@ final alertsProvider = AutoDisposeStreamProvider<Alert>.internal(
 );
 
 typedef AlertsRef = AutoDisposeStreamProviderRef<Alert>;
-String _$activeAlertsHash() => r'b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1';
+String _$activeAlertsHash() => r'9570ff480d65e4b8b634a04a30ed1b18e7d9e869';
 
 /// Provider for active (unacknowledged) alerts
 ///
@@ -51,7 +51,7 @@ final activeAlertsProvider = AutoDisposeFutureProvider<List<Alert>>.internal(
 );
 
 typedef ActiveAlertsRef = AutoDisposeFutureProviderRef<List<Alert>>;
-String _$alertHistoryHash() => r'c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2';
+String _$alertHistoryHash() => r'1af56dd60d2383652254afc15bdf74c857fa3878';
 
 /// Copied from Dart SDK
 class _SystemHash {
@@ -110,8 +110,40 @@ const alertHistoryProvider = AlertHistoryFamily();
 ///
 /// Copied from [alertHistory].
 class AlertHistoryFamily extends Family<AsyncValue<List<Alert>>> {
+  /// Provider for alert history with optional filtering
+  ///
+  /// Fetches historical alerts with optional filtering:
+  /// - limit: Number of alerts to fetch (default: 100)
+  /// - severity: Filter by severity (info, warning, critical)
+  /// - acknowledged: Filter by acknowledgment status
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final history = ref.watch(alertHistoryProvider(
+  ///   limit: 50,
+  ///   severity: 'critical',
+  /// ));
+  /// ```
+  ///
+  /// Copied from [alertHistory].
   const AlertHistoryFamily();
 
+  /// Provider for alert history with optional filtering
+  ///
+  /// Fetches historical alerts with optional filtering:
+  /// - limit: Number of alerts to fetch (default: 100)
+  /// - severity: Filter by severity (info, warning, critical)
+  /// - acknowledged: Filter by acknowledgment status
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final history = ref.watch(alertHistoryProvider(
+  ///   limit: 50,
+  ///   severity: 'critical',
+  /// ));
+  /// ```
+  ///
+  /// Copied from [alertHistory].
   AlertHistoryProvider call({
     int? limit,
     String? severity,
@@ -150,12 +182,43 @@ class AlertHistoryFamily extends Family<AsyncValue<List<Alert>>> {
   String? get name => r'alertHistoryProvider';
 }
 
-class AlertHistoryProvider
-    extends AutoDisposeFutureProvider<List<Alert>> {
+/// Provider for alert history with optional filtering
+///
+/// Fetches historical alerts with optional filtering:
+/// - limit: Number of alerts to fetch (default: 100)
+/// - severity: Filter by severity (info, warning, critical)
+/// - acknowledged: Filter by acknowledgment status
+///
+/// Example usage:
+/// ```dart
+/// final history = ref.watch(alertHistoryProvider(
+///   limit: 50,
+///   severity: 'critical',
+/// ));
+/// ```
+///
+/// Copied from [alertHistory].
+class AlertHistoryProvider extends AutoDisposeFutureProvider<List<Alert>> {
+  /// Provider for alert history with optional filtering
+  ///
+  /// Fetches historical alerts with optional filtering:
+  /// - limit: Number of alerts to fetch (default: 100)
+  /// - severity: Filter by severity (info, warning, critical)
+  /// - acknowledged: Filter by acknowledgment status
+  ///
+  /// Example usage:
+  /// ```dart
+  /// final history = ref.watch(alertHistoryProvider(
+  ///   limit: 50,
+  ///   severity: 'critical',
+  /// ));
+  /// ```
+  ///
+  /// Copied from [alertHistory].
   AlertHistoryProvider({
-    required int? limit,
-    required String? severity,
-    required bool? acknowledged,
+    int? limit,
+    String? severity,
+    bool? acknowledged,
   }) : this._internal(
           (ref) => alertHistory(
             ref as AlertHistoryRef,
@@ -238,14 +301,18 @@ class AlertHistoryProvider
 }
 
 mixin AlertHistoryRef on AutoDisposeFutureProviderRef<List<Alert>> {
+  /// The parameter `limit` of this provider.
   int? get limit;
+
+  /// The parameter `severity` of this provider.
   String? get severity;
+
+  /// The parameter `acknowledged` of this provider.
   bool? get acknowledged;
 }
 
 class _AlertHistoryProviderElement
-    extends AutoDisposeFutureProviderElement<List<Alert>>
-    with AlertHistoryRef {
+    extends AutoDisposeFutureProviderElement<List<Alert>> with AlertHistoryRef {
   _AlertHistoryProviderElement(super.provider);
 
   @override
@@ -256,7 +323,7 @@ class _AlertHistoryProviderElement
   bool? get acknowledged => (origin as AlertHistoryProvider).acknowledged;
 }
 
-String _$alertConfigHash() => r'd4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3';
+String _$alertConfigHash() => r'709c5ec74fe6a849af9b0922f300459ab893480a';
 
 /// Provider for current alert configuration
 ///
@@ -280,7 +347,7 @@ final alertConfigProvider = AutoDisposeFutureProvider<AlertConfig>.internal(
 
 typedef AlertConfigRef = AutoDisposeFutureProviderRef<AlertConfig>;
 String _$unacknowledgedAlertCountHash() =>
-    r'e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4';
+    r'479493846d6269c0a7a98d4c6e6b5644b5c97ebf';
 
 /// Provider for tracking unacknowledged alert count
 ///
@@ -305,7 +372,7 @@ final unacknowledgedAlertCountProvider =
 );
 
 typedef UnacknowledgedAlertCountRef = AutoDisposeFutureProviderRef<int>;
-String _$alertsBySeverityHash() => r'f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5';
+String _$alertsBySeverityHash() => r'4cd0bcfa709ea1a656216e3030c27dd476467ecd';
 
 /// Provider for alerts grouped by severity
 ///
@@ -328,7 +395,7 @@ final alertsBySeverityProvider =
 
 typedef AlertsBySeverityRef
     = AutoDisposeFutureProviderRef<Map<String, List<Alert>>>;
-String _$alertAcknowledgerHash() => r'g7h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6';
+String _$alertAcknowledgerHash() => r'fef317888e35df69b610bad74f787fe1c7a6e2df';
 
 /// Provider for acknowledging an alert
 ///
@@ -349,7 +416,7 @@ final alertAcknowledgerProvider =
 );
 
 typedef _$AlertAcknowledger = AutoDisposeAsyncNotifier<void>;
-String _$alertDismisserHash() => r'h8i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7';
+String _$alertDismisserHash() => r'252cc6b0553f3ee06175acb8eeda2084bb78c0df';
 
 /// Provider for dismissing an alert
 ///
@@ -369,7 +436,7 @@ final alertDismisserProvider =
 );
 
 typedef _$AlertDismisser = AutoDisposeAsyncNotifier<void>;
-String _$alertConfiguratorHash() => r'i9j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8';
+String _$alertConfiguratorHash() => r'99d8693e2fb25c4028a152420bc283ff19bba7be';
 
 /// Provider for configuring alerts
 ///
@@ -389,7 +456,7 @@ final alertConfiguratorProvider =
 );
 
 typedef _$AlertConfigurator = AutoDisposeAsyncNotifier<void>;
-String _$alertRuleManagerHash() => r'j0k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9';
+String _$alertRuleManagerHash() => r'09da5ebeaa37a3ce635b62b808495e0d194c9da6';
 
 /// Provider for managing alert rules
 ///
@@ -409,7 +476,7 @@ final alertRuleManagerProvider =
 );
 
 typedef _$AlertRuleManager = AutoDisposeAsyncNotifier<void>;
-String _$alertTesterHash() => r'k1l2m3n4o5p6q7r8s9t0u1v2w3x4y5z6a7b8c9d0';
+String _$alertTesterHash() => r'e8ae4c1356923ea8f21f887f2f81acde6818aa21';
 
 /// Provider for testing alert configuration
 ///

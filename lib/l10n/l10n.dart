@@ -33,7 +33,7 @@ abstract class L10n {
   final String localeName;
 
   static L10n of(BuildContext context) {
-    return Localizations.of<L10n>(context, L10n)!;
+    return lookupL10n(Localizations.localeOf(context));
   }
 
   static const LocalizationsDelegate<L10n> delegate = _L10nDelegate();
@@ -338,7 +338,7 @@ abstract class L10n {
   String get exitPrice;
   String get pnl;
   String get showing;
-  String get of;
+  String get ofLabel;
   String get trades;
   String get noBacktestsYet;
   String get profitFactor;
@@ -496,7 +496,8 @@ abstract class L10n {
   String get noTradingPairs;
   String get tapAddPairToStart;
   String get removePair;
-  String removePairConfirmation({required String exchange, required String symbol});
+  String removePairConfirmation(
+      {required String exchange, required String symbol});
   String get remove;
   String get cannotRemovePair;
   String cannotRemovePairWithPositions({required int count});
@@ -549,7 +550,6 @@ abstract class L10n {
   String get type;
   String get threshold;
   String get edit;
-  String get delete;
   String get errorLoadingConfiguration;
   String get alertConfigurationSaved;
   String get ruleAdded;
@@ -562,7 +562,6 @@ abstract class L10n {
   String get ruleName;
   String get pleaseEnterRuleName;
   String get alertType;
-  String get pleaseEnterValidNumber;
   String get severity;
   String get cooldownMinutes;
   String get preventDuplicateAlerts;
@@ -578,7 +577,8 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'es'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['en', 'es'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_L10nDelegate old) => false;

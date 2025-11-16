@@ -148,7 +148,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       child: Scaffold(
         body: systemStatusAsync.when(
           data: (systemStatus) {
-            final isEngineRunning = systemStatus.isRunning;
+            final isEngineRunning = systemStatus.running;
 
             return ListView(
               padding: const EdgeInsets.all(16),
@@ -264,7 +264,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               ),
                               _buildStatusInfo(
                                 l10n.avgLatency,
-                                '${metrics.avgLatency.toStringAsFixed(0)}${l10n.ms}',
+                                '${metrics.avgLatencyMs.toStringAsFixed(0)}${l10n.ms}',
                                 theme,
                               ),
                             ],
@@ -340,11 +340,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       MetricCard(
                         icon: Icons.speed,
                         title: l10n.avgLatency,
-                        value: '${metrics.avgLatency.toStringAsFixed(0)}${l10n.ms}',
-                        change: metrics.avgLatency < 100
+                        value: '${metrics.avgLatencyMs.toStringAsFixed(0)}${l10n.ms}',
+                        change: metrics.avgLatencyMs < 100
                             ? l10n.excellent
                             : l10n.good,
-                        changeColor: metrics.avgLatency < 100
+                        changeColor: metrics.avgLatencyMs < 100
                             ? const Color(0xFF4CAF50)
                             : Colors.orange,
                         isLoading: false,
@@ -451,14 +451,14 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           data: (systemStatus) => FloatingActionButton.extended(
             onPressed: _isTogglingEngine
                 ? null
-                : () => _toggleEngine(systemStatus.isRunning),
+                : () => _toggleEngine(systemStatus.running),
             icon: Icon(
-              systemStatus.isRunning ? Icons.stop : Icons.play_arrow,
+              systemStatus.running ? Icons.stop : Icons.play_arrow,
             ),
-            label: Text(systemStatus.isRunning
+            label: Text(systemStatus.running
                 ? l10n.stopEngine
                 : l10n.startEngine),
-            backgroundColor: systemStatus.isRunning
+            backgroundColor: systemStatus.running
                 ? const Color(0xFFF44336)
                 : const Color(0xFF4CAF50),
             foregroundColor: Colors.white,

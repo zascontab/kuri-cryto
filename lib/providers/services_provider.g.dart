@@ -164,5 +164,121 @@ final websocketServiceProvider = AutoDisposeProvider<WebSocketService>.internal(
 );
 
 typedef WebsocketServiceRef = AutoDisposeProviderRef<WebSocketService>;
+String _$analysisServiceHash() => r'c0bf5edcef281db33906450658f109a629c2efd1';
+
+/// Provider for Analysis Service
+///
+/// Handles multi-timeframe market analysis:
+/// - Technical indicators (RSI, MACD, Bollinger)
+/// - Signal generation
+/// - Consensus analysis across timeframes
+///
+/// Copied from [analysisService].
+@ProviderFor(analysisService)
+final analysisServiceProvider = AutoDisposeProvider<AnalysisService>.internal(
+  analysisService,
+  name: r'analysisServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$analysisServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AnalysisServiceRef = AutoDisposeProviderRef<AnalysisService>;
+String _$backtestServiceHash() => r'9e5469d55dcb40128d35d7a466525316e9b23d11';
+
+/// Provider for Backtest Service
+///
+/// Manages strategy backtesting:
+/// - Run backtests with historical data
+/// - Get performance metrics
+/// - Trade history and equity curves
+///
+/// Copied from [backtestService].
+@ProviderFor(backtestService)
+final backtestServiceProvider = AutoDisposeProvider<BacktestService>.internal(
+  backtestService,
+  name: r'backtestServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$backtestServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef BacktestServiceRef = AutoDisposeProviderRef<BacktestService>;
+String _$optimizationServiceHash() =>
+    r'68460f4d51165cce05bf1468532ef018542b0bb5';
+
+/// Provider for Optimization Service
+///
+/// Manages parameter optimization:
+/// - Run parameter optimizations
+/// - Get optimization results
+/// - Apply optimal parameters
+/// - Manage optimization history
+///
+/// Copied from [optimizationService].
+@ProviderFor(optimizationService)
+final optimizationServiceProvider =
+    AutoDisposeProvider<OptimizationService>.internal(
+  optimizationService,
+  name: r'optimizationServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$optimizationServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef OptimizationServiceRef = AutoDisposeProviderRef<OptimizationService>;
+String _$executionServiceHash() => r'3cc75c07df8f7525cd79e99aa7bc2bbc0ffbd7bb';
+
+/// Provider for Execution Service
+///
+/// Handles execution statistics and performance:
+/// - Latency statistics
+/// - Execution history
+/// - Queue management
+/// - Performance metrics
+/// - Metrics export
+///
+/// Copied from [executionService].
+@ProviderFor(executionService)
+final executionServiceProvider = AutoDisposeProvider<ExecutionService>.internal(
+  executionService,
+  name: r'executionServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$executionServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ExecutionServiceRef = AutoDisposeProviderRef<ExecutionService>;
+String _$alertServiceHash() => r'78afd1bf3a1440c841a6d53cb71d0accba478fdb';
+
+/// Provider for Alert Service
+///
+/// Manages alert system:
+/// - Configure alert rules
+/// - Get alert history
+/// - Acknowledge/dismiss alerts
+/// - Get active alerts
+/// - Test alert configuration
+///
+/// Copied from [alertService].
+@ProviderFor(alertService)
+final alertServiceProvider = AutoDisposeProvider<AlertService>.internal(
+  alertService,
+  name: r'alertServiceProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$alertServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AlertServiceRef = AutoDisposeProviderRef<AlertService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

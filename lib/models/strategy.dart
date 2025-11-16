@@ -61,7 +61,8 @@ class StrategyPerformance {
         profitFactor: _parseDouble(json['profit_factor']),
       );
     } catch (e) {
-      throw FormatException('Failed to parse StrategyPerformance from JSON: $e');
+      throw FormatException(
+          'Failed to parse StrategyPerformance from JSON: $e');
     }
   }
 
@@ -102,16 +103,16 @@ class StrategyPerformance {
     if (identical(this, other)) return true;
 
     return other is StrategyPerformance &&
-      other.totalTrades == totalTrades &&
-      other.winningTrades == winningTrades &&
-      other.losingTrades == losingTrades &&
-      other.winRate == winRate &&
-      other.totalPnl == totalPnl &&
-      other.avgWin == avgWin &&
-      other.avgLoss == avgLoss &&
-      other.sharpeRatio == sharpeRatio &&
-      other.maxDrawdown == maxDrawdown &&
-      other.profitFactor == profitFactor;
+        other.totalTrades == totalTrades &&
+        other.winningTrades == winningTrades &&
+        other.losingTrades == losingTrades &&
+        other.winRate == winRate &&
+        other.totalPnl == totalPnl &&
+        other.avgWin == avgWin &&
+        other.avgLoss == avgLoss &&
+        other.sharpeRatio == sharpeRatio &&
+        other.maxDrawdown == maxDrawdown &&
+        other.profitFactor == profitFactor;
   }
 
   @override
@@ -138,6 +139,11 @@ class Strategy {
   /// Strategy name/identifier
   final String name;
 
+  /// Strategy description
+  ///
+  /// Optional, can be null
+  final String? description;
+
   /// Whether the strategy is currently active
   final bool active;
 
@@ -152,6 +158,7 @@ class Strategy {
 
   const Strategy({
     required this.name,
+    this.description,
     this.active = false,
     this.weight = 0.0,
     required this.performance,
@@ -177,10 +184,12 @@ class Strategy {
     try {
       return Strategy(
         name: json['name']?.toString() ?? 'unknown',
+        description: json['description']?.toString(),
         active: json['active'] == true,
         weight: _parseDouble(json['weight']),
         performance: json['performance'] != null
-            ? StrategyPerformance.fromJson(json['performance'] as Map<String, dynamic>)
+            ? StrategyPerformance.fromJson(
+                json['performance'] as Map<String, dynamic>)
             : const StrategyPerformance(),
         config: json['config'] as Map<String, dynamic>?,
       );
@@ -193,6 +202,7 @@ class Strategy {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      if (description != null) 'description': description,
       'active': active,
       'weight': weight,
       'performance': performance.toJson(),
@@ -230,10 +240,10 @@ class Strategy {
     if (identical(this, other)) return true;
 
     return other is Strategy &&
-      other.name == name &&
-      other.active == active &&
-      other.weight == weight &&
-      other.performance == performance;
+        other.name == name &&
+        other.active == active &&
+        other.weight == weight &&
+        other.performance == performance;
   }
 
   @override

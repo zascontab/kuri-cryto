@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 import '../models/position.dart';
 import 'formatters.dart';
@@ -571,7 +573,7 @@ extension DoubleExtension on double {
   /// (-5.0).clampValue(1, 10); // 1.0
   /// ```
   double clampValue(double min, double max) {
-    return clamp(min, max);
+    return clamp(min, max).toDouble();
   }
 
   /// Verifica si es aproximadamente igual a otro valor
@@ -835,4 +837,4 @@ extension PositionExtension on Position {
 }
 
 // Importación necesaria para pow
-import 'dart:math';
+

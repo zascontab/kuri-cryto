@@ -808,7 +808,7 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
             if (trades.length > 10) ...[
               const SizedBox(height: 8),
               Text(
-                '${l10n.showing} 10 ${l10n.of} ${trades.length} ${l10n.trades}',
+                '${l10n.showing} 10 ${l10n.ofLabel} ${trades.length} ${l10n.trades}',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),

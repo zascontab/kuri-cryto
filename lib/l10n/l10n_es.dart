@@ -270,7 +270,8 @@ class L10nEs extends L10n {
       'Kill Switch ACTIVADO - Todo el trading detenido';
 
   @override
-  String get killSwitchDeactivated => 'Kill Switch desactivado - Trading reanudado';
+  String get killSwitchDeactivated =>
+      'Kill Switch desactivado - Trading reanudado';
 
   @override
   String get selectRiskMode => 'Seleccionar Modo de Riesgo';
@@ -292,7 +293,8 @@ class L10nEs extends L10n {
   String get aggressive => 'Agresivo';
 
   @override
-  String get higherRiskLargerPositions => 'Mayor riesgo, posiciones más grandes';
+  String get higherRiskLargerPositions =>
+      'Mayor riesgo, posiciones más grandes';
 
   @override
   String riskModeChanged({required String mode}) =>
@@ -358,7 +360,8 @@ class L10nEs extends L10n {
   String get allTradingWillStop => 'Todo el trading se detendrá inmediatamente';
 
   @override
-  String get allPositionsWillClose => 'Todas las posiciones abiertas se cerrarán';
+  String get allPositionsWillClose =>
+      'Todas las posiciones abiertas se cerrarán';
 
   @override
   String get requiresManualReactivation =>
@@ -421,7 +424,8 @@ class L10nEs extends L10n {
   String get availableStrategies => 'Estrategias Disponibles';
 
   @override
-  String strategyActivated({required String name}) => 'Estrategia "$name" activada';
+  String strategyActivated({required String name}) =>
+      'Estrategia "$name" activada';
 
   @override
   String strategyDeactivated({required String name}) =>
@@ -453,7 +457,8 @@ class L10nEs extends L10n {
   String get multiTimeframeAnalysis => 'Análisis Multi-Temporalidad';
 
   @override
-  String get technicalAnalysisMultipleTimeframes => 'Análisis técnico en múltiples temporalidades';
+  String get technicalAnalysisMultipleTimeframes =>
+      'Análisis técnico en múltiples temporalidades';
 
   @override
   String get symbol => 'Símbolo';
@@ -487,7 +492,8 @@ class L10nEs extends L10n {
   String get backtesting => 'Backtesting';
 
   @override
-  String get testStrategiesWithHistoricalData => 'Prueba estrategias con datos históricos';
+  String get testStrategiesWithHistoricalData =>
+      'Prueba estrategias con datos históricos';
 
   @override
   String get newBacktest => 'Nuevo Backtest';
@@ -559,7 +565,7 @@ class L10nEs extends L10n {
   String get showing => 'Mostrando';
 
   @override
-  String get of => 'de';
+  String get ofLabel => 'de';
 
   @override
   String get trades => 'operaciones';
@@ -632,7 +638,8 @@ class L10nEs extends L10n {
   String get bayesianOptimization => 'Optimización Bayesiana';
 
   @override
-  String get bayesianOptimizationDesc => 'Búsqueda inteligente usando probabilidad';
+  String get bayesianOptimizationDesc =>
+      'Búsqueda inteligente usando probabilidad';
 
   @override
   String get maxIterations => 'Máximo de Iteraciones';
@@ -656,7 +663,8 @@ class L10nEs extends L10n {
   String get estimatedCombinations => 'Combinaciones Estimadas';
 
   @override
-  String get pleaseFixConfigurationErrors => 'Por favor corrija los errores de configuración';
+  String get pleaseFixConfigurationErrors =>
+      'Por favor corrija los errores de configuración';
 
   @override
   String get runOptimization => 'Ejecutar Optimización';
@@ -722,16 +730,19 @@ class L10nEs extends L10n {
   String get applyParameters => 'Aplicar Parámetros';
 
   @override
-  String get applyParametersConfirmation => '¿Aplicar estos parámetros a la configuración de la estrategia?';
+  String get applyParametersConfirmation =>
+      '¿Aplicar estos parámetros a la configuración de la estrategia?';
 
   @override
   String get apply => 'Aplicar';
 
   @override
-  String get parametersAppliedSuccessfully => 'Parámetros aplicados exitosamente';
+  String get parametersAppliedSuccessfully =>
+      'Parámetros aplicados exitosamente';
 
   @override
-  String get cancelOptimizationConfirmation => '¿Estás seguro de que quieres cancelar esta optimización?';
+  String get cancelOptimizationConfirmation =>
+      '¿Estás seguro de que quieres cancelar esta optimización?';
 
   @override
   String get no => 'No';
@@ -740,7 +751,8 @@ class L10nEs extends L10n {
   String get yes => 'Sí';
 
   @override
-  String get optimizationCancelledSuccessfully => 'Optimización cancelada exitosamente';
+  String get optimizationCancelledSuccessfully =>
+      'Optimización cancelada exitosamente';
 
   @override
   String get noOptimizationsYet => 'No hay optimizaciones aún';
@@ -758,13 +770,15 @@ class L10nEs extends L10n {
   String get deleteOptimization => 'Eliminar Optimización';
 
   @override
-  String get deleteOptimizationConfirmation => '¿Estás seguro de que quieres eliminar esta optimización?';
+  String get deleteOptimizationConfirmation =>
+      '¿Estás seguro de que quieres eliminar esta optimización?';
 
   @override
   String get delete => 'Eliminar';
 
   @override
-  String get optimizationDeletedSuccessfully => 'Optimización eliminada exitosamente';
+  String get optimizationDeletedSuccessfully =>
+      'Optimización eliminada exitosamente';
 
   @override
   String get completed => 'Completado';
@@ -1007,13 +1021,15 @@ class L10nEs extends L10n {
   String get noTradingPairs => 'Sin Pares de Trading';
 
   @override
-  String get tapAddPairToStart => 'Toca el botón + para agregar tu primer par de trading';
+  String get tapAddPairToStart =>
+      'Toca el botón + para agregar tu primer par de trading';
 
   @override
   String get removePair => 'Remover Par';
 
   @override
-  String removePairConfirmation({required String exchange, required String symbol}) =>
+  String removePairConfirmation(
+          {required String exchange, required String symbol}) =>
       '¿Estás seguro de que quieres remover $symbol de $exchange?';
 
   @override
@@ -1084,19 +1100,22 @@ class L10nEs extends L10n {
   String get noAlertsYet => 'Sin Alertas Aún';
 
   @override
-  String get alertHistoryWillAppearHere => 'Tu historial de alertas aparecerá aquí';
+  String get alertHistoryWillAppearHere =>
+      'Tu historial de alertas aparecerá aquí';
 
   @override
   String get manageAlertRules => 'Administrar Reglas de Alerta';
 
   @override
-  String get configureAlertConditions => 'Configurar condiciones y umbrales de alerta';
+  String get configureAlertConditions =>
+      'Configurar condiciones y umbrales de alerta';
 
   @override
   String get testAlertSystem => 'Probar Sistema de Alertas';
 
   @override
-  String get sendTestAlert => 'Enviar una alerta de prueba para verificar la configuración';
+  String get sendTestAlert =>
+      'Enviar una alerta de prueba para verificar la configuración';
 
   @override
   String get alertAcknowledged => 'Alerta reconocida';
@@ -1141,10 +1160,12 @@ class L10nEs extends L10n {
   String get telegramChatId => 'ID de Chat de Telegram';
 
   @override
-  String get pleaseEnterTelegramToken => 'Por favor ingresa el token del bot de Telegram';
+  String get pleaseEnterTelegramToken =>
+      'Por favor ingresa el token del bot de Telegram';
 
   @override
-  String get pleaseEnterTelegramChatId => 'Por favor ingresa el ID de chat de Telegram';
+  String get pleaseEnterTelegramChatId =>
+      'Por favor ingresa el ID de chat de Telegram';
 
   @override
   String get telegramSetupInstructions =>
@@ -1160,7 +1181,8 @@ class L10nEs extends L10n {
   String get noAlertRulesYet => 'Sin Reglas de Alerta Aún';
 
   @override
-  String get tapAddToCreateRule => 'Toca "Agregar Regla" para crear tu primera regla de alerta';
+  String get tapAddToCreateRule =>
+      'Toca "Agregar Regla" para crear tu primera regla de alerta';
 
   @override
   String get type => 'Tipo';
@@ -1172,13 +1194,11 @@ class L10nEs extends L10n {
   String get edit => 'Editar';
 
   @override
-  String get delete => 'Eliminar';
-
-  @override
   String get errorLoadingConfiguration => 'Error al Cargar Configuración';
 
   @override
-  String get alertConfigurationSaved => 'Configuración de alertas guardada exitosamente';
+  String get alertConfigurationSaved =>
+      'Configuración de alertas guardada exitosamente';
 
   @override
   String get ruleAdded => 'Regla de alerta agregada exitosamente';
@@ -1212,16 +1232,14 @@ class L10nEs extends L10n {
   String get alertType => 'Tipo de Alerta';
 
   @override
-  String get pleaseEnterValidNumber => 'Por favor ingresa un número válido';
-
-  @override
   String get severity => 'Severidad';
 
   @override
   String get cooldownMinutes => 'Enfriamiento (minutos)';
 
   @override
-  String get preventDuplicateAlerts => 'Prevenir alertas duplicadas durante este período';
+  String get preventDuplicateAlerts =>
+      'Prevenir alertas duplicadas durante este período';
 
   @override
   String get testAlertSent => 'Alerta de prueba enviada exitosamente';
