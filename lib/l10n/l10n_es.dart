@@ -144,4 +144,243 @@ class L10nEs extends L10n {
 
   @override
   String get spanish => 'Español';
+
+  @override
+  String get tradingDashboard => 'Panel de Trading';
+
+  @override
+  String get positions => 'Posiciones';
+
+  @override
+  String get strategies => 'Estrategias';
+
+  @override
+  String get riskMonitor => 'Monitor de Riesgo';
+
+  @override
+  String get more => 'Más';
+
+  @override
+  String get tradingMCP => 'Trading MCP';
+
+  @override
+  String get home => 'Inicio';
+
+  @override
+  String get risk => 'Riesgo';
+
+  @override
+  String get executionStats => 'Estadísticas de Ejecución';
+
+  @override
+  String get viewLatencyPerformance => 'Ver latencia y rendimiento';
+
+  @override
+  String get tradingPairs => 'Pares de Trading';
+
+  @override
+  String get manageTradingPairs => 'Administrar pares de trading';
+
+  @override
+  String get alerts => 'Alertas';
+
+  @override
+  String get configureNotifications => 'Configurar notificaciones';
+
+  @override
+  String get appPreferences => 'Preferencias de la aplicación';
+
+  @override
+  String get about => 'Acerca de';
+
+  @override
+  String get appInformation => 'Información de la aplicación';
+
+  @override
+  String get appVersion => '1.0.0';
+
+  @override
+  String get appDescription =>
+      'Plataforma avanzada de automatización de trading de criptomonedas';
+
+  @override
+  String get backendVersion => 'Backend: Trading MCP Server v1.0.0';
+
+  @override
+  String get openPositions => 'Posiciones Abiertas';
+
+  @override
+  String get history => 'Historial';
+
+  @override
+  String closingPosition({required String positionId}) =>
+      'Cerrando posición $positionId...';
+
+  @override
+  String get movingStopLossBreakeven =>
+      'Moviendo stop loss a punto de equilibrio...';
+
+  @override
+  String get enablingTrailingStop => 'Activando trailing stop...';
+
+  @override
+  String get noOpenPositions => 'Sin Posiciones Abiertas';
+
+  @override
+  String get startEngineToTrade => 'Inicia el motor para comenzar a operar';
+
+  @override
+  String get closedPositionsHere => 'Tus posiciones cerradas aparecerán aquí';
+
+  @override
+  String get slTpUpdatedSuccess => 'SL/TP actualizado exitosamente';
+
+  @override
+  String get editStopLossTakeProfit => 'Editar Stop Loss y Take Profit';
+
+  @override
+  String get stopLoss => 'Stop Loss';
+
+  @override
+  String get priceCloseIfLosing =>
+      'Precio para cerrar posición si está perdiendo';
+
+  @override
+  String get pleaseEnterStopLoss => 'Por favor ingresa el precio de stop loss';
+
+  @override
+  String get pleaseEnterValidPrice => 'Por favor ingresa un precio válido';
+
+  @override
+  String get takeProfit => 'Take Profit';
+
+  @override
+  String get priceCloseIfWinning =>
+      'Precio para cerrar posición si está ganando';
+
+  @override
+  String get pleaseEnterTakeProfit =>
+      'Por favor ingresa el precio de take profit';
+
+  @override
+  String get save => 'Guardar';
+
+  @override
+  String get killSwitchActivated =>
+      'Kill Switch ACTIVADO - Todo el trading detenido';
+
+  @override
+  String get killSwitchDeactivated => 'Kill Switch desactivado - Trading reanudado';
+
+  @override
+  String get selectRiskMode => 'Seleccionar Modo de Riesgo';
+
+  @override
+  String get conservative => 'Conservador';
+
+  @override
+  String get lowerRiskSmallerPositions =>
+      'Menor riesgo, posiciones más pequeñas';
+
+  @override
+  String get normal => 'Normal';
+
+  @override
+  String get balancedRiskReward => 'Riesgo y recompensa equilibrados';
+
+  @override
+  String get aggressive => 'Agresivo';
+
+  @override
+  String get higherRiskLargerPositions => 'Mayor riesgo, posiciones más grandes';
+
+  @override
+  String riskModeChanged({required String mode}) =>
+      'Modo de riesgo cambiado a $mode';
+
+  @override
+  String get riskLimitsUpdated => 'Límites de riesgo actualizados exitosamente';
+
+  @override
+  String get riskLimits => 'Límites de Riesgo';
+
+  @override
+  String get editLimits => 'Editar límites';
+
+  @override
+  String get maxPositionSize => 'Tamaño Máximo de Posición';
+
+  @override
+  String get maxTotalExposure => 'Exposición Total Máxima';
+
+  @override
+  String get stopLossPercent => 'Stop Loss %';
+
+  @override
+  String get takeProfitPercent => 'Take Profit %';
+
+  @override
+  String get maxDailyLoss => 'Pérdida Diaria Máxima';
+
+  @override
+  String get riskMode => 'Modo de Riesgo';
+
+  @override
+  String get tapToChangeMode => 'Toca para cambiar de modo';
+
+  @override
+  String get exposureBySymbol => 'Exposición por Símbolo';
+
+  @override
+  String get editRiskLimits => 'Editar Límites de Riesgo';
+
+  @override
+  String get pleaseEnterValue => 'Por favor ingresa un valor';
+
+  @override
+  String get pleaseEnterValidAmount => 'Por favor ingresa una cantidad válida';
+
+  @override
+  String get pleaseEnterValidPercentage =>
+      'Por favor ingresa un porcentaje válido';
+
+  @override
+  String get strategiesOverview => 'Resumen de Estrategias';
+
+  @override
+  String get active => 'Activo';
+
+  @override
+  String get avgWinRate => 'Tasa de Acierto Promedio';
+
+  @override
+  String get availableStrategies => 'Estrategias Disponibles';
+
+  @override
+  String strategyActivated({required String name}) => 'Estrategia "$name" activada';
+
+  @override
+  String strategyDeactivated({required String name}) =>
+      'Estrategia "$name" desactivada';
+
+  @override
+  String get performanceMetrics => 'Métricas de Rendimiento';
+
+  @override
+  String get weight => 'Peso';
+
+  @override
+  String get avgWin => 'Ganancia Promedio';
+
+  @override
+  String get avgLoss => 'Pérdida Promedio';
+
+  @override
+  String get configuration => 'Configuración';
+
+  @override
+  String get strategyConfigUpdated => 'Configuración de estrategia actualizada';
+
+  @override
+  String configureStrategy({required String name}) => 'Configurar $name';
 }

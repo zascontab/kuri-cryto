@@ -192,6 +192,92 @@ abstract class L10n {
 
   /// Spanish
   String get spanish;
+
+  // Navigation & Main Screen
+  String get tradingDashboard;
+  String get positions;
+  String get strategies;
+  String get riskMonitor;
+  String get more;
+  String get tradingMCP;
+  String get home;
+  String get risk;
+
+  // More Screen
+  String get executionStats;
+  String get viewLatencyPerformance;
+  String get tradingPairs;
+  String get manageTradingPairs;
+  String get alerts;
+  String get configureNotifications;
+  String get appPreferences;
+  String get about;
+  String get appInformation;
+  String get appVersion;
+  String get appDescription;
+  String get backendVersion;
+
+  // Positions Screen
+  String get openPositions;
+  String get history;
+  String closingPosition({required String positionId});
+  String get movingStopLossBreakeven;
+  String get enablingTrailingStop;
+  String get noOpenPositions;
+  String get startEngineToTrade;
+  String get closedPositionsHere;
+  String get slTpUpdatedSuccess;
+  String get editStopLossTakeProfit;
+  String get stopLoss;
+  String get priceCloseIfLosing;
+  String get pleaseEnterStopLoss;
+  String get pleaseEnterValidPrice;
+  String get takeProfit;
+  String get priceCloseIfWinning;
+  String get pleaseEnterTakeProfit;
+  String get save;
+
+  // Risk Screen
+  String get killSwitchActivated;
+  String get killSwitchDeactivated;
+  String get selectRiskMode;
+  String get conservative;
+  String get lowerRiskSmallerPositions;
+  String get normal;
+  String get balancedRiskReward;
+  String get aggressive;
+  String get higherRiskLargerPositions;
+  String riskModeChanged({required String mode});
+  String get riskLimitsUpdated;
+  String get riskLimits;
+  String get editLimits;
+  String get maxPositionSize;
+  String get maxTotalExposure;
+  String get stopLossPercent;
+  String get takeProfitPercent;
+  String get maxDailyLoss;
+  String get riskMode;
+  String get tapToChangeMode;
+  String get exposureBySymbol;
+  String get editRiskLimits;
+  String get pleaseEnterValue;
+  String get pleaseEnterValidAmount;
+  String get pleaseEnterValidPercentage;
+
+  // Strategies Screen
+  String get strategiesOverview;
+  String get active;
+  String get avgWinRate;
+  String get availableStrategies;
+  String strategyActivated({required String name});
+  String strategyDeactivated({required String name});
+  String get performanceMetrics;
+  String get weight;
+  String get avgWin;
+  String get avgLoss;
+  String get configuration;
+  String get strategyConfigUpdated;
+  String configureStrategy({required String name});
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {
