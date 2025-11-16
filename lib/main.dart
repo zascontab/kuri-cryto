@@ -70,7 +70,7 @@ class KuriCryptoApp extends ConsumerWidget {
       ),
 
       // Configuración de Cards
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -113,7 +113,7 @@ class KuriCryptoApp extends ConsumerWidget {
       ),
 
       // Configuración de Cards
-      cardTheme: CardTheme(
+      cardTheme: CardThemeData(
         elevation: 2,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -198,9 +198,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Text(
               'Kuri Crypto',
               style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
-              ),
+                    fontWeight: FontWeight.bold,
+                    color: colorScheme.primary,
+                  ),
             ),
             const SizedBox(height: 16),
 
@@ -214,8 +214,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Text(
               'Cargando...',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onBackground.withOpacity(0.6),
-              ),
+                    color: colorScheme.onBackground.withOpacity(0.6),
+                  ),
             ),
           ],
         ),

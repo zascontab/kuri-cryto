@@ -150,7 +150,7 @@ class _MainScreenState extends State<MainScreen> {
               ),
               const Divider(height: 1),
               ListTile(
-                leading: const Icon(Icons.pairs),
+                leading: const Icon(Icons.paid),
                 title: const Text('Trading Pairs'),
                 subtitle: const Text('Manage trading pairs'),
                 trailing: const Icon(Icons.chevron_right),

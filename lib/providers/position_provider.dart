@@ -1,9 +1,6 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/position.dart';
-import '../services/position_service.dart';
-import '../services/websocket_service.dart';
 import 'services_provider.dart';
-import 'websocket_provider.dart';
 
 part 'position_provider.g.dart';
 
@@ -12,51 +9,63 @@ part 'position_provider.g.dart';
 /// Provides live updates of open positions as they change.
 /// Uses WebSocket connection for real-time updates with <1s latency.
 ///
-/// Returns Stream<List<Position>> that emits whenever positions change.
+/// Returns Stream<Position> that emits whenever a position changes.
+///
+/// NOTE: This returns individual position updates. If you need a list of all
+/// current positions, use the REST API via positionServiceProvider.getPositions()
 @riverpod
-Stream<List<Position>> positions(PositionsRef ref) {
+Stream<Position> positions(PositionsRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
-  // Ensure WebSocket is connected
+  // Ensure connection
   wsService.connect();
 
-  // Return the positions stream
-  return ref.watch(positionUpdatesStreamProvider);
+  // Transform WebSocket Position to model Position
+  return wsService.positionUpdates.map((wsPosition) {
+    return Position(
+      id: wsPosition.id,
+      symbol: wsPosition.symbol,
+      side: wsPosition.side,
+      entryPrice: wsPosition.entryPrice,
+      currentPrice: wsPosition.currentPrice,
+      size: wsPosition.size,
+      leverage: wsPosition.leverage,
+      stopLoss: wsPosition.stopLoss,
+      takeProfit: wsPosition.takeProfit,
+      unrealizedPnl: wsPosition.unrealizedPnl,
+      realizedPnl: wsPosition.realizedPnl ?? 0.0,
+      openTime: wsPosition.openTime,
+      closeTime: wsPosition.closeTime,
+      strategy: wsPosition.strategy,
+      status: wsPosition.status,
+    );
+  });
 }
 
 /// Provider for position history with pagination support
 ///
 /// Fetches closed positions with optional filtering:
 /// - limit: Number of positions to fetch (default: 100)
-/// - offset: Pagination offset (default: 0)
-/// - symbol: Filter by trading pair (optional)
-/// - strategy: Filter by strategy (optional)
-/// - startDate: Filter by start date (optional)
-/// - endDate: Filter by end date (optional)
+/// - fromDate: Start date (ISO 8601 format, optional)
+/// - toDate: End date (ISO 8601 format, optional)
 ///
 /// Example usage:
 /// ```dart
-/// final history = ref.watch(positionHistoryProvider(limit: 50, offset: 0));
+/// final history = ref.watch(positionHistoryProvider(limit: 50));
 /// ```
 @riverpod
 Future<List<Position>> positionHistory(
   PositionHistoryRef ref, {
-  int limit = 100,
-  int offset = 0,
-  String? symbol,
-  String? strategy,
-  DateTime? startDate,
-  DateTime? endDate,
+  int? limit,
+  String? fromDate,
+  String? toDate,
 }) async {
   final service = ref.watch(positionServiceProvider);
 
   return await service.getPositionHistory(
     limit: limit,
-    offset: offset,
-    symbol: symbol,
-    strategy: strategy,
-    startDate: startDate,
-    endDate: endDate,
+    from: fromDate,
+    to: toDate,
   );
 }
 
@@ -161,7 +170,7 @@ class SlTpUpdater extends _$SlTpUpdater {
     try {
       final service = ref.read(positionServiceProvider);
       final result = await service.updateSlTp(
-        positionId: positionId,
+        positionId,
         stopLoss: stopLoss,
         takeProfit: takeProfit,
       );
@@ -193,19 +202,20 @@ class BreakevenMover extends _$BreakevenMover {
   /// Move stop-loss to breakeven for a position
   ///
   /// Sets SL = entry price, ensuring no loss if SL is hit.
-  Future<bool> moveToBreakeven(String positionId) async {
+  /// Returns the new stop-loss price.
+  Future<double> moveToBreakeven(String positionId) async {
     state = const AsyncValue.loading();
 
     try {
       final service = ref.read(positionServiceProvider);
-      final result = await service.moveToBreakeven(positionId);
+      final newStopLoss = await service.moveToBreakeven(positionId);
 
       state = const AsyncValue.data(null);
 
       // Invalidate positions to trigger refresh
       ref.invalidate(positionsProvider);
 
-      return result;
+      return newStopLoss;
     } catch (e, stack) {
       state = AsyncValue.error(e, stack);
       rethrow;
@@ -243,8 +253,8 @@ class TrailingStopEnabler extends _$TrailingStopEnabler {
     try {
       final service = ref.read(positionServiceProvider);
       final result = await service.enableTrailingStop(
-        positionId: positionId,
-        distancePercent: distancePercent,
+        positionId,
+        distancePercent,
       );
 
       state = const AsyncValue.data(null);
@@ -262,11 +272,11 @@ class TrailingStopEnabler extends _$TrailingStopEnabler {
 
 /// Provider for aggregated position statistics
 ///
-/// Calculates summary statistics from current positions:
-/// - Total positions
-/// - Total unrealized P&L
-/// - Total exposure
-/// - Positions by strategy
+/// NOTE: Temporarily disabled. Needs to be refactored to work with Stream<Position>
+/// instead of List<Position>.
+///
+/// TODO: Implement using StreamProvider that accumulates positions
+/*
 @riverpod
 class PositionStats extends _$PositionStats {
   @override
@@ -309,6 +319,7 @@ class PositionStats extends _$PositionStats {
     );
   }
 }
+*/
 
 /// Position statistics model
 class PositionStatistics {

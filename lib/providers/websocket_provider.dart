@@ -1,31 +1,10 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../models/position.dart';
-import '../models/metrics.dart';
-import '../models/alert.dart';
-import '../models/risk_state.dart';
+import '../models/websocket_event.dart';
 import '../services/websocket_service.dart';
 import 'services_provider.dart';
 
 part 'websocket_provider.g.dart';
-
-/// Enum for WebSocket connection state
-enum WebSocketConnectionState {
-  /// Not connected
-  disconnected,
-
-  /// Attempting to connect
-  connecting,
-
-  /// Successfully connected
-  connected,
-
-  /// Connection error occurred
-  error,
-
-  /// Reconnecting after disconnect
-  reconnecting,
-}
 
 /// Provider for WebSocket connection state
 ///
@@ -52,21 +31,14 @@ class WebsocketConnectionState extends _$WebsocketConnectionState {
     });
 
     // Subscribe to connection state changes
-    _subscription = wsService.connectionStateStream.listen((connected) {
-      if (connected) {
-        state = WebSocketConnectionState.connected;
-      } else {
-        // Check if we should reconnect
-        if (state == WebSocketConnectionState.connected) {
-          state = WebSocketConnectionState.reconnecting;
-        } else {
-          state = WebSocketConnectionState.disconnected;
-        }
-      }
+    _subscription = wsService.connectionStateStream.listen((wsState) {
+      // Map WebSocketService's state to our local enum
+      // Note: We use the same enum name so this is a direct assignment
+      state = wsState;
     });
 
-    // Initial state
-    return WebSocketConnectionState.disconnected;
+    // Initial state - get current state from service
+    return wsService.connectionState;
   }
 
   /// Manually connect to WebSocket
@@ -88,8 +60,7 @@ class WebsocketConnectionState extends _$WebsocketConnectionState {
 
   /// Check if currently connecting
   bool get isConnecting =>
-      state == WebSocketConnectionState.connecting ||
-      state == WebSocketConnectionState.reconnecting;
+      state == WebSocketConnectionState.connecting;
 
   /// Check if in error state
   bool get hasError => state == WebSocketConnectionState.error;
@@ -98,7 +69,7 @@ class WebsocketConnectionState extends _$WebsocketConnectionState {
 /// Provider for position updates stream
 ///
 /// Streams real-time position updates from WebSocket.
-/// Emits List<Position> whenever positions change.
+/// Emits Position whenever a position changes.
 ///
 /// Updates include:
 /// - New positions opened
@@ -106,22 +77,20 @@ class WebsocketConnectionState extends _$WebsocketConnectionState {
 /// - Position closures
 /// - SL/TP modifications
 @riverpod
-Stream<List<Position>> positionUpdatesStream(PositionUpdatesStreamRef ref) {
+Stream<Position> positionUpdatesStream(PositionUpdatesStreamRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
   // Ensure connection is active
   wsService.connect();
 
-  // Transform WebSocket events into position list
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.positionUpdate)
-      .map((event) => event.data as List<Position>);
+  // Return position updates stream from WebSocket service
+  return wsService.positionUpdates;
 }
 
 /// Provider for metrics updates stream
 ///
 /// Streams real-time metrics updates from WebSocket.
-/// Emits MetricsModel whenever metrics change.
+/// Emits Metrics whenever metrics change.
 ///
 /// Updates every few seconds with:
 /// - Total trades
@@ -130,14 +99,12 @@ Stream<List<Position>> positionUpdatesStream(PositionUpdatesStreamRef ref) {
 /// - Active positions
 /// - Average latency
 @riverpod
-Stream<MetricsModel> metricsUpdatesStream(MetricsUpdatesStreamRef ref) {
+Stream<Metrics> metricsUpdatesStream(MetricsUpdatesStreamRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
   wsService.connect();
 
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.metricsUpdate)
-      .map((event) => event.data as MetricsModel);
+  return wsService.metricsUpdates;
 }
 
 /// Provider for alerts stream
@@ -157,46 +124,36 @@ Stream<Alert> alertsStream(AlertsStreamRef ref) {
 
   wsService.connect();
 
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.alert)
-      .map((event) => event.data as Alert);
+  return wsService.alerts;
 }
 
 /// Provider for risk updates stream
 ///
-/// Streams real-time risk state updates from WebSocket.
-/// Emits RiskState whenever risk metrics change.
+/// NOTE: Risk updates are not yet implemented in WebSocket service.
+/// This provider will be empty until the backend adds risk update events.
 ///
-/// Includes:
-/// - Drawdown levels
-/// - Exposure changes
-/// - Consecutive losses
-/// - Risk mode changes
-/// - Kill switch status
+/// TODO: Enable when backend implements risk_update WebSocket events
+/*
 @riverpod
-Stream<RiskState> riskUpdatesStream(RiskUpdatesStreamRef ref) {
+Stream<dynamic> riskUpdatesStream(RiskUpdatesStreamRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
-
   wsService.connect();
-
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.riskUpdate)
-      .map((event) => event.data as RiskState);
+  // TODO: Add risk updates stream when available
+  return const Stream.empty();
 }
+*/
 
 /// Provider for trade execution events stream
 ///
 /// Streams notifications when trades are executed.
 /// Useful for showing real-time execution confirmations.
 @riverpod
-Stream<TradeExecutedEvent> tradeExecutionStream(TradeExecutionStreamRef ref) {
+Stream<Trade> tradeExecutionStream(TradeExecutionStreamRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
   wsService.connect();
 
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.tradeExecuted)
-      .map((event) => event.data as TradeExecutedEvent);
+  return wsService.tradeExecuted;
 }
 
 /// Provider for kill switch events stream
@@ -209,9 +166,7 @@ Stream<KillSwitchEvent> killSwitchStream(KillSwitchStreamRef ref) {
 
   wsService.connect();
 
-  return wsService.eventStream
-      .where((event) => event.type == WebSocketEventType.killSwitch)
-      .map((event) => event.data as KillSwitchEvent);
+  return wsService.killSwitchEvents;
 }
 
 /// Provider for WebSocket connection status indicator
@@ -232,11 +187,6 @@ class WebsocketStatus extends _$WebsocketStatus {
       case WebSocketConnectionState.connecting:
         return ConnectionStatus(
           message: 'Connecting...',
-          color: ConnectionStatusColor.warning,
-        );
-      case WebSocketConnectionState.reconnecting:
-        return ConnectionStatus(
-          message: 'Reconnecting...',
           color: ConnectionStatusColor.warning,
         );
       case WebSocketConnectionState.error:
@@ -303,10 +253,11 @@ class WebsocketLatency extends _$WebsocketLatency {
 
   void _startLatencyMonitoring(WebSocketService wsService) {
     _pingTimer?.cancel();
-    _pingTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
-      final latency = await wsService.measureLatency();
-      _updateLatency(latency);
-    });
+    // TODO: Implement latency monitoring when WebSocketService supports it
+    // _pingTimer = Timer.periodic(const Duration(seconds: 5), (_) async {
+    //   final latency = await wsService.measureLatency();
+    //   _updateLatency(latency);
+    // });
   }
 
   void _updateLatency(int latency) {
@@ -393,7 +344,9 @@ class LastEventTimestamp extends _$LastEventTimestamp {
       _subscription?.cancel();
     });
 
-    _subscription = wsService.eventStream.listen((_) {
+    // Listen to any stream to track last event time
+    // Using position updates as a proxy for activity
+    _subscription = wsService.positionUpdates.listen((_) {
       state = DateTime.now();
     });
 

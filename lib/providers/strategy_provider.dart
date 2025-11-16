@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/strategy.dart';
-import '../models/strategy_performance.dart';
 import '../services/strategy_service.dart';
 import 'services_provider.dart';
 
@@ -179,10 +178,7 @@ class StrategyConfigUpdater extends _$StrategyConfigUpdater {
 
     try {
       final service = ref.read(strategyServiceProvider);
-      final result = await service.updateConfig(
-        strategyName: strategyName,
-        config: config,
-      );
+      final result = await service.updateConfig(strategyName, config);
 
       state = const AsyncValue.data(null);
 
@@ -204,18 +200,16 @@ class StrategyConfigUpdater extends _$StrategyConfigUpdater {
 ///
 /// Fetches comprehensive details for a specific strategy including:
 /// - Full configuration
-/// - Detailed performance metrics
-/// - Recent trades
-/// - P&L history
+/// - Performance metrics
 ///
 /// Takes strategy name as parameter.
 @riverpod
-Future<StrategyDetails> strategyDetails(
+Future<Strategy> strategyDetails(
   StrategyDetailsRef ref,
   String strategyName,
 ) async {
   final service = ref.watch(strategyServiceProvider);
-  return await service.getStrategyDetails(strategyName);
+  return await service.getStrategy(strategyName);
 }
 
 /// Provider for strategy performance metrics
@@ -231,18 +225,13 @@ Future<StrategyDetails> strategyDetails(
 ///
 /// Parameters:
 /// - strategyName: Name of the strategy
-/// - period: Time period ('daily', 'weekly', 'monthly', 'all')
 @riverpod
 Future<StrategyPerformance> strategyPerformance(
-  StrategyPerformanceRef ref, {
-  required String strategyName,
-  String period = 'daily',
-}) async {
+  StrategyPerformanceRef ref,
+  String strategyName,
+) async {
   final service = ref.watch(strategyServiceProvider);
-  return await service.getStrategyPerformance(
-    strategyName: strategyName,
-    period: period,
-  );
+  return await service.getPerformance(strategyName);
 }
 
 /// Provider for active strategies count

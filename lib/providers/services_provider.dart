@@ -53,11 +53,10 @@ Dio dio(DioRef ref) {
 
 /// Provider for API client
 ///
-/// Wraps Dio instance with custom error handling and retry logic
+/// Creates ApiClient with custom error handling and retry logic
 @riverpod
 ApiClient apiClient(ApiClientRef ref) {
-  final dio = ref.watch(dioProvider);
-  return ApiClient(dio);
+  return ApiClient();
 }
 
 /// Provider for Scalping Service
@@ -124,7 +123,7 @@ RiskService riskService(RiskServiceRef ref) {
 /// Auto-reconnection with exponential backoff
 @riverpod
 WebSocketService websocketService(WebsocketServiceRef ref) {
-  final service = WebSocketService(websocketUrl);
+  final service = WebSocketService(url: websocketUrl);
 
   // Ensure cleanup on provider disposal
   ref.onDispose(() {

@@ -62,14 +62,14 @@ class ApiConfig {
   // Configuración de Timeouts
   // ============================================================================
 
-  /// Timeout para conexión (en milisegundos)
-  static const int connectTimeout = 30000; // 30 segundos
+  /// Timeout para conexión
+  static const Duration connectTimeout = Duration(seconds: 30);
 
-  /// Timeout para recepción de datos (en milisegundos)
-  static const int receiveTimeout = 30000; // 30 segundos
+  /// Timeout para recepción de datos
+  static const Duration receiveTimeout = Duration(seconds: 30);
 
-  /// Timeout para envío de datos (en milisegundos)
-  static const int sendTimeout = 30000; // 30 segundos
+  /// Timeout para envío de datos
+  static const Duration sendTimeout = Duration(seconds: 30);
 
   /// Timeout para reconexión de WebSocket (en segundos)
   static const int wsReconnectTimeout = 5; // 5 segundos
@@ -81,8 +81,8 @@ class ApiConfig {
   /// Número máximo de reintentos para peticiones HTTP
   static const int maxRetries = 3;
 
-  /// Delay inicial entre reintentos (en milisegundos)
-  static const int retryDelay = 1000; // 1 segundo
+  /// Delay inicial entre reintentos
+  static const Duration retryDelay = Duration(seconds: 1);
 
   /// Factor multiplicador para backoff exponencial
   static const double retryBackoffMultiplier = 2.0;
@@ -130,6 +130,15 @@ class ApiConfig {
   /// Habilitar logs de peticiones HTTP en desarrollo
   static const bool enableHttpLogs = true;
 
+  /// Alias for enableHttpLogs (for compatibility)
+  static const bool enableLogging = enableHttpLogs;
+
+  /// Habilitar logs del body de las peticiones
+  static const bool logRequestBody = true;
+
+  /// Habilitar logs del body de las respuestas
+  static const bool logResponseBody = true;
+
   /// Habilitar logs de WebSocket en desarrollo
   static const bool enableWsLogs = true;
 
@@ -150,6 +159,13 @@ class ApiConfig {
   // Métodos Auxiliares
   // ============================================================================
 
+  /// Get base URL for environment
+  static String getBaseUrl(String environment) {
+    // For now, we only support localhost
+    // In the future, you can add staging, production URLs here
+    return apiBaseUrl;
+  }
+
   /// Construye la URL completa para un endpoint
   static String getApiUrl(String endpoint) {
     return '$apiBaseUrl$endpoint';
@@ -162,7 +178,7 @@ class ApiConfig {
 
   /// Calcula el delay de reintento con backoff exponencial
   static int getRetryDelay(int attemptNumber) {
-    return (retryDelay *
+    return (retryDelay.inMilliseconds *
             (retryBackoffMultiplier * attemptNumber)).round();
   }
 }

@@ -4,7 +4,6 @@ import '../models/risk_limits.dart';
 import '../models/exposure.dart';
 import '../services/risk_service.dart';
 import 'services_provider.dart';
-import 'websocket_provider.dart';
 
 part 'risk_provider.g.dart';
 
@@ -17,16 +16,12 @@ part 'risk_provider.g.dart';
 /// - Risk mode (Conservative/Normal/Aggressive)
 /// - Kill switch status
 ///
-/// Updates in real-time via WebSocket stream.
+/// For now, fetches from REST API.
+/// TODO: Switch to WebSocket stream when available
 @riverpod
-Stream<RiskState> riskState(RiskStateRef ref) {
-  final stream = ref.watch(riskUpdatesStreamProvider);
-
-  // Also subscribe to WebSocket service to ensure connection
-  final wsService = ref.watch(websocketServiceProvider);
-  wsService.connect();
-
-  return stream;
+Future<RiskState> riskState(RiskStateRef ref) async {
+  final service = ref.watch(riskServiceProvider);
+  return await service.getSentinelState();
 }
 
 /// Provider for risk limits configuration
@@ -72,11 +67,11 @@ class RiskLimits extends _$RiskLimits {
 @riverpod
 class Exposure extends _$Exposure {
   @override
-  FutureOr<ExposureModel> build() async {
+  FutureOr<ExposureInfo> build() async {
     return _fetchExposure();
   }
 
-  Future<ExposureModel> _fetchExposure() async {
+  Future<ExposureInfo> _fetchExposure() async {
     final service = ref.read(riskServiceProvider);
     return await service.getExposure();
   }
@@ -90,7 +85,7 @@ class Exposure extends _$Exposure {
   /// Get exposure percentage (0-100)
   double getExposurePercent() {
     return state.when(
-      data: (exposure) {
+      data: (ExposureInfo exposure) {
         if (exposure.maxExposure == 0) return 0;
         return (exposure.currentExposure / exposure.maxExposure) * 100;
       },
@@ -204,35 +199,16 @@ class RiskLimitsUpdater extends _$RiskLimitsUpdater {
 
   /// Update risk limits
   ///
-  /// All parameters are optional. Only provided parameters will be updated.
-  ///
   /// Parameters:
-  /// - maxPositionSize: Maximum size per position in USD
-  /// - maxTotalExposure: Maximum total exposure in USD
-  /// - stopLossPercent: Default stop loss percentage
-  /// - takeProfitPercent: Default take profit percentage
-  /// - maxDailyLoss: Maximum allowed daily loss in USD
-  /// - maxConsecutiveLosses: Maximum consecutive losses before pause
-  Future<bool> updateLimits({
-    double? maxPositionSize,
-    double? maxTotalExposure,
-    double? stopLossPercent,
-    double? takeProfitPercent,
-    double? maxDailyLoss,
-    int? maxConsecutiveLosses,
-  }) async {
+  /// - params: RiskParameters object with new limits
+  ///
+  /// All fields in RiskParameters are required.
+  Future<bool> updateLimits(RiskParameters params) async {
     state = const AsyncValue.loading();
 
     try {
       final service = ref.read(riskServiceProvider);
-      final result = await service.updateRiskLimits(
-        maxPositionSize: maxPositionSize,
-        maxTotalExposure: maxTotalExposure,
-        stopLossPercent: stopLossPercent,
-        takeProfitPercent: takeProfitPercent,
-        maxDailyLoss: maxDailyLoss,
-        maxConsecutiveLosses: maxConsecutiveLosses,
-      );
+      final result = await service.updateRiskLimits(params);
 
       state = const AsyncValue.data(null);
 
@@ -362,7 +338,7 @@ class ConsecutiveLossesStatus extends _$ConsecutiveLossesStatus {
     final limits = limitsAsync.value!;
 
     final current = state.consecutiveLosses;
-    final max = limits.maxConsecutiveLosses;
+    final max = limits.parameters.maxConsecutiveLosses;
 
     return ConsecutiveLossesInfo(
       current: current,

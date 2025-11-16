@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import '../models/system_status.dart';
-import '../models/metrics.dart';
-import '../models/health_status.dart';
+import '../models/system_status.dart' as models;
+import '../models/metrics.dart' as models;
+import '../models/health_status.dart' as models;
 import '../services/scalping_service.dart';
 import 'services_provider.dart';
 
@@ -22,7 +22,7 @@ class SystemStatus extends _$SystemStatus {
   Timer? _timer;
 
   @override
-  FutureOr<SystemStatusModel> build() async {
+  FutureOr<models.SystemStatus> build() async {
     // Clean up timer on dispose
     ref.onDispose(() {
       _timer?.cancel();
@@ -36,7 +36,7 @@ class SystemStatus extends _$SystemStatus {
   }
 
   /// Fetch system status from API
-  Future<SystemStatusModel> _fetchStatus() async {
+  Future<models.SystemStatus> _fetchStatus() async {
     final service = ref.read(scalpingServiceProvider);
     return await service.getStatus();
   }
@@ -59,7 +59,7 @@ class SystemStatus extends _$SystemStatus {
   Future<void> startEngine() async {
     try {
       final service = ref.read(scalpingServiceProvider);
-      await service.start();
+      await service.startEngine();
 
       // Refresh status after starting
       await refresh();
@@ -74,7 +74,7 @@ class SystemStatus extends _$SystemStatus {
   Future<void> stopEngine() async {
     try {
       final service = ref.read(scalpingServiceProvider);
-      await service.stop();
+      await service.stopEngine();
 
       // Refresh status after stopping
       await refresh();
@@ -101,7 +101,7 @@ class Metrics extends _$Metrics {
   Timer? _timer;
 
   @override
-  FutureOr<MetricsModel> build() async {
+  FutureOr<models.Metrics> build() async {
     ref.onDispose(() {
       _timer?.cancel();
     });
@@ -110,7 +110,7 @@ class Metrics extends _$Metrics {
     return _fetchMetrics();
   }
 
-  Future<MetricsModel> _fetchMetrics() async {
+  Future<models.Metrics> _fetchMetrics() async {
     final service = ref.read(scalpingServiceProvider);
     return await service.getMetrics();
   }
@@ -130,18 +130,15 @@ class Metrics extends _$Metrics {
 
 /// Provider for health status with auto-refresh every 10 seconds
 ///
-/// Monitors system health:
-/// - Overall health status (healthy/degraded/down)
-/// - Component health (database, exchange, websocket)
-/// - Error messages
+/// Monitors system health
 ///
 /// Auto-refreshes every 10 seconds
 @riverpod
-class HealthStatus extends _$HealthStatus {
+class Health extends _$Health {
   Timer? _timer;
 
   @override
-  FutureOr<HealthStatusModel> build() async {
+  FutureOr<models.HealthStatus> build() async {
     ref.onDispose(() {
       _timer?.cancel();
     });
@@ -150,7 +147,7 @@ class HealthStatus extends _$HealthStatus {
     return _fetchHealth();
   }
 
-  Future<HealthStatusModel> _fetchHealth() async {
+  Future<models.HealthStatus> _fetchHealth() async {
     final service = ref.read(scalpingServiceProvider);
     return await service.getHealth();
   }
