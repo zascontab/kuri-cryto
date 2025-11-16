@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import '../widgets/risk_sentinel_card.dart';
+import '../l10n/l10n.dart';
 
 /// Risk monitor screen with Risk Sentinel state
 class RiskScreen extends StatefulWidget {
@@ -85,12 +86,13 @@ class _RiskScreenState extends State<RiskScreen> {
       _killSwitchActive = !_killSwitchActive;
     });
 
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           _killSwitchActive
-              ? 'Kill Switch ACTIVATED - All trading stopped'
-              : 'Kill Switch deactivated - Trading resumed',
+              ? l10n.killSwitchActivated
+              : l10n.killSwitchDeactivated,
         ),
         backgroundColor: _killSwitchActive
             ? const Color(0xFFF44336)
@@ -120,10 +122,11 @@ class _RiskScreenState extends State<RiskScreen> {
             _maxDailyLoss = limits['maxDailyLoss']!;
           });
 
+          final l10n = L10n.of(context);
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Risk limits updated successfully'),
-              backgroundColor: Color(0xFF4CAF50),
+            SnackBar(
+              content: Text(l10n.riskLimitsUpdated),
+              backgroundColor: const Color(0xFF4CAF50),
             ),
           );
         },
@@ -134,24 +137,25 @@ class _RiskScreenState extends State<RiskScreen> {
   void _changeRiskMode() {
     HapticFeedback.lightImpact();
 
+    final l10n = L10n.of(context);
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
-        title: const Text('Select Risk Mode'),
+        title: Text(l10n.selectRiskMode),
         children: [
           _buildRiskModeOption(
-            'Conservative',
-            'Lower risk, smaller positions',
+            l10n.conservative,
+            l10n.lowerRiskSmallerPositions,
             const Color(0xFF4CAF50),
           ),
           _buildRiskModeOption(
-            'Normal',
-            'Balanced risk and reward',
+            l10n.normal,
+            l10n.balancedRiskReward,
             Colors.blue,
           ),
           _buildRiskModeOption(
-            'Aggressive',
-            'Higher risk, larger positions',
+            l10n.aggressive,
+            l10n.higherRiskLargerPositions,
             const Color(0xFFF44336),
           ),
         ],
@@ -168,9 +172,10 @@ class _RiskScreenState extends State<RiskScreen> {
         Navigator.pop(context);
 
         HapticFeedback.mediumImpact();
+        final l10n = L10n.of(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Risk mode changed to $mode'),
+            content: Text(l10n.riskModeChanged(mode: mode)),
             backgroundColor: color,
           ),
         );
@@ -216,6 +221,7 @@ class _RiskScreenState extends State<RiskScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return RefreshIndicator(
       onRefresh: _onRefresh,
@@ -260,7 +266,7 @@ class _RiskScreenState extends State<RiskScreen> {
                           ),
                           const SizedBox(width: 8),
                           Text(
-                            'Risk Limits',
+                            l10n.riskLimits,
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -270,33 +276,33 @@ class _RiskScreenState extends State<RiskScreen> {
                       IconButton(
                         icon: const Icon(Icons.edit),
                         onPressed: _editRiskLimits,
-                        tooltip: 'Edit limits',
+                        tooltip: l10n.editLimits,
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
                   _buildLimitRow(
-                    'Max Position Size',
+                    l10n.maxPositionSize,
                     '\$${_maxPositionSize.toStringAsFixed(0)}',
                     theme,
                   ),
                   _buildLimitRow(
-                    'Max Total Exposure',
+                    l10n.maxTotalExposure,
                     '\$${_maxTotalExposure.toStringAsFixed(0)}',
                     theme,
                   ),
                   _buildLimitRow(
-                    'Stop Loss %',
+                    l10n.stopLossPercent,
                     '${_stopLossPercent.toStringAsFixed(1)}%',
                     theme,
                   ),
                   _buildLimitRow(
-                    'Take Profit %',
+                    l10n.takeProfitPercent,
                     '${_takeProfitPercent.toStringAsFixed(1)}%',
                     theme,
                   ),
                   _buildLimitRow(
-                    'Max Daily Loss',
+                    l10n.maxDailyLoss,
                     '\$${_maxDailyLoss.toStringAsFixed(0)}',
                     theme,
                   ),
@@ -328,14 +334,14 @@ class _RiskScreenState extends State<RiskScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Risk Mode',
+                              l10n.riskMode,
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              'Tap to change mode',
+                              l10n.tapToChangeMode,
                               style: theme.textTheme.bodySmall?.copyWith(
                                 color: theme.colorScheme.onSurfaceVariant,
                               ),
@@ -385,7 +391,7 @@ class _RiskScreenState extends State<RiskScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Exposure by Symbol',
+                        l10n.exposureBySymbol,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -558,8 +564,9 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = L10n.of(context);
     return AlertDialog(
-      title: const Text('Edit Risk Limits'),
+      title: Text(l10n.editRiskLimits),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -568,19 +575,19 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
             children: [
               TextFormField(
                 controller: _maxPositionSizeController,
-                decoration: const InputDecoration(
-                  labelText: 'Max Position Size',
+                decoration: InputDecoration(
+                  labelText: l10n.maxPositionSize,
                   prefixText: '\$',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a value';
+                    return l10n.pleaseEnterValue;
                   }
                   final val = double.tryParse(value);
                   if (val == null || val <= 0) {
-                    return 'Please enter a valid amount';
+                    return l10n.pleaseEnterValidAmount;
                   }
                   return null;
                 },
@@ -588,19 +595,19 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _maxTotalExposureController,
-                decoration: const InputDecoration(
-                  labelText: 'Max Total Exposure',
+                decoration: InputDecoration(
+                  labelText: l10n.maxTotalExposure,
                   prefixText: '\$',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a value';
+                    return l10n.pleaseEnterValue;
                   }
                   final val = double.tryParse(value);
                   if (val == null || val <= 0) {
-                    return 'Please enter a valid amount';
+                    return l10n.pleaseEnterValidAmount;
                   }
                   return null;
                 },
@@ -608,19 +615,19 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _stopLossController,
-                decoration: const InputDecoration(
-                  labelText: 'Stop Loss %',
+                decoration: InputDecoration(
+                  labelText: l10n.stopLossPercent,
                   suffixText: '%',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a value';
+                    return l10n.pleaseEnterValue;
                   }
                   final val = double.tryParse(value);
                   if (val == null || val <= 0 || val > 100) {
-                    return 'Please enter a valid percentage';
+                    return l10n.pleaseEnterValidPercentage;
                   }
                   return null;
                 },
@@ -628,19 +635,19 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _takeProfitController,
-                decoration: const InputDecoration(
-                  labelText: 'Take Profit %',
+                decoration: InputDecoration(
+                  labelText: l10n.takeProfitPercent,
                   suffixText: '%',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a value';
+                    return l10n.pleaseEnterValue;
                   }
                   final val = double.tryParse(value);
                   if (val == null || val <= 0 || val > 100) {
-                    return 'Please enter a valid percentage';
+                    return l10n.pleaseEnterValidPercentage;
                   }
                   return null;
                 },
@@ -648,19 +655,19 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _maxDailyLossController,
-                decoration: const InputDecoration(
-                  labelText: 'Max Daily Loss',
+                decoration: InputDecoration(
+                  labelText: l10n.maxDailyLoss,
                   prefixText: '\$',
-                  border: OutlineInputBorder(),
+                  border: const OutlineInputBorder(),
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a value';
+                    return l10n.pleaseEnterValue;
                   }
                   final val = double.tryParse(value);
                   if (val == null || val <= 0) {
-                    return 'Please enter a valid amount';
+                    return l10n.pleaseEnterValidAmount;
                   }
                   return null;
                 },
@@ -672,11 +679,11 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: _save,
-          child: const Text('Save'),
+          child: Text(l10n.save),
         ),
       ],
     );

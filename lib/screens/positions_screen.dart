@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/position_card.dart';
+import '../l10n/l10n.dart';
 
 /// Positions screen with tabs for open and closed positions
 class PositionsScreen extends StatefulWidget {
@@ -122,9 +123,10 @@ class _PositionsScreenState extends State<PositionsScreen>
     HapticFeedback.heavyImpact();
 
     // TODO: Replace with actual API call
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('Closing position $positionId...'),
+        content: Text(l10n.closingPosition(positionId: positionId)),
         duration: const Duration(seconds: 2),
       ),
     );
@@ -144,11 +146,12 @@ class _PositionsScreenState extends State<PositionsScreen>
     HapticFeedback.mediumImpact();
 
     // TODO: Replace with actual API call
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Moving stop loss to breakeven...'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Color(0xFF4CAF50),
+      SnackBar(
+        content: Text(l10n.movingStopLossBreakeven),
+        duration: const Duration(seconds: 2),
+        backgroundColor: const Color(0xFF4CAF50),
       ),
     );
   }
@@ -157,11 +160,12 @@ class _PositionsScreenState extends State<PositionsScreen>
     HapticFeedback.mediumImpact();
 
     // TODO: Replace with actual API call
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Enabling trailing stop...'),
-        duration: Duration(seconds: 2),
-        backgroundColor: Color(0xFF4CAF50),
+      SnackBar(
+        content: Text(l10n.enablingTrailingStop),
+        duration: const Duration(seconds: 2),
+        backgroundColor: const Color(0xFF4CAF50),
       ),
     );
   }
@@ -169,14 +173,15 @@ class _PositionsScreenState extends State<PositionsScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return Column(
       children: [
         TabBar(
           controller: _tabController,
-          tabs: const [
-            Tab(text: 'Open Positions'),
-            Tab(text: 'History'),
+          tabs: [
+            Tab(text: l10n.openPositions),
+            Tab(text: l10n.history),
           ],
         ),
         Expanded(
@@ -237,6 +242,7 @@ class _PositionsScreenState extends State<PositionsScreen>
   }
 
   Widget _buildEmptyState(bool isOpen) {
+    final l10n = L10n.of(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -248,7 +254,7 @@ class _PositionsScreenState extends State<PositionsScreen>
           ),
           const SizedBox(height: 16),
           Text(
-            isOpen ? 'No Open Positions' : 'No Position History',
+            isOpen ? l10n.noOpenPositions : l10n.history,
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                   color: Colors.grey[600],
                   fontWeight: FontWeight.w500,
@@ -257,8 +263,8 @@ class _PositionsScreenState extends State<PositionsScreen>
           const SizedBox(height: 8),
           Text(
             isOpen
-                ? 'Start the engine to begin trading'
-                : 'Your closed positions will appear here',
+                ? l10n.startEngineToTrade
+                : l10n.closedPositionsHere,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[500],
                 ),
@@ -331,10 +337,11 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
       // TODO: Replace with actual API call
       Navigator.pop(context);
 
+      final l10n = L10n.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('SL/TP updated successfully'),
-          backgroundColor: Color(0xFF4CAF50),
+        SnackBar(
+          content: Text(l10n.slTpUpdatedSuccess),
+          backgroundColor: const Color(0xFF4CAF50),
         ),
       );
     }
@@ -343,6 +350,7 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return Padding(
       padding: EdgeInsets.only(
@@ -357,7 +365,7 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Edit Stop Loss & Take Profit',
+                l10n.editStopLossTakeProfit,
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -365,20 +373,20 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
               const SizedBox(height: 24),
               TextFormField(
                 controller: _stopLossController,
-                decoration: const InputDecoration(
-                  labelText: 'Stop Loss',
+                decoration: InputDecoration(
+                  labelText: l10n.stopLoss,
                   prefixText: '\$',
-                  border: OutlineInputBorder(),
-                  helperText: 'Price to close position if losing',
+                  border: const OutlineInputBorder(),
+                  helperText: l10n.priceCloseIfLosing,
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter stop loss price';
+                    return l10n.pleaseEnterStopLoss;
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {
-                    return 'Please enter a valid price';
+                    return l10n.pleaseEnterValidPrice;
                   }
                   return null;
                 },
@@ -386,20 +394,20 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _takeProfitController,
-                decoration: const InputDecoration(
-                  labelText: 'Take Profit',
+                decoration: InputDecoration(
+                  labelText: l10n.takeProfit,
                   prefixText: '\$',
-                  border: OutlineInputBorder(),
-                  helperText: 'Price to close position if winning',
+                  border: const OutlineInputBorder(),
+                  helperText: l10n.priceCloseIfWinning,
                 ),
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter take profit price';
+                    return l10n.pleaseEnterTakeProfit;
                   }
                   final price = double.tryParse(value);
                   if (price == null || price <= 0) {
-                    return 'Please enter a valid price';
+                    return l10n.pleaseEnterValidPrice;
                   }
                   return null;
                 },
@@ -410,14 +418,14 @@ class _SLTPEditSheetState extends State<_SLTPEditSheet> {
                   Expanded(
                     child: OutlinedButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: Text(l10n.cancel),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
                     child: FilledButton(
                       onPressed: _save,
-                      child: const Text('Save'),
+                      child: Text(l10n.save),
                     ),
                   ),
                 ],

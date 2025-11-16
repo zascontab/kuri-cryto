@@ -6,6 +6,7 @@ import 'strategies_screen.dart';
 import 'risk_screen.dart';
 import 'settings_screen.dart';
 import '../widgets/custom_app_bar.dart';
+import '../l10n/l10n.dart';
 
 /// Main screen with bottom navigation and PageView
 class MainScreen extends StatefulWidget {
@@ -59,20 +60,21 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-  String _getAppBarTitle() {
+  String _getAppBarTitle(BuildContext context) {
+    final l10n = L10n.of(context);
     switch (_currentIndex) {
       case 0:
-        return 'Trading Dashboard';
+        return l10n.tradingDashboard;
       case 1:
-        return 'Positions';
+        return l10n.positions;
       case 2:
-        return 'Strategies';
+        return l10n.strategies;
       case 3:
-        return 'Risk Monitor';
+        return l10n.riskMonitor;
       case 4:
-        return 'More';
+        return l10n.more;
       default:
-        return 'Trading MCP';
+        return l10n.tradingMCP;
     }
   }
 
@@ -80,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
-        title: _getAppBarTitle(),
+        title: _getAppBarTitle(context),
         status: _systemStatus,
         isConnected: _isConnected,
         onSettingsTap: _onSettingsTap,
@@ -96,128 +98,139 @@ class _MainScreenState extends State<MainScreen> {
           _buildMoreScreen(),
         ],
       ),
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: _onTabTapped,
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.dashboard_outlined),
-            selectedIcon: Icon(Icons.dashboard),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.account_balance_wallet_outlined),
-            selectedIcon: Icon(Icons.account_balance_wallet),
-            label: 'Positions',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.psychology_outlined),
-            selectedIcon: Icon(Icons.psychology),
-            label: 'Strategies',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.security_outlined),
-            selectedIcon: Icon(Icons.security),
-            label: 'Risk',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.more_horiz_outlined),
-            selectedIcon: Icon(Icons.more_horiz),
-            label: 'More',
-          ),
-        ],
+      bottomNavigationBar: Builder(
+        builder: (context) {
+          final l10n = L10n.of(context);
+          return NavigationBar(
+            selectedIndex: _currentIndex,
+            onDestinationSelected: _onTabTapped,
+            destinations: [
+              NavigationDestination(
+                icon: const Icon(Icons.dashboard_outlined),
+                selectedIcon: const Icon(Icons.dashboard),
+                label: l10n.home,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.account_balance_wallet_outlined),
+                selectedIcon: const Icon(Icons.account_balance_wallet),
+                label: l10n.positions,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.psychology_outlined),
+                selectedIcon: const Icon(Icons.psychology),
+                label: l10n.strategies,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.security_outlined),
+                selectedIcon: const Icon(Icons.security),
+                label: l10n.risk,
+              ),
+              NavigationDestination(
+                icon: const Icon(Icons.more_horiz_outlined),
+                selectedIcon: const Icon(Icons.more_horiz),
+                label: l10n.more,
+              ),
+            ],
+          );
+        }
       ),
     );
   }
 
   Widget _buildMoreScreen() {
-    return ListView(
-      padding: const EdgeInsets.all(16),
-      children: [
-        Card(
-          child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.speed),
-                title: const Text('Execution Stats'),
-                subtitle: const Text('View latency and performance'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  // Navigate to execution stats
-                },
+    return Builder(
+      builder: (context) {
+        final l10n = L10n.of(context);
+        return ListView(
+          padding: const EdgeInsets.all(16),
+          children: [
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.speed),
+                    title: Text(l10n.executionStats),
+                    subtitle: Text(l10n.viewLatencyPerformance),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      // Navigate to execution stats
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.paid),
+                    title: Text(l10n.tradingPairs),
+                    subtitle: Text(l10n.manageTradingPairs),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      // Navigate to pairs management
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.notifications),
+                    title: Text(l10n.alerts),
+                    subtitle: Text(l10n.configureNotifications),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      // Navigate to alerts
+                    },
+                  ),
+                ],
               ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.paid),
-                title: const Text('Trading Pairs'),
-                subtitle: const Text('Manage trading pairs'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  // Navigate to pairs management
-                },
+            ),
+            const SizedBox(height: 16),
+            Card(
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.settings),
+                    title: Text(l10n.settings),
+                    subtitle: Text(l10n.appPreferences),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      // Navigate to settings
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.info_outline),
+                    title: Text(l10n.about),
+                    subtitle: Text(l10n.appInformation),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      _showAboutDialog();
+                    },
+                  ),
+                ],
               ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.notifications),
-                title: const Text('Alerts'),
-                subtitle: const Text('Configure notifications'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  // Navigate to alerts
-                },
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-        Card(
-          child: Column(
-            children: [
-              ListTile(
-                leading: const Icon(Icons.settings),
-                title: const Text('Settings'),
-                subtitle: const Text('App preferences'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  // Navigate to settings
-                },
-              ),
-              const Divider(height: 1),
-              ListTile(
-                leading: const Icon(Icons.info_outline),
-                title: const Text('About'),
-                subtitle: const Text('App information'),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  HapticFeedback.lightImpact();
-                  _showAboutDialog();
-                },
-              ),
-            ],
-          ),
-        ),
-      ],
+            ),
+          ],
+        );
+      }
     );
   }
 
   void _showAboutDialog() {
+    final l10n = L10n.of(context);
     showAboutDialog(
       context: context,
-      applicationName: 'Trading MCP',
-      applicationVersion: '1.0.0',
+      applicationName: l10n.tradingMCP,
+      applicationVersion: l10n.appVersion,
       applicationIcon: const Icon(
         Icons.currency_bitcoin,
         size: 48,
         color: Color(0xFF4CAF50),
       ),
       children: [
-        const Text('Advanced cryptocurrency trading automation platform'),
+        Text(l10n.appDescription),
         const SizedBox(height: 16),
-        const Text('Backend: Trading MCP Server v1.0.0'),
+        Text(l10n.backendVersion),
       ],
     );
   }

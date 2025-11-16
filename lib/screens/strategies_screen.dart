@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../widgets/strategy_card.dart';
+import '../l10n/l10n.dart';
 
 /// Strategies screen for controlling trading strategies
 class StrategiesScreen extends StatefulWidget {
@@ -87,6 +88,7 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return RefreshIndicator(
       onRefresh: _onRefresh,
@@ -109,7 +111,7 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        'Strategies Overview',
+                        l10n.strategiesOverview,
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -121,13 +123,13 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       _buildSummaryMetric(
-                        'Active',
+                        l10n.active,
                         _strategies.where((s) => s.isActive).length.toString(),
                         theme,
                         const Color(0xFF4CAF50),
                       ),
                       _buildSummaryMetric(
-                        'Total Trades',
+                        l10n.totalTrades,
                         _strategies
                             .map((s) => s.totalTrades)
                             .reduce((a, b) => a + b)
@@ -135,12 +137,12 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
                         theme,
                       ),
                       _buildSummaryMetric(
-                        'Avg Win Rate',
+                        l10n.avgWinRate,
                         '${(_strategies.map((s) => s.winRate).reduce((a, b) => a + b) / _strategies.length).toStringAsFixed(1)}%',
                         theme,
                       ),
                       _buildSummaryMetric(
-                        'Total P&L',
+                        l10n.totalPnl,
                         '+\$${_strategies.map((s) => s.totalPnl).reduce((a, b) => a + b).toStringAsFixed(2)}',
                         theme,
                         const Color(0xFF4CAF50),
@@ -155,7 +157,7 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
 
           // Strategies list
           Text(
-            'Available Strategies',
+            l10n.availableStrategies,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -234,12 +236,13 @@ class _StrategiesScreenState extends State<StrategiesScreen> {
       strategy.isActive = value;
     });
 
+    final l10n = L10n.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
           value
-              ? 'Strategy "$name" activated'
-              : 'Strategy "$name" deactivated',
+              ? l10n.strategyActivated(name: name)
+              : l10n.strategyDeactivated(name: name),
         ),
         backgroundColor: const Color(0xFF4CAF50),
         duration: const Duration(seconds: 2),
@@ -314,6 +317,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return Container(
       padding: const EdgeInsets.all(24),
@@ -337,23 +341,23 @@ class _StrategyDetailsSheet extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 16),
           Text(
-            'Performance Metrics',
+            l10n.performanceMetrics,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
           ),
           const SizedBox(height: 16),
-          _buildMetricRow('Total Trades', strategy.totalTrades.toString(), theme),
-          _buildMetricRow('Win Rate', '${strategy.winRate.toStringAsFixed(1)}%', theme),
-          _buildMetricRow('Total P&L', '+\$${strategy.totalPnl.toStringAsFixed(2)}', theme),
-          _buildMetricRow('Weight', '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
+          _buildMetricRow(l10n.totalTrades, strategy.totalTrades.toString(), theme),
+          _buildMetricRow(l10n.winRate, '${strategy.winRate.toStringAsFixed(1)}%', theme),
+          _buildMetricRow(l10n.totalPnl, '+\$${strategy.totalPnl.toStringAsFixed(2)}', theme),
+          _buildMetricRow(l10n.weight, '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
           _buildMetricRow(
-            'Avg Win',
+            l10n.avgWin,
             '\$${((strategy.totalPnl / strategy.totalTrades) * (strategy.winRate / 100)).toStringAsFixed(2)}',
             theme,
           ),
           _buildMetricRow(
-            'Avg Loss',
+            l10n.avgLoss,
             '-\$${((strategy.totalPnl / strategy.totalTrades) * ((100 - strategy.winRate) / 100)).abs().toStringAsFixed(2)}',
             theme,
           ),
@@ -361,7 +365,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
           const Divider(),
           const SizedBox(height: 16),
           Text(
-            'Configuration',
+            l10n.configuration,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
             ),
@@ -439,10 +443,11 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
       // TODO: Replace with actual API call
       Navigator.pop(context);
 
+      final l10n = L10n.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Strategy configuration updated'),
-          backgroundColor: Color(0xFF4CAF50),
+        SnackBar(
+          content: Text(l10n.strategyConfigUpdated),
+          backgroundColor: const Color(0xFF4CAF50),
         ),
       );
     }
@@ -451,9 +456,10 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = L10n.of(context);
 
     return AlertDialog(
-      title: Text('Configure ${widget.strategy.name}'),
+      title: Text(l10n.configureStrategy(name: widget.strategy.name)),
       content: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -471,7 +477,7 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
                   keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a value';
+                      return l10n.pleaseEnterValue;
                     }
                     return null;
                   },
@@ -484,11 +490,11 @@ class _StrategyConfigDialogState extends State<_StrategyConfigDialog> {
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
-          child: const Text('Cancel'),
+          child: Text(l10n.cancel),
         ),
         FilledButton(
           onPressed: _save,
-          child: const Text('Save'),
+          child: Text(l10n.save),
         ),
       ],
     );
