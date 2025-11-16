@@ -1,0 +1,185 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2025-01-16",
+  "scalpingEngine": "Scalping Engine",
+  "@scalpingEngine": {
+    "type": "String"
+  },
+  "running": "Running",
+  "@running": {
+    "type": "String"
+  },
+  "stopped": "Stopped",
+  "@stopped": {
+    "type": "String"
+  },
+  "healthy": "Healthy",
+  "@healthy": {
+    "type": "String"
+  },
+  "degraded": "Degraded",
+  "@degraded": {
+    "type": "String"
+  },
+  "down": "Down",
+  "@down": {
+    "type": "String"
+  },
+  "uptime": "Uptime",
+  "@uptime": {
+    "type": "String"
+  },
+  "activePositions": "Active Positions",
+  "@activePositions": {
+    "type": "String"
+  },
+  "totalTrades": "Total Trades",
+  "@totalTrades": {
+    "type": "String"
+  },
+  "startEngine": "Start Engine",
+  "@startEngine": {
+    "type": "String"
+  },
+  "stopEngine": "Stop Engine",
+  "@stopEngine": {
+    "type": "String"
+  },
+  "startEngineConfirmation": "Are you sure you want to start the trading engine?",
+  "@startEngineConfirmation": {
+    "type": "String"
+  },
+  "stopEngineConfirmation": "Are you sure you want to stop the trading engine? All positions will be closed.",
+  "@stopEngineConfirmation": {
+    "type": "String"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "String"
+  },
+  "start": "Start",
+  "@start": {
+    "type": "String"
+  },
+  "stop": "Stop",
+  "@stop": {
+    "type": "String"
+  },
+  "tradingMetrics": "Trading Metrics",
+  "@tradingMetrics": {
+    "type": "String"
+  },
+  "totalPnl": "Total P&L",
+  "@totalPnl": {
+    "type": "String"
+  },
+  "dailyPnl": "Daily P&L",
+  "@dailyPnl": {
+    "type": "String"
+  },
+  "winRate": "Win Rate",
+  "@winRate": {
+    "type": "String"
+  },
+  "avgLatency": "Avg Latency",
+  "@avgLatency": {
+    "type": "String"
+  },
+  "ms": "ms",
+  "@ms": {
+    "description": "milliseconds abbreviation",
+    "type": "String"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "type": "String"
+  },
+  "errorLoadingData": "Error loading data",
+  "@errorLoadingData": {
+    "type": "String"
+  },
+  "stopEngineMessage": "This will stop the scalping engine. Open positions will remain active. Continue?",
+  "@stopEngineMessage": {
+    "type": "String"
+  },
+  "startEngineMessage": "This will start the scalping engine and begin trading. Continue?",
+  "@startEngineMessage": {
+    "type": "String"
+  },
+  "engineStartedSuccess": "Engine started successfully",
+  "@engineStartedSuccess": {
+    "type": "String"
+  },
+  "engineStoppedSuccess": "Engine stopped successfully",
+  "@engineStoppedSuccess": {
+    "type": "String"
+  },
+  "keyMetrics": "Key Metrics",
+  "@keyMetrics": {
+    "type": "String"
+  },
+  "today": "today",
+  "@today": {
+    "type": "String"
+  },
+  "aboveTarget": "Above target",
+  "@aboveTarget": {
+    "type": "String"
+  },
+  "belowTarget": "Below target",
+  "@belowTarget": {
+    "type": "String"
+  },
+  "openTrades": "Open trades",
+  "@openTrades": {
+    "type": "String"
+  },
+  "excellent": "Excellent",
+  "@excellent": {
+    "type": "String"
+  },
+  "good": "Good",
+  "@good": {
+    "type": "String"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "type": "String"
+  },
+  "refreshData": "Refresh Data",
+  "@refreshData": {
+    "type": "String"
+  },
+  "lastUpdatedNow": "Last updated just now",
+  "@lastUpdatedNow": {
+    "type": "String"
+  },
+  "viewAnalytics": "View Analytics",
+  "@viewAnalytics": {
+    "type": "String"
+  },
+  "detailedCharts": "Detailed performance charts",
+  "@detailedCharts": {
+    "type": "String"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "type": "String"
+  },
+  "language": "Language",
+  "@language": {
+    "type": "String"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "type": "String"
+  },
+  "english": "English",
+  "@english": {
+    "type": "String"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "type": "String"
+  }
+}
