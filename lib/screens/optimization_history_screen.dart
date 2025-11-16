@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../models/optimization.dart';
 import '../providers/optimization_provider.dart';
 import '../l10n/l10n.dart';
+import '../widgets/tiktok_modal.dart';
 import 'optimization_results_screen.dart';
 
 /// Optimization History Screen
@@ -330,27 +331,22 @@ class OptimizationHistoryScreen extends ConsumerWidget {
     String optimizationId,
     WidgetRef ref,
   ) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showTikTokModal<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.deleteOptimization),
-          content: Text(l10n.deleteOptimizationConfirmation),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFEF4444),
-              ),
-              child: Text(l10n.delete),
-            ),
-          ],
-        );
-      },
+      title: l10n.deleteOptimization,
+      message: l10n.deleteOptimizationConfirmation,
+      actions: [
+        TikTokModalButton(
+          label: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TikTokModalButton(
+          label: l10n.delete,
+          isPrimary: true,
+          backgroundColor: Colors.red,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
     );
 
     if (confirmed != true) return;

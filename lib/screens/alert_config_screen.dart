@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n.dart';
 import '../models/alert_config.dart';
 import '../providers/alert_provider.dart';
+import '../widgets/tiktok_modal.dart';
 
 /// Alert Configuration Screen
 ///
@@ -406,45 +407,164 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
   }
 
   void _showRuleDialog({required AlertConfig config, AlertRule? rule}) {
-    showDialog(
+    final l10n = L10n.of(context);
+    final formKey = GlobalKey<FormState>();
+    String name = rule?.name ?? '';
+    AlertType type = rule?.type ?? AlertType.dailyDrawdown;
+    double threshold = rule?.threshold ?? 0.0;
+    String? symbol = rule?.symbol;
+    AlertSeverity severity = rule?.severity ?? AlertSeverity.warning;
+    int cooldownMinutes = rule?.cooldownMinutes ?? 60;
+
+    showTikTokModal(
       context: context,
-      builder: (context) => _AlertRuleDialog(
-        config: config,
-        rule: rule,
-        onSave: (newRule) async {
-          try {
-            if (rule == null) {
-              // Add new rule
-              await ref.read(alertRuleManagerProvider.notifier).addRule(newRule);
-            } else {
-              // Update existing rule
-              await ref.read(alertRuleManagerProvider.notifier).updateRule(
-                rule.id!,
-                newRule,
-              );
-            }
-            if (mounted) {
-              final l10n = L10n.of(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(rule == null ? l10n.ruleAdded : l10n.ruleUpdated),
-                  backgroundColor: const Color(0xFF4CAF50),
+      title: rule == null ? l10n.addAlertRule : l10n.editAlertRule,
+      content: StatefulBuilder(
+        builder: (context, setState) {
+          return Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextFormField(
+                  initialValue: name,
+                  decoration: InputDecoration(
+                    labelText: l10n.ruleName,
+                    border: const OutlineInputBorder(),
+                  ),
+                  validator: (value) =>
+                      value?.isEmpty ?? true ? l10n.pleaseEnterRuleName : null,
+                  onSaved: (value) => name = value!,
                 ),
-              );
-            }
-          } catch (e) {
-            if (mounted) {
-              final l10n = L10n.of(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(l10n.errorOccurred(error: e.toString())),
-                  backgroundColor: const Color(0xFFF44336),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<AlertType>(
+                  value: type,
+                  decoration: InputDecoration(
+                    labelText: l10n.alertType,
+                    border: const OutlineInputBorder(),
+                  ),
+                  items: AlertType.values.map((type) {
+                    return DropdownMenuItem(
+                      value: type,
+                      child: Text(type.displayName),
+                    );
+                  }).toList(),
+                  onChanged: (value) => setState(() => type = value!),
                 ),
-              );
-            }
-          }
+                const SizedBox(height: 16),
+                TextFormField(
+                  initialValue: threshold.toString(),
+                  decoration: InputDecoration(
+                    labelText: l10n.threshold,
+                    border: const OutlineInputBorder(),
+                  ),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) =>
+                      double.tryParse(value ?? '') == null ? l10n.pleaseEnterValidNumber : null,
+                  onSaved: (value) => threshold = double.parse(value!),
+                ),
+                const SizedBox(height: 16),
+                if (type == AlertType.price || type == AlertType.volume)
+                  TextFormField(
+                    initialValue: symbol,
+                    decoration: InputDecoration(
+                      labelText: l10n.symbol,
+                      hintText: 'BTC-USDT',
+                      border: const OutlineInputBorder(),
+                    ),
+                    onSaved: (value) => symbol = value?.isEmpty ?? true ? null : value,
+                  ),
+                const SizedBox(height: 16),
+                DropdownButtonFormField<AlertSeverity>(
+                  value: severity,
+                  decoration: InputDecoration(
+                    labelText: l10n.severity,
+                    border: const OutlineInputBorder(),
+                  ),
+                  items: AlertSeverity.values.map((severity) {
+                    return DropdownMenuItem(
+                      value: severity,
+                      child: Text(severity.displayName),
+                    );
+                  }).toList(),
+                  onChanged: (value) => setState(() => severity = value!),
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  initialValue: cooldownMinutes.toString(),
+                  decoration: InputDecoration(
+                    labelText: l10n.cooldownMinutes,
+                    border: const OutlineInputBorder(),
+                    helperText: l10n.preventDuplicateAlerts,
+                  ),
+                  keyboardType: TextInputType.number,
+                  validator: (value) =>
+                      int.tryParse(value ?? '') == null ? l10n.pleaseEnterValidNumber : null,
+                  onSaved: (value) => cooldownMinutes = int.parse(value!),
+                ),
+              ],
+            ),
+          );
         },
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.save,
+          isPrimary: true,
+          onPressed: () async {
+            if (formKey.currentState!.validate()) {
+              formKey.currentState!.save();
+              final newRule = AlertRule(
+                id: rule?.id,
+                name: name,
+                type: type,
+                threshold: threshold,
+                symbol: symbol,
+                severity: severity,
+                cooldownMinutes: cooldownMinutes,
+                createdAt: rule?.createdAt,
+                updatedAt: DateTime.now(),
+              );
+
+              try {
+                if (rule == null) {
+                  // Add new rule
+                  await ref.read(alertRuleManagerProvider.notifier).addRule(newRule);
+                } else {
+                  // Update existing rule
+                  await ref.read(alertRuleManagerProvider.notifier).updateRule(
+                    rule.id!,
+                    newRule,
+                  );
+                }
+                if (mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(rule == null ? l10n.ruleAdded : l10n.ruleUpdated),
+                      backgroundColor: const Color(0xFF4CAF50),
+                    ),
+                  );
+                }
+              } catch (e) {
+                if (mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(l10n.errorOccurred(error: e.toString())),
+                      backgroundColor: const Color(0xFFF44336),
+                    ),
+                  );
+                }
+              }
+            }
+          },
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 
@@ -469,25 +589,22 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
   }
 
   void _deleteRule(AlertRule rule, L10n l10n) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showTikTokModal<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.deleteRule),
-        content: Text(l10n.confirmDeleteRule(name: rule.name)),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.error,
-            ),
-            child: Text(l10n.delete),
-          ),
-        ],
-      ),
+      title: l10n.deleteRule,
+      message: l10n.confirmDeleteRule(name: rule.name),
+      actions: [
+        TikTokModalButton(
+          text: l10n.delete,
+          isPrimary: true,
+          backgroundColor: Colors.red,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+      ],
     );
 
     if (confirmed == true && rule.id != null) {
@@ -512,164 +629,5 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
         }
       }
     }
-  }
-}
-
-/// Dialog for creating/editing alert rules
-class _AlertRuleDialog extends StatefulWidget {
-  final AlertConfig config;
-  final AlertRule? rule;
-  final Function(AlertRule) onSave;
-
-  const _AlertRuleDialog({
-    required this.config,
-    this.rule,
-    required this.onSave,
-  });
-
-  @override
-  State<_AlertRuleDialog> createState() => _AlertRuleDialogState();
-}
-
-class _AlertRuleDialogState extends State<_AlertRuleDialog> {
-  final _formKey = GlobalKey<FormState>();
-  late String _name;
-  late AlertType _type;
-  late double _threshold;
-  late String? _symbol;
-  late AlertSeverity _severity;
-  late int _cooldownMinutes;
-
-  @override
-  void initState() {
-    super.initState();
-    _name = widget.rule?.name ?? '';
-    _type = widget.rule?.type ?? AlertType.dailyDrawdown;
-    _threshold = widget.rule?.threshold ?? 0.0;
-    _symbol = widget.rule?.symbol;
-    _severity = widget.rule?.severity ?? AlertSeverity.warning;
-    _cooldownMinutes = widget.rule?.cooldownMinutes ?? 60;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
-
-    return AlertDialog(
-      title: Text(widget.rule == null ? l10n.addAlertRule : l10n.editAlertRule),
-      content: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                initialValue: _name,
-                decoration: InputDecoration(
-                  labelText: l10n.ruleName,
-                  border: const OutlineInputBorder(),
-                ),
-                validator: (value) =>
-                    value?.isEmpty ?? true ? l10n.pleaseEnterRuleName : null,
-                onSaved: (value) => _name = value!,
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<AlertType>(
-                value: _type,
-                decoration: InputDecoration(
-                  labelText: l10n.alertType,
-                  border: const OutlineInputBorder(),
-                ),
-                items: AlertType.values.map((type) {
-                  return DropdownMenuItem(
-                    value: type,
-                    child: Text(type.displayName),
-                  );
-                }).toList(),
-                onChanged: (value) => setState(() => _type = value!),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                initialValue: _threshold.toString(),
-                decoration: InputDecoration(
-                  labelText: l10n.threshold,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) =>
-                    double.tryParse(value ?? '') == null ? l10n.pleaseEnterValidNumber : null,
-                onSaved: (value) => _threshold = double.parse(value!),
-              ),
-              const SizedBox(height: 16),
-              if (_type == AlertType.price || _type == AlertType.volume)
-                TextFormField(
-                  initialValue: _symbol,
-                  decoration: InputDecoration(
-                    labelText: l10n.symbol,
-                    hintText: 'BTC-USDT',
-                    border: const OutlineInputBorder(),
-                  ),
-                  onSaved: (value) => _symbol = value?.isEmpty ?? true ? null : value,
-                ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<AlertSeverity>(
-                value: _severity,
-                decoration: InputDecoration(
-                  labelText: l10n.severity,
-                  border: const OutlineInputBorder(),
-                ),
-                items: AlertSeverity.values.map((severity) {
-                  return DropdownMenuItem(
-                    value: severity,
-                    child: Text(severity.displayName),
-                  );
-                }).toList(),
-                onChanged: (value) => setState(() => _severity = value!),
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                initialValue: _cooldownMinutes.toString(),
-                decoration: InputDecoration(
-                  labelText: l10n.cooldownMinutes,
-                  border: const OutlineInputBorder(),
-                  helperText: l10n.preventDuplicateAlerts,
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) =>
-                    int.tryParse(value ?? '') == null ? l10n.pleaseEnterValidNumber : null,
-                onSaved: (value) => _cooldownMinutes = int.parse(value!),
-              ),
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-              final rule = AlertRule(
-                id: widget.rule?.id,
-                name: _name,
-                type: _type,
-                threshold: _threshold,
-                symbol: _symbol,
-                severity: _severity,
-                cooldownMinutes: _cooldownMinutes,
-                createdAt: widget.rule?.createdAt,
-                updatedAt: DateTime.now(),
-              );
-              widget.onSave(rule);
-              Navigator.of(context).pop();
-            }
-          },
-          child: Text(l10n.save),
-        ),
-      ],
-    );
   }
 }

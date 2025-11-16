@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../l10n/l10n.dart';
 import '../providers/execution_provider.dart';
+import '../widgets/tiktok_modal.dart';
 
 /// Execution Statistics Screen
 ///
@@ -975,57 +976,60 @@ class _ExecutionStatsScreenState extends ConsumerState<ExecutionStatsScreen>
     dynamic execution,
   ) {
     final dateFormat = DateFormat('MMM dd, yyyy HH:mm:ss');
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('${execution.symbol} - ${execution.side.toUpperCase()}'),
-        content: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildDetailRow(l10n.orderId, execution.id),
-              _buildDetailRow(l10n.status, execution.status.toUpperCase()),
-              _buildDetailRow(l10n.price, '\$${execution.price.toStringAsFixed(6)}'),
-              _buildDetailRow(l10n.size, execution.size.toStringAsFixed(4)),
-              _buildDetailRow(
-                l10n.latency,
-                '${execution.latency.toStringAsFixed(2)} ${l10n.ms}',
+
+    // Build content widget
+    final contentWidget = SingleChildScrollView(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildDetailRow(l10n.orderId, execution.id),
+          _buildDetailRow(l10n.status, execution.status.toUpperCase()),
+          _buildDetailRow(l10n.price, '\$${execution.price.toStringAsFixed(6)}'),
+          _buildDetailRow(l10n.size, execution.size.toStringAsFixed(4)),
+          _buildDetailRow(
+            l10n.latency,
+            '${execution.latency.toStringAsFixed(2)} ${l10n.ms}',
+          ),
+          _buildDetailRow(l10n.time, dateFormat.format(execution.timestamp)),
+          if (execution.strategy != null)
+            _buildDetailRow(l10n.strategy, execution.strategy!),
+          if (execution.slippage != null)
+            _buildDetailRow(
+              l10n.avgSlippage,
+              '${execution.slippage!.toStringAsFixed(2)} ${l10n.basisPoints}',
+            ),
+          if (execution.error != null) ...[
+            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF44336).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(4),
               ),
-              _buildDetailRow(l10n.time, dateFormat.format(execution.timestamp)),
-              if (execution.strategy != null)
-                _buildDetailRow(l10n.strategy, execution.strategy!),
-              if (execution.slippage != null)
-                _buildDetailRow(
-                  l10n.avgSlippage,
-                  '${execution.slippage!.toStringAsFixed(2)} ${l10n.basisPoints}',
+              child: Text(
+                '${l10n.error}: ${execution.error}',
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: const Color(0xFFF44336),
                 ),
-              if (execution.error != null) ...[
-                const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFF44336).withValues(alpha: 0.1),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    '${l10n.error}: ${execution.error}',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: const Color(0xFFF44336),
-                    ),
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.ok),
-          ),
+              ),
+            ),
+          ],
         ],
       ),
+    );
+
+    showTikTokModal(
+      context: context,
+      title: '${execution.symbol} - ${execution.side.toUpperCase()}',
+      content: contentWidget,
+      actions: [
+        TikTokModalButton(
+          text: l10n.ok,
+          isPrimary: true,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 

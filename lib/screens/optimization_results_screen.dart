@@ -8,6 +8,7 @@ import '../providers/optimization_provider.dart';
 import '../services/optimization_service.dart';
 import '../providers/services_provider.dart';
 import '../l10n/l10n.dart';
+import '../widgets/tiktok_modal.dart';
 
 /// Optimization Results Screen
 ///
@@ -667,24 +668,21 @@ class _OptimizationResultsScreenState
   Future<void> _applyParameters(L10n l10n, OptimizationResult result) async {
     if (result.bestParameters == null) return;
 
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showTikTokModal<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.applyParameters),
-          content: Text(l10n.applyParametersConfirmation),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              child: Text(l10n.apply),
-            ),
-          ],
-        );
-      },
+      title: l10n.applyParameters,
+      message: l10n.applyParametersConfirmation,
+      actions: [
+        TikTokModalButton(
+          label: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TikTokModalButton(
+          label: l10n.apply,
+          isPrimary: true,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
     );
 
     if (confirmed != true) return;
@@ -717,27 +715,22 @@ class _OptimizationResultsScreenState
   }
 
   Future<void> _cancelOptimization(L10n l10n) async {
-    final confirmed = await showDialog<bool>(
+    final confirmed = await showTikTokModal<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.cancelOptimization),
-          content: Text(l10n.cancelOptimizationConfirmation),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(false),
-              child: Text(l10n.no),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.of(context).pop(true),
-              style: FilledButton.styleFrom(
-                backgroundColor: const Color(0xFFEF4444),
-              ),
-              child: Text(l10n.yes),
-            ),
-          ],
-        );
-      },
+      title: l10n.cancelOptimization,
+      message: l10n.cancelOptimizationConfirmation,
+      actions: [
+        TikTokModalButton(
+          label: l10n.no,
+          onPressed: () => Navigator.of(context).pop(false),
+        ),
+        TikTokModalButton(
+          label: l10n.yes,
+          isPrimary: true,
+          backgroundColor: Colors.red,
+          onPressed: () => Navigator.of(context).pop(true),
+        ),
+      ],
     );
 
     if (confirmed != true) return;

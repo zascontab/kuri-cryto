@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n.dart';
+import '../widgets/tiktok_modal.dart';
 
 /// Performance Charts Screen
 ///
@@ -419,92 +420,102 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
   }
 
   void _showFilterDialog(BuildContext context, ThemeData theme, L10n l10n) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.filterByStatus),
-        content: StatefulBuilder(
-          builder: (context, setState) => SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  l10n.filterByStrategy,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedStrategy,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: l10n.strategy,
-                  ),
-                  items: [
-                    DropdownMenuItem(value: 'all', child: Text(l10n.allStrategies)),
-                    const DropdownMenuItem(value: 'rsi', child: Text('RSI Scalping')),
-                    const DropdownMenuItem(value: 'macd', child: Text('MACD Scalping')),
-                    const DropdownMenuItem(value: 'bollinger', child: Text('Bollinger Scalping')),
-                    const DropdownMenuItem(value: 'volume', child: Text('Volume Scalping')),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() => _selectedStrategy = value);
-                    }
-                  },
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  l10n.filterBySymbol,
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                DropdownButtonFormField<String>(
-                  value: _selectedSymbol,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: l10n.symbol,
-                  ),
-                  items: [
-                    DropdownMenuItem(value: 'all', child: Text(l10n.allSymbols)),
-                    const DropdownMenuItem(value: 'BTC-USDT', child: Text('BTC-USDT')),
-                    const DropdownMenuItem(value: 'ETH-USDT', child: Text('ETH-USDT')),
-                    const DropdownMenuItem(value: 'DOGE-USDT', child: Text('DOGE-USDT')),
-                  ],
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() => _selectedSymbol = value);
-                    }
-                  },
-                ),
-              ],
+    // Create temporary state variables for the dialog
+    String tempStrategy = _selectedStrategy;
+    String tempSymbol = _selectedSymbol;
+
+    // Build content widget
+    final contentWidget = StatefulBuilder(
+      builder: (context, setDialogState) => SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              l10n.filterByStrategy,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<String>(
+              value: tempStrategy,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: l10n.strategy,
+              ),
+              items: [
+                DropdownMenuItem(value: 'all', child: Text(l10n.allStrategies)),
+                const DropdownMenuItem(value: 'rsi', child: Text('RSI Scalping')),
+                const DropdownMenuItem(value: 'macd', child: Text('MACD Scalping')),
+                const DropdownMenuItem(value: 'bollinger', child: Text('Bollinger Scalping')),
+                const DropdownMenuItem(value: 'volume', child: Text('Volume Scalping')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setDialogState(() => tempStrategy = value);
+                }
+              },
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.filterBySymbol,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            DropdownButtonFormField<String>(
+              value: tempSymbol,
+              decoration: InputDecoration(
+                border: const OutlineInputBorder(),
+                labelText: l10n.symbol,
+              ),
+              items: [
+                DropdownMenuItem(value: 'all', child: Text(l10n.allSymbols)),
+                const DropdownMenuItem(value: 'BTC-USDT', child: Text('BTC-USDT')),
+                const DropdownMenuItem(value: 'ETH-USDT', child: Text('ETH-USDT')),
+                const DropdownMenuItem(value: 'DOGE-USDT', child: Text('DOGE-USDT')),
+              ],
+              onChanged: (value) {
+                if (value != null) {
+                  setDialogState(() => tempSymbol = value);
+                }
+              },
+            ),
+          ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              setState(() {
-                _selectedStrategy = 'all';
-                _selectedSymbol = 'all';
-              });
-              Navigator.pop(context);
-            },
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              setState(() {}); // Apply filters
-              Navigator.pop(context);
-            },
-            child: Text(l10n.ok),
-          ),
-        ],
       ),
+    );
+
+    showTikTokModal(
+      context: context,
+      title: l10n.filterByStatus,
+      content: contentWidget,
+      actions: [
+        TikTokModalButton(
+          text: l10n.cancel,
+          isPrimary: false,
+          onPressed: () {
+            setState(() {
+              _selectedStrategy = 'all';
+              _selectedSymbol = 'all';
+            });
+            Navigator.pop(context);
+          },
+        ),
+        TikTokModalButton(
+          text: l10n.ok,
+          isPrimary: true,
+          onPressed: () {
+            setState(() {
+              _selectedStrategy = tempStrategy;
+              _selectedSymbol = tempSymbol;
+            });
+            Navigator.pop(context);
+          },
+        ),
+      ],
     );
   }
 }

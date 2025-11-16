@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n.dart';
 import '../widgets/metric_card.dart';
+import '../widgets/tiktok_modal.dart';
 import '../providers/system_provider.dart';
 
 /// Dashboard screen showing system status and key metrics
@@ -33,39 +34,28 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
     HapticFeedback.mediumImpact();
     final l10n = L10n.of(context);
 
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => AlertDialog(
-        icon: Icon(
-          isRunning ? Icons.stop_circle : Icons.play_circle_filled,
-          size: 48,
-          color: isRunning
+      title: isRunning ? l10n.stopEngine : l10n.startEngine,
+      message: isRunning ? l10n.stopEngineMessage : l10n.startEngineMessage,
+      actions: [
+        TikTokModalButton(
+          text: isRunning ? l10n.stop : l10n.start,
+          isPrimary: true,
+          icon: isRunning ? Icons.stop_circle : Icons.play_circle_filled,
+          backgroundColor: isRunning
               ? const Color(0xFFF44336)
               : const Color(0xFF4CAF50),
+          onPressed: () {
+            Navigator.pop(context);
+            _performEngineToggle(isRunning);
+          },
         ),
-        title: Text(isRunning ? l10n.stopEngine : l10n.startEngine),
-        content: Text(
-          isRunning ? l10n.stopEngineMessage : l10n.startEngineMessage,
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _performEngineToggle(isRunning);
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: isRunning
-                  ? const Color(0xFFF44336)
-                  : const Color(0xFF4CAF50),
-            ),
-            child: Text(isRunning ? l10n.stop : l10n.start),
-          ),
-        ],
-      ),
+      ],
     );
   }
 

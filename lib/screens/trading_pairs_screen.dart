@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/trading_pair.dart';
 import '../providers/trading_pairs_provider.dart';
 import '../l10n/l10n.dart';
+import '../widgets/tiktok_modal.dart';
 
 /// Trading Pairs management screen
 ///
@@ -130,55 +131,47 @@ class TradingPairsScreen extends ConsumerWidget {
       return;
     }
 
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.removePair),
-        content: Text(
-          l10n.removePairConfirmation(
-            exchange: pair.exchange.toUpperCase(),
-            symbol: pair.symbol,
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
-          ),
-          FilledButton(
-            onPressed: () async {
-              Navigator.pop(context);
-              await _removePair(context, ref, pair);
-            },
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFFF44336),
-            ),
-            child: Text(l10n.remove),
-          ),
-        ],
+      title: l10n.removePair,
+      message: l10n.removePairConfirmation(
+        exchange: pair.exchange.toUpperCase(),
+        symbol: pair.symbol,
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.remove,
+          isPrimary: true,
+          backgroundColor: Colors.red,
+          onPressed: () async {
+            Navigator.pop(context);
+            await _removePair(context, ref, pair);
+          },
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 
   void _showCannotRemoveDialog(BuildContext context, TradingPair pair) {
     final l10n = L10n.of(context);
 
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(l10n.cannotRemovePair),
-        content: Text(
-          l10n.cannotRemovePairWithPositions(
-            count: pair.openPositions ?? 0,
-          ),
-        ),
-        actions: [
-          FilledButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(l10n.ok),
-          ),
-        ],
+      title: l10n.cannotRemovePair,
+      message: l10n.cannotRemovePairWithPositions(
+        count: pair.openPositions ?? 0,
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.ok,
+          isPrimary: true,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../models/optimization.dart';
 import '../providers/optimization_provider.dart';
 import '../l10n/l10n.dart';
+import '../widgets/tiktok_modal.dart';
 import 'optimization_results_screen.dart';
 import 'optimization_history_screen.dart';
 
@@ -624,110 +625,107 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
     final stepController = TextEditingController();
     final formKey = GlobalKey<FormState>();
 
-    await showDialog(
+    await showTikTokModal(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.addParameter),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: l10n.parameterName,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: minController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.minimumValue,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: maxController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.maximumValue,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: stepController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.stepSize,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  final range = ParameterRange(
-                    name: nameController.text,
-                    min: double.parse(minController.text),
-                    max: double.parse(maxController.text),
-                    step: double.parse(stepController.text),
-                  );
-
-                  ref.read(optimizationConfigFormProvider.notifier).addParameterRange(range);
-                  Navigator.of(context).pop();
+      title: l10n.addParameter,
+      content: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: l10n.parameterName,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
                 }
+                return null;
               },
-              child: Text(l10n.add),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: minController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.minimumValue,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: maxController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.maximumValue,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: stepController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.stepSize,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
             ),
           ],
-        );
-      },
+        ),
+      ),
+      actions: [
+        TikTokModalButton(
+          label: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        TikTokModalButton(
+          label: l10n.add,
+          isPrimary: true,
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              final range = ParameterRange(
+                name: nameController.text,
+                min: double.parse(minController.text),
+                max: double.parse(maxController.text),
+                step: double.parse(stepController.text),
+              );
+
+              ref.read(optimizationConfigFormProvider.notifier).addParameterRange(range);
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -743,110 +741,107 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
     final stepController = TextEditingController(text: currentRange.step.toString());
     final formKey = GlobalKey<FormState>();
 
-    await showDialog(
+    await showTikTokModal(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(l10n.editParameter),
-          content: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    labelText: l10n.parameterName,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: minController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.minimumValue,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: maxController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.maximumValue,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: stepController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: l10n.stepSize,
-                    border: const OutlineInputBorder(),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    if (double.tryParse(value) == null) {
-                      return l10n.pleaseEnterValidNumber;
-                    }
-                    return null;
-                  },
-                ),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: Text(l10n.cancel),
-            ),
-            FilledButton(
-              onPressed: () {
-                if (formKey.currentState!.validate()) {
-                  final range = ParameterRange(
-                    name: nameController.text,
-                    min: double.parse(minController.text),
-                    max: double.parse(maxController.text),
-                    step: double.parse(stepController.text),
-                  );
-
-                  ref.read(optimizationConfigFormProvider.notifier).updateParameterRange(index, range);
-                  Navigator.of(context).pop();
+      title: l10n.editParameter,
+      content: Form(
+        key: formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: nameController,
+              decoration: InputDecoration(
+                labelText: l10n.parameterName,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
                 }
+                return null;
               },
-              child: Text(l10n.save),
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: minController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.minimumValue,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: maxController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.maximumValue,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: stepController,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              decoration: InputDecoration(
+                labelText: l10n.stepSize,
+                border: const OutlineInputBorder(),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                if (double.tryParse(value) == null) {
+                  return l10n.pleaseEnterValidNumber;
+                }
+                return null;
+              },
             ),
           ],
-        );
-      },
+        ),
+      ),
+      actions: [
+        TikTokModalButton(
+          label: l10n.cancel,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        TikTokModalButton(
+          label: l10n.save,
+          isPrimary: true,
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              final range = ParameterRange(
+                name: nameController.text,
+                min: double.parse(minController.text),
+                max: double.parse(maxController.text),
+                step: double.parse(stepController.text),
+              );
+
+              ref.read(optimizationConfigFormProvider.notifier).updateParameterRange(index, range);
+              Navigator.of(context).pop();
+            }
+          },
+        ),
+      ],
     );
   }
 

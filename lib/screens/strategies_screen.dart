@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/strategy_card.dart';
+import '../widgets/tiktok_modal.dart';
 import '../l10n/l10n.dart';
 import '../providers/strategy_provider.dart';
 import '../models/strategy.dart';
@@ -81,9 +82,10 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
   void _configureStrategy(Strategy strategy) {
     HapticFeedback.lightImpact();
 
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => _StrategyConfigDialog(strategy: strategy),
+      isDismissible: false,
+      content: _StrategyConfigContent(strategy: strategy),
     );
   }
 
@@ -361,17 +363,17 @@ class _StrategyDetailsSheet extends StatelessWidget {
   }
 }
 
-// Strategy configuration dialog
-class _StrategyConfigDialog extends ConsumerStatefulWidget {
+// Strategy configuration content (used in TikTokModal)
+class _StrategyConfigContent extends ConsumerStatefulWidget {
   final Strategy strategy;
 
-  const _StrategyConfigDialog({required this.strategy});
+  const _StrategyConfigContent({required this.strategy});
 
   @override
-  ConsumerState<_StrategyConfigDialog> createState() => _StrategyConfigDialogState();
+  ConsumerState<_StrategyConfigContent> createState() => _StrategyConfigContentState();
 }
 
-class _StrategyConfigDialogState extends ConsumerState<_StrategyConfigDialog> {
+class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> {
   final _formKey = GlobalKey<FormState>();
   late Map<String, TextEditingController> _controllers;
 
@@ -443,43 +445,42 @@ class _StrategyConfigDialogState extends ConsumerState<_StrategyConfigDialog> {
     final theme = Theme.of(context);
     final l10n = L10n.of(context);
 
-    return AlertDialog(
-      title: Text(l10n.configureStrategy(name: widget.strategy.name)),
+    return TikTokModal(
+      title: l10n.configureStrategy(name: widget.strategy.name),
       content: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: _controllers.entries.map((entry) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: TextFormField(
-                  controller: entry.value,
-                  decoration: InputDecoration(
-                    labelText: entry.key.replaceAll('_', ' ').toUpperCase(),
-                    border: const OutlineInputBorder(),
-                  ),
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return l10n.pleaseEnterValue;
-                    }
-                    return null;
-                  },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: _controllers.entries.map((entry) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: TextFormField(
+                controller: entry.value,
+                decoration: InputDecoration(
+                  labelText: entry.key.replaceAll('_', ' ').toUpperCase(),
+                  border: const OutlineInputBorder(),
                 ),
-              );
-            }).toList(),
-          ),
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return l10n.pleaseEnterValue;
+                  }
+                  return null;
+                },
+              ),
+            );
+          }).toList(),
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
+        TikTokModalButton(
+          text: l10n.save,
+          isPrimary: true,
           onPressed: _save,
-          child: Text(l10n.save),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );

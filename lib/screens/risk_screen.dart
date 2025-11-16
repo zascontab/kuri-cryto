@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/risk_sentinel_card.dart';
+import '../widgets/tiktok_modal.dart';
 import '../l10n/l10n.dart';
 import '../providers/risk_sentinel_provider.dart';
 import '../providers/risk_provider.dart';
@@ -113,72 +114,69 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   Future<bool> _showActivationConfirmationDialog(BuildContext context) async {
     final l10n = L10n.of(context);
 
-    final result = await showDialog<bool>(
+    final result = await showTikTokModal<bool>(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        icon: const Icon(
-          Icons.warning_amber_rounded,
-          color: Color(0xFFF44336),
-          size: 64,
-        ),
-        title: Text(
-          l10n.activateKillSwitch,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              l10n.killSwitchWarning,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(height: 16),
-            Container(
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF44336).withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(
-                  color: const Color(0xFFF44336).withValues(alpha: 0.3),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildWarningItem(l10n.allTradingWillStop),
-                  const SizedBox(height: 8),
-                  _buildWarningItem(l10n.allPositionsWillClose),
-                  const SizedBox(height: 8),
-                  _buildWarningItem(l10n.requiresManualReactivation),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              l10n.areYouSure,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
+      isDismissible: false,
+      title: l10n.activateKillSwitch,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Icon(
+            Icons.warning_amber_rounded,
+            color: Color(0xFFF44336),
+            size: 64,
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFFF44336),
+          const SizedBox(height: 16),
+          Text(
+            l10n.killSwitchWarning,
+            style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 16),
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: const Color(0xFFF44336).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: const Color(0xFFF44336).withValues(alpha: 0.3),
+              ),
             ),
-            child: Text(l10n.activate),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildWarningItem(l10n.allTradingWillStop),
+                const SizedBox(height: 8),
+                _buildWarningItem(l10n.allPositionsWillClose),
+                const SizedBox(height: 8),
+                _buildWarningItem(l10n.requiresManualReactivation),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            l10n.areYouSure,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 14,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.activate,
+          isPrimary: true,
+          backgroundColor: const Color(0xFFF44336),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+      ],
     );
 
     return result ?? false;
@@ -188,60 +186,74 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
     final l10n = L10n.of(context);
 
     // First confirmation
-    final firstConfirmation = await showDialog<bool>(
+    final firstConfirmation = await showTikTokModal<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        icon: const Icon(
-          Icons.info_outline,
-          color: Colors.blue,
-          size: 48,
-        ),
-        title: Text(l10n.deactivateKillSwitch),
-        content: Text(l10n.thisWillResumeTrading),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
+      title: l10n.deactivateKillSwitch,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.info_outline,
+            color: Colors.blue,
+            size: 48,
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: Colors.blue,
-            ),
-            child: Text(l10n.continue_),
+          const SizedBox(height: 16),
+          Text(
+            l10n.thisWillResumeTrading,
+            style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.continue_,
+          isPrimary: true,
+          backgroundColor: Colors.blue,
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+      ],
     );
 
     if (firstConfirmation != true || !context.mounted) return false;
 
     // Second confirmation
-    final secondConfirmation = await showDialog<bool>(
+    final secondConfirmation = await showTikTokModal<bool>(
       context: context,
-      barrierDismissible: false,
-      builder: (context) => AlertDialog(
-        icon: const Icon(
-          Icons.check_circle_outline,
-          color: Color(0xFF4CAF50),
-          size: 48,
-        ),
-        title: Text(l10n.confirmDeactivation),
-        content: Text(l10n.confirmResumeTrading),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: Text(l10n.cancel),
+      isDismissible: false,
+      title: l10n.confirmDeactivation,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(
+            Icons.check_circle_outline,
+            color: Color(0xFF4CAF50),
+            size: 48,
           ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, true),
-            style: FilledButton.styleFrom(
-              backgroundColor: const Color(0xFF4CAF50),
-            ),
-            child: Text(l10n.resume),
+          const SizedBox(height: 16),
+          Text(
+            l10n.confirmResumeTrading,
+            style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.resume,
+          isPrimary: true,
+          backgroundColor: const Color(0xFF4CAF50),
+          onPressed: () => Navigator.pop(context, true),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context, false),
+        ),
+      ],
     );
 
     return secondConfirmation ?? false;
@@ -270,9 +282,10 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   void _editRiskLimits(dynamic limits) {
     HapticFeedback.lightImpact();
 
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => _RiskLimitsDialog(
+      isDismissible: false,
+      content: _RiskLimitsContent(
         maxPositionSize: limits.parameters.maxPositionSizeUsd,
         maxTotalExposure: limits.parameters.maxTotalExposureUsd,
         stopLossPercent: limits.parameters.stopLossPercent,
@@ -327,21 +340,24 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
     HapticFeedback.lightImpact();
 
     final l10n = L10n.of(context);
-    showDialog(
+    showTikTokModal(
       context: context,
-      builder: (context) => SimpleDialog(
-        title: Text(l10n.selectRiskMode),
+      title: l10n.selectRiskMode,
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
           _buildRiskModeOption(
             l10n.conservative,
             l10n.lowerRiskSmallerPositions,
             const Color(0xFF4CAF50),
           ),
+          const SizedBox(height: 12),
           _buildRiskModeOption(
             l10n.normal,
             l10n.balancedRiskReward,
             Colors.blue,
           ),
+          const SizedBox(height: 12),
           _buildRiskModeOption(
             l10n.aggressive,
             l10n.higherRiskLargerPositions,
@@ -349,6 +365,12 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
           ),
         ],
       ),
+      actions: [
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
     );
   }
 
@@ -360,8 +382,8 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
     );
     final isSelected = currentMode == mode;
 
-    return SimpleDialogOption(
-      onPressed: () {
+    return InkWell(
+      onTap: () {
         // TODO: Implement API endpoint to change risk mode
         Navigator.pop(context);
 
@@ -796,8 +818,8 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   }
 }
 
-// Risk limits edit dialog
-class _RiskLimitsDialog extends StatefulWidget {
+// Risk limits edit content (used in TikTokModal)
+class _RiskLimitsContent extends StatefulWidget {
   final double maxPositionSize;
   final double maxTotalExposure;
   final double stopLossPercent;
@@ -806,7 +828,7 @@ class _RiskLimitsDialog extends StatefulWidget {
   final int maxConsecutiveLosses;
   final Function(Map<String, double>) onSave;
 
-  const _RiskLimitsDialog({
+  const _RiskLimitsContent({
     required this.maxPositionSize,
     required this.maxTotalExposure,
     required this.stopLossPercent,
@@ -817,10 +839,10 @@ class _RiskLimitsDialog extends StatefulWidget {
   });
 
   @override
-  State<_RiskLimitsDialog> createState() => _RiskLimitsDialogState();
+  State<_RiskLimitsContent> createState() => _RiskLimitsContentState();
 }
 
-class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
+class _RiskLimitsContentState extends State<_RiskLimitsContent> {
   final _formKey = GlobalKey<FormState>();
   late TextEditingController _maxPositionSizeController;
   late TextEditingController _maxTotalExposureController;
@@ -882,144 +904,144 @@ class _RiskLimitsDialogState extends State<_RiskLimitsDialog> {
   @override
   Widget build(BuildContext context) {
     final l10n = L10n.of(context);
-    return AlertDialog(
-      title: Text(l10n.editRiskLimits),
+
+    return TikTokModal(
+      title: l10n.editRiskLimits,
       content: Form(
         key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextFormField(
-                controller: _maxPositionSizeController,
-                decoration: InputDecoration(
-                  labelText: l10n.maxPositionSize,
-                  prefixText: '\$',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = double.tryParse(value);
-                  if (val == null || val <= 0) {
-                    return l10n.pleaseEnterValidAmount;
-                  }
-                  return null;
-                },
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: _maxPositionSizeController,
+              decoration: InputDecoration(
+                labelText: l10n.maxPositionSize,
+                prefixText: '\$',
+                border: const OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _maxTotalExposureController,
-                decoration: InputDecoration(
-                  labelText: l10n.maxTotalExposure,
-                  prefixText: '\$',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = double.tryParse(value);
-                  if (val == null || val <= 0) {
-                    return l10n.pleaseEnterValidAmount;
-                  }
-                  return null;
-                },
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = double.tryParse(value);
+                if (val == null || val <= 0) {
+                  return l10n.pleaseEnterValidAmount;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _maxTotalExposureController,
+              decoration: InputDecoration(
+                labelText: l10n.maxTotalExposure,
+                prefixText: '\$',
+                border: const OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _stopLossController,
-                decoration: InputDecoration(
-                  labelText: l10n.stopLossPercent,
-                  suffixText: '%',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = double.tryParse(value);
-                  if (val == null || val <= 0 || val > 100) {
-                    return l10n.pleaseEnterValidPercentage;
-                  }
-                  return null;
-                },
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = double.tryParse(value);
+                if (val == null || val <= 0) {
+                  return l10n.pleaseEnterValidAmount;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _stopLossController,
+              decoration: InputDecoration(
+                labelText: l10n.stopLossPercent,
+                suffixText: '%',
+                border: const OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _takeProfitController,
-                decoration: InputDecoration(
-                  labelText: l10n.takeProfitPercent,
-                  suffixText: '%',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = double.tryParse(value);
-                  if (val == null || val <= 0 || val > 100) {
-                    return l10n.pleaseEnterValidPercentage;
-                  }
-                  return null;
-                },
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = double.tryParse(value);
+                if (val == null || val <= 0 || val > 100) {
+                  return l10n.pleaseEnterValidPercentage;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _takeProfitController,
+              decoration: InputDecoration(
+                labelText: l10n.takeProfitPercent,
+                suffixText: '%',
+                border: const OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _maxDailyLossController,
-                decoration: InputDecoration(
-                  labelText: l10n.maxDailyLoss,
-                  prefixText: '\$',
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = double.tryParse(value);
-                  if (val == null || val <= 0) {
-                    return l10n.pleaseEnterValidAmount;
-                  }
-                  return null;
-                },
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = double.tryParse(value);
+                if (val == null || val <= 0 || val > 100) {
+                  return l10n.pleaseEnterValidPercentage;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _maxDailyLossController,
+              decoration: InputDecoration(
+                labelText: l10n.maxDailyLoss,
+                prefixText: '\$',
+                border: const OutlineInputBorder(),
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: _maxConsecutiveLossesController,
-                decoration: InputDecoration(
-                  labelText: l10n.maxConsecutiveLosses,
-                  border: const OutlineInputBorder(),
-                ),
-                keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return l10n.pleaseEnterValue;
-                  }
-                  final val = int.tryParse(value);
-                  if (val == null || val <= 0) {
-                    return 'Please enter a valid number';
-                  }
-                  return null;
-                },
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = double.tryParse(value);
+                if (val == null || val <= 0) {
+                  return l10n.pleaseEnterValidAmount;
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16),
+            TextFormField(
+              controller: _maxConsecutiveLossesController,
+              decoration: InputDecoration(
+                labelText: l10n.maxConsecutiveLosses,
+                border: const OutlineInputBorder(),
               ),
-            ],
-          ),
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return l10n.pleaseEnterValue;
+                }
+                final val = int.tryParse(value);
+                if (val == null || val <= 0) {
+                  return 'Please enter a valid number';
+                }
+                return null;
+              },
+            ),
+          ],
         ),
       ),
       actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: Text(l10n.cancel),
-        ),
-        FilledButton(
+        TikTokModalButton(
+          text: l10n.save,
+          isPrimary: true,
           onPressed: _save,
-          child: Text(l10n.save),
+        ),
+        TikTokModalButton(
+          text: l10n.cancel,
+          onPressed: () => Navigator.pop(context),
         ),
       ],
     );
