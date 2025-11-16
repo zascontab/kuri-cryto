@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n.dart';
 import '../providers/locale_provider.dart';
+import '../widgets/theme_toggle_button.dart';
 
 /// Settings screen with app configuration options
 class SettingsScreen extends ConsumerWidget {
@@ -19,6 +20,45 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: ListView(
         children: [
+          // Theme Section
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Apariencia',
+              style: theme.textTheme.titleSmall?.copyWith(
+                color: theme.colorScheme.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ThemeModeSelector(),
+                  const SizedBox(height: 16),
+                  const Divider(),
+                  const SizedBox(height: 16),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Toggle rápido',
+                        style: theme.textTheme.bodyLarge,
+                      ),
+                      const ThemeSwitch(),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
           // Language Section
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -56,6 +96,7 @@ class SettingsScreen extends ConsumerWidget {
               ],
             ),
           ),
+          const SizedBox(height: 100),
         ],
       ),
     );

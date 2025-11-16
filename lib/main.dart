@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide ThemeMode;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'config/app_theme.dart';
 import 'l10n/l10n.dart';
 import 'providers/locale_provider.dart';
+import 'providers/theme_provider.dart' as theme_provider;
 import 'screens/main_screen.dart';
 
 /// Punto de entrada principal de la aplicación Kuri Crypto
@@ -32,6 +34,10 @@ class KuriCryptoApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
+    final themeMode = ref.watch(theme_provider.themeProvider);
+
+    // Convertir nuestro ThemeMode al ThemeMode de Flutter
+    final flutterThemeMode = _convertThemeMode(themeMode);
 
     return MaterialApp(
       title: 'Kuri Crypto',
@@ -42,14 +48,10 @@ class KuriCryptoApp extends ConsumerWidget {
       supportedLocales: L10n.supportedLocales,
       locale: locale,
 
-      // Configuración de tema claro
-      theme: _buildLightTheme(),
-
-      // Configuración de tema oscuro
-      darkTheme: _buildDarkTheme(),
-
-      // Modo de tema por defecto (sistema)
-      themeMode: ThemeMode.system,
+      // Temas usando AppTheme
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: flutterThemeMode,
 
       // Pantalla inicial
       home: const SplashScreen(),
@@ -63,90 +65,15 @@ class KuriCryptoApp extends ConsumerWidget {
     );
   }
 
-  /// Construye el tema claro de Material 3
-  ThemeData _buildLightTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF6366F1), // Indigo
-        brightness: Brightness.light,
-      ),
-
-      // Configuración de AppBar
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-      ),
-
-      // Configuración de Cards
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-
-      // Configuración de botones elevados
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-
-      // Configuración de inputs
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        filled: true,
-      ),
-    );
-  }
-
-  /// Construye el tema oscuro de Material 3
-  ThemeData _buildDarkTheme() {
-    return ThemeData(
-      useMaterial3: true,
-      colorScheme: ColorScheme.fromSeed(
-        seedColor: const Color(0xFF6366F1), // Indigo
-        brightness: Brightness.dark,
-      ),
-
-      // Configuración de AppBar
-      appBarTheme: const AppBarTheme(
-        centerTitle: true,
-        elevation: 0,
-      ),
-
-      // Configuración de Cards
-      cardTheme: CardThemeData(
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-      ),
-
-      // Configuración de botones elevados
-      elevatedButtonTheme: ElevatedButtonThemeData(
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-      ),
-
-      // Configuración de inputs
-      inputDecorationTheme: InputDecorationTheme(
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
-        filled: true,
-      ),
-    );
+  ThemeMode _convertThemeMode(theme_provider.ThemeMode mode) {
+    switch (mode) {
+      case theme_provider.ThemeMode.light:
+        return ThemeMode.light;
+      case theme_provider.ThemeMode.dark:
+        return ThemeMode.dark;
+      case theme_provider.ThemeMode.system:
+        return ThemeMode.system;
+    }
   }
 }
 
@@ -190,7 +117,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     final colorScheme = Theme.of(context).colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -223,7 +150,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             Text(
               'Cargando...',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: colorScheme.onBackground.withValues(alpha: 0.6),
+                    color: colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
             ),
           ],
