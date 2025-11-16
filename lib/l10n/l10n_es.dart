@@ -79,4 +79,69 @@ class L10nEs extends L10n {
 
   @override
   String get errorLoadingData => 'Error al cargar datos';
+
+  @override
+  String get stopEngineMessage =>
+      'Esto detendrá el motor de scalping. Las posiciones abiertas permanecerán activas. ¿Continuar?';
+
+  @override
+  String get startEngineMessage =>
+      'Esto iniciará el motor de scalping y comenzará a operar. ¿Continuar?';
+
+  @override
+  String get engineStartedSuccess => 'Motor iniciado exitosamente';
+
+  @override
+  String get engineStoppedSuccess => 'Motor detenido exitosamente';
+
+  @override
+  String get keyMetrics => 'Métricas Clave';
+
+  @override
+  String get today => 'hoy';
+
+  @override
+  String get aboveTarget => 'Sobre objetivo';
+
+  @override
+  String get belowTarget => 'Bajo objetivo';
+
+  @override
+  String get openTrades => 'Operaciones abiertas';
+
+  @override
+  String get excellent => 'Excelente';
+
+  @override
+  String get good => 'Bueno';
+
+  @override
+  String get quickActions => 'Acciones Rápidas';
+
+  @override
+  String get refreshData => 'Actualizar Datos';
+
+  @override
+  String get lastUpdatedNow => 'Actualizado hace un momento';
+
+  @override
+  String get viewAnalytics => 'Ver Análisis';
+
+  @override
+  String get detailedCharts => 'Gráficos de rendimiento detallados';
+
+  @override
+  String get settings => 'Configuración';
+
+  @override
+  String get language => 'Idioma';
+
+  @override
+  String get selectLanguage => 'Seleccionar Idioma';
+
+  @override
+  String get english => 'Inglés';
+
+  @override
+  String get spanish => 'Español';
 }

@@ -97,5 +97,89 @@
   "errorLoadingData": "Error al cargar datos",
   "@errorLoadingData": {
     "type": "String"
+  },
+  "stopEngineMessage": "Esto detendrá el motor de scalping. Las posiciones abiertas permanecerán activas. ¿Continuar?",
+  "@stopEngineMessage": {
+    "type": "String"
+  },
+  "startEngineMessage": "Esto iniciará el motor de scalping y comenzará a operar. ¿Continuar?",
+  "@startEngineMessage": {
+    "type": "String"
+  },
+  "engineStartedSuccess": "Motor iniciado exitosamente",
+  "@engineStartedSuccess": {
+    "type": "String"
+  },
+  "engineStoppedSuccess": "Motor detenido exitosamente",
+  "@engineStoppedSuccess": {
+    "type": "String"
+  },
+  "keyMetrics": "Métricas Clave",
+  "@keyMetrics": {
+    "type": "String"
+  },
+  "today": "hoy",
+  "@today": {
+    "type": "String"
+  },
+  "aboveTarget": "Sobre objetivo",
+  "@aboveTarget": {
+    "type": "String"
+  },
+  "belowTarget": "Bajo objetivo",
+  "@belowTarget": {
+    "type": "String"
+  },
+  "openTrades": "Operaciones abiertas",
+  "@openTrades": {
+    "type": "String"
+  },
+  "excellent": "Excelente",
+  "@excellent": {
+    "type": "String"
+  },
+  "good": "Bueno",
+  "@good": {
+    "type": "String"
+  },
+  "quickActions": "Acciones Rápidas",
+  "@quickActions": {
+    "type": "String"
+  },
+  "refreshData": "Actualizar Datos",
+  "@refreshData": {
+    "type": "String"
+  },
+  "lastUpdatedNow": "Actualizado hace un momento",
+  "@lastUpdatedNow": {
+    "type": "String"
+  },
+  "viewAnalytics": "Ver Análisis",
+  "@viewAnalytics": {
+    "type": "String"
+  },
+  "detailedCharts": "Gráficos de rendimiento detallados",
+  "@detailedCharts": {
+    "type": "String"
+  },
+  "settings": "Configuración",
+  "@settings": {
+    "type": "String"
+  },
+  "language": "Idioma",
+  "@language": {
+    "type": "String"
+  },
+  "selectLanguage": "Seleccionar Idioma",
+  "@selectLanguage": {
+    "type": "String"
+  },
+  "english": "Inglés",
+  "@english": {
+    "type": "String"
+  },
+  "spanish": "Español",
+  "@spanish": {
+    "type": "String"
   }
 }

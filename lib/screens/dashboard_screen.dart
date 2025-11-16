@@ -69,6 +69,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _toggleEngine() {
     HapticFeedback.mediumImpact();
+    final l10n = L10n.of(context);
 
     showDialog(
       context: context,
@@ -80,16 +81,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ? const Color(0xFFF44336)
               : const Color(0xFF4CAF50),
         ),
-        title: Text(_isEngineRunning ? 'Stop Engine' : 'Start Engine'),
+        title: Text(_isEngineRunning ? l10n.stopEngine : l10n.startEngine),
         content: Text(
-          _isEngineRunning
-              ? 'This will stop the scalping engine. Open positions will remain active. Continue?'
-              : 'This will start the scalping engine and begin trading. Continue?',
+          _isEngineRunning ? l10n.stopEngineMessage : l10n.startEngineMessage,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           FilledButton(
             onPressed: () {
@@ -101,7 +100,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ? const Color(0xFFF44336)
                   : const Color(0xFF4CAF50),
             ),
-            child: Text(_isEngineRunning ? 'Stop' : 'Start'),
+            child: Text(_isEngineRunning ? l10n.stop : l10n.start),
           ),
         ],
       ),
@@ -122,12 +121,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
       });
 
       HapticFeedback.heavyImpact();
+      final l10n = L10n.of(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
             _isEngineRunning
-                ? 'Engine started successfully'
-                : 'Engine stopped successfully',
+                ? l10n.engineStartedSuccess
+                : l10n.engineStoppedSuccess,
           ),
           backgroundColor: const Color(0xFF4CAF50),
           duration: const Duration(seconds: 2),
@@ -272,7 +272,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             // Metrics Grid
             Text(
-              'Key Metrics',
+              L10n.of(context).keyMetrics,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -293,7 +293,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   value:
                       '${_totalPnl >= 0 ? '+' : ''}\$${_totalPnl.toStringAsFixed(2)}',
                   change:
-                      '${_dailyPnlChange >= 0 ? '+' : ''}${_dailyPnlChange.toStringAsFixed(1)}% today',
+                      '${_dailyPnlChange >= 0 ? '+' : ''}${_dailyPnlChange.toStringAsFixed(1)}% ${L10n.of(context).today}',
                   changeColor: _dailyPnlChange >= 0
                       ? const Color(0xFF4CAF50)
                       : const Color(0xFFF44336),
@@ -303,7 +303,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   icon: Icons.percent,
                   title: L10n.of(context).winRate,
                   value: '${_winRate.toStringAsFixed(1)}%',
-                  change: _winRate >= 50 ? 'Above target' : 'Below target',
+                  change: _winRate >= 50
+                      ? L10n.of(context).aboveTarget
+                      : L10n.of(context).belowTarget,
                   changeColor: _winRate >= 50
                       ? const Color(0xFF4CAF50)
                       : const Color(0xFFF44336),
@@ -313,14 +315,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   icon: Icons.account_balance_wallet,
                   title: L10n.of(context).activePositions,
                   value: _activePositions.toString(),
-                  change: 'Open trades',
+                  change: L10n.of(context).openTrades,
                   isLoading: _isLoading,
                 ),
                 MetricCard(
                   icon: Icons.speed,
                   title: L10n.of(context).avgLatency,
                   value: '${_avgLatency.toStringAsFixed(0)}${L10n.of(context).ms}',
-                  change: _avgLatency < 100 ? 'Excellent' : 'Good',
+                  change: _avgLatency < 100
+                      ? L10n.of(context).excellent
+                      : L10n.of(context).good,
                   changeColor: _avgLatency < 100
                       ? const Color(0xFF4CAF50)
                       : Colors.orange,
@@ -333,7 +337,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
             // Quick Actions
             Text(
-              'Quick Actions',
+              L10n.of(context).quickActions,
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
@@ -345,8 +349,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 children: [
                   ListTile(
                     leading: const Icon(Icons.refresh),
-                    title: const Text('Refresh Data'),
-                    subtitle: const Text('Last updated just now'),
+                    title: Text(L10n.of(context).refreshData),
+                    subtitle: Text(L10n.of(context).lastUpdatedNow),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -356,8 +360,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Divider(height: 1),
                   ListTile(
                     leading: const Icon(Icons.analytics),
-                    title: const Text('View Analytics'),
-                    subtitle: const Text('Detailed performance charts'),
+                    title: Text(L10n.of(context).viewAnalytics),
+                    subtitle: Text(L10n.of(context).detailedCharts),
                     trailing: const Icon(Icons.chevron_right),
                     onTap: () {
                       HapticFeedback.lightImpact();
@@ -374,7 +378,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           icon: Icon(
             _isEngineRunning ? Icons.stop : Icons.play_arrow,
           ),
-          label: Text(_isEngineRunning ? 'Stop Engine' : 'Start Engine'),
+          label: Text(_isEngineRunning
+              ? L10n.of(context).stopEngine
+              : L10n.of(context).startEngine),
           backgroundColor: _isEngineRunning
               ? const Color(0xFFF44336)
               : const Color(0xFF4CAF50),

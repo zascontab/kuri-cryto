@@ -129,6 +129,69 @@ abstract class L10n {
 
   /// Error loading data
   String get errorLoadingData;
+
+  /// Stop engine confirmation message
+  String get stopEngineMessage;
+
+  /// Start engine confirmation message
+  String get startEngineMessage;
+
+  /// Engine started success message
+  String get engineStartedSuccess;
+
+  /// Engine stopped success message
+  String get engineStoppedSuccess;
+
+  /// Key Metrics section title
+  String get keyMetrics;
+
+  /// Today label
+  String get today;
+
+  /// Above target label
+  String get aboveTarget;
+
+  /// Below target label
+  String get belowTarget;
+
+  /// Open trades label
+  String get openTrades;
+
+  /// Excellent rating
+  String get excellent;
+
+  /// Good rating
+  String get good;
+
+  /// Quick Actions section
+  String get quickActions;
+
+  /// Refresh Data action
+  String get refreshData;
+
+  /// Last updated now
+  String get lastUpdatedNow;
+
+  /// View Analytics action
+  String get viewAnalytics;
+
+  /// Detailed charts label
+  String get detailedCharts;
+
+  /// Settings
+  String get settings;
+
+  /// Language
+  String get language;
+
+  /// Select Language
+  String get selectLanguage;
+
+  /// English
+  String get english;
+
+  /// Spanish
+  String get spanish;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

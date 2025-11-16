@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'l10n/l10n.dart';
+import 'providers/locale_provider.dart';
 import 'screens/main_screen.dart';
 
 /// Punto de entrada principal de la aplicación Kuri Crypto
@@ -30,6 +31,8 @@ class KuriCryptoApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final locale = ref.watch(localeProvider);
+
     return MaterialApp(
       title: 'Kuri Crypto',
       debugShowCheckedModeBanner: false,
@@ -37,6 +40,7 @@ class KuriCryptoApp extends ConsumerWidget {
       // Localization
       localizationsDelegates: L10n.localizationsDelegates,
       supportedLocales: L10n.supportedLocales,
+      locale: locale,
 
       // Configuración de tema claro
       theme: _buildLightTheme(),

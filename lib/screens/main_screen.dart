@@ -4,6 +4,7 @@ import 'dashboard_screen.dart';
 import 'positions_screen.dart';
 import 'strategies_screen.dart';
 import 'risk_screen.dart';
+import 'settings_screen.dart';
 import '../widgets/custom_app_bar.dart';
 
 /// Main screen with bottom navigation and PageView
@@ -51,11 +52,9 @@ class _MainScreenState extends State<MainScreen> {
 
   void _onSettingsTap() {
     HapticFeedback.lightImpact();
-    // Navigate to settings screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Settings coming soon'),
-        duration: Duration(seconds: 1),
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const SettingsScreen(),
       ),
     );
   }
