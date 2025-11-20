@@ -1,6 +1,7 @@
 /// Optimization Models
 ///
 /// Models for parameter optimization system
+library;
 
 /// Parameter range configuration
 class ParameterRange {

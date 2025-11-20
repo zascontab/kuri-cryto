@@ -12,8 +12,10 @@ import 'trading_pairs_screen.dart';
 import 'alerts_screen.dart';
 import 'execution_stats_screen.dart';
 import 'performance_charts_screen.dart';
+import 'ai_bot_control_screen.dart';
+import 'comprehensive_analysis_screen.dart';
 import '../widgets/custom_app_bar.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 
 /// Main screen with bottom navigation and PageView
 class MainScreen extends StatefulWidget {
@@ -28,8 +30,8 @@ class _MainScreenState extends State<MainScreen> {
   late PageController _pageController;
 
   // Mock data - replace with actual state management
-  String _systemStatus = 'running';
-  bool _isConnected = true;
+  final String _systemStatus = 'running';
+  final bool _isConnected = true;
 
   @override
   void initState() {
@@ -68,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   String _getAppBarTitle(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     switch (_currentIndex) {
       case 0:
         return l10n.tradingDashboard;
@@ -107,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
       ),
       bottomNavigationBar: Builder(
         builder: (context) {
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
           return NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: _onTabTapped,
@@ -147,7 +149,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget _buildMoreScreen() {
     return Builder(
       builder: (context) {
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         return ListView(
           padding: const EdgeInsets.all(16),
           children: [
@@ -258,6 +260,36 @@ class _MainScreenState extends State<MainScreen> {
                       );
                     },
                   ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.smart_toy),
+                    title: Text(l10n.aiBotTitle),
+                    subtitle: Text(l10n.aiBotStatus),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AiBotControlScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  const Divider(height: 1),
+                  ListTile(
+                    leading: const Icon(Icons.insights),
+                    title: Text(l10n.analysisTitle),
+                    subtitle: Text(l10n.analysisTechnical),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () {
+                      HapticFeedback.lightImpact();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const ComprehensiveAnalysisScreen(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -296,7 +328,7 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _showAboutDialog() {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     showAboutDialog(
       context: context,
       applicationName: l10n.tradingMCP,

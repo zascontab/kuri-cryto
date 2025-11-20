@@ -1,10 +1,10 @@
 import 'package:test/test.dart';
-import '../../lib/models/strategy.dart';
+import 'package:kuri_crypto/models/strategy.dart';
 
 void main() {
   group('StrategyPerformance Model', () {
     test('should create StrategyPerformance with all fields', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winningTrades: 32,
         losingTrades: 18,
@@ -52,7 +52,7 @@ void main() {
     });
 
     test('should convert StrategyPerformance to JSON', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winRate: 64.0,
         totalPnl: 125.50,
@@ -84,14 +84,14 @@ void main() {
 
   group('Strategy Model', () {
     test('should create Strategy with all fields', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winRate: 64.0,
         totalPnl: 125.50,
         sharpeRatio: 1.8,
       );
 
-      final strategy = Strategy(
+      const strategy = Strategy(
         name: 'rsi_scalping',
         active: true,
         weight: 0.25,
@@ -142,13 +142,13 @@ void main() {
     });
 
     test('should convert Strategy to JSON', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winRate: 65.0,
         totalPnl: 45.50,
       );
 
-      final strategy = Strategy(
+      const strategy = Strategy(
         name: 'rsi_scalping',
         active: true,
         weight: 0.25,
@@ -166,13 +166,13 @@ void main() {
     });
 
     test('should create copy with modified fields', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winRate: 65.0,
         totalPnl: 45.50,
       );
 
-      final original = Strategy(
+      const original = Strategy(
         name: 'rsi_scalping',
         active: true,
         weight: 0.25,
@@ -191,26 +191,26 @@ void main() {
     });
 
     test('should check if strategy is performing well', () {
-      final goodPerformance = StrategyPerformance(
+      const goodPerformance = StrategyPerformance(
         totalTrades: 50,
         winRate: 65.0,
         totalPnl: 45.50,
       );
 
-      final badPerformance = StrategyPerformance(
+      const badPerformance = StrategyPerformance(
         totalTrades: 50,
         winRate: 40.0,
         totalPnl: -20.0,
       );
 
-      final goodStrategy = Strategy(
+      const goodStrategy = Strategy(
         name: 'good',
         active: true,
         weight: 0.25,
         performance: goodPerformance,
       );
 
-      final badStrategy = Strategy(
+      const badStrategy = Strategy(
         name: 'bad',
         active: true,
         weight: 0.25,
@@ -222,14 +222,14 @@ void main() {
     });
 
     test('should check if strategy has sufficient data', () {
-      final withData = Strategy(
+      const withData = Strategy(
         name: 'test',
         active: true,
         weight: 0.25,
         performance: StrategyPerformance(totalTrades: 50),
       );
 
-      final withoutData = Strategy(
+      const withoutData = Strategy(
         name: 'test',
         active: true,
         weight: 0.25,
@@ -260,20 +260,20 @@ void main() {
     });
 
     test('should handle equality correctly', () {
-      final performance = StrategyPerformance(
+      const performance = StrategyPerformance(
         totalTrades: 50,
         winRate: 65.0,
         totalPnl: 45.50,
       );
 
-      final strategy1 = Strategy(
+      const strategy1 = Strategy(
         name: 'rsi_scalping',
         active: true,
         weight: 0.25,
         performance: performance,
       );
 
-      final strategy2 = Strategy(
+      const strategy2 = Strategy(
         name: 'rsi_scalping',
         active: true,
         weight: 0.25,

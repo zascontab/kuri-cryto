@@ -14,7 +14,7 @@ import '../models/position.dart';
 /// - Enable trailing stop
 class PositionService {
   final ApiClient _apiClient;
-  static const String _basePath = '/scalping/positions';
+  static const String _basePath = '/positions';
 
   PositionService(this._apiClient);
 

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/strategy_card.dart';
 import '../widgets/tiktok_modal.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../providers/strategy_provider.dart';
 import '../models/strategy.dart';
 
@@ -23,7 +23,7 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
 
   void _toggleStrategy(String name, bool currentValue) async {
     HapticFeedback.mediumImpact();
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       await ref.read(strategyTogglerProvider.notifier).toggle(name);
@@ -81,18 +81,25 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
 
   void _configureStrategy(Strategy strategy) {
     HapticFeedback.lightImpact();
-
+    final l10n = context.l10n;
     showTikTokModal(
       context: context,
       isDismissible: false,
       content: _StrategyConfigContent(strategy: strategy),
+      actions: [
+        TikTokModalButton(
+          text: l10n.strategies,
+          isPrimary: true,
+          onPressed: () => _configureStrategy(strategy),
+        ),
+      ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     final strategiesAsync = ref.watch(strategiesProvider);
     final stats = ref.watch(strategyStatsProvider);
@@ -130,30 +137,38 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _buildSummaryMetric(
-                          l10n.active,
-                          stats.activeStrategies.toString(),
-                          theme,
-                          const Color(0xFF4CAF50),
+                        Expanded(
+                          child: _buildSummaryMetric(
+                            l10n.active,
+                            stats.activeStrategies.toString(),
+                            theme,
+                            const Color(0xFF4CAF50),
+                          ),
                         ),
-                        _buildSummaryMetric(
-                          l10n.totalTrades,
-                          strategies
-                              .map((s) => s.performance?.totalTrades ?? 0)
-                              .reduce((a, b) => a + b)
-                              .toString(),
-                          theme,
+                        Expanded(
+                          child: _buildSummaryMetric(
+                            l10n.totalTrades,
+                            strategies
+                                .map((s) => s.performance.totalTrades ?? 0)
+                                .reduce((a, b) => a + b)
+                                .toString(),
+                            theme,
+                          ),
                         ),
-                        _buildSummaryMetric(
-                          l10n.avgWinRate,
-                          '${stats.combinedWinRate.toStringAsFixed(1)}%',
-                          theme,
+                        Expanded(
+                          child: _buildSummaryMetric(
+                            l10n.avgWinRate,
+                            '${stats.combinedWinRate.toStringAsFixed(1)}%',
+                            theme,
+                          ),
                         ),
-                        _buildSummaryMetric(
-                          l10n.totalPnl,
-                          '+\$${stats.combinedPnl.toStringAsFixed(2)}',
-                          theme,
-                          const Color(0xFF4CAF50),
+                        Expanded(
+                          child: _buildSummaryMetric(
+                            l10n.totalPnl,
+                            '+\$${stats.combinedPnl.toStringAsFixed(2)}',
+                            theme,
+                            const Color(0xFF4CAF50),
+                          ),
                         ),
                       ],
                     ),
@@ -177,14 +192,15 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
                 name: strategy.name,
                 isActive: strategy.active,
                 weight: strategy.weight,
-                totalTrades: strategy.performance?.totalTrades ?? 0,
-                winRate: strategy.performance?.winRate ?? 0.0,
-                totalPnl: strategy.performance?.totalPnl ?? 0.0,
-                onToggle: (value) => _toggleStrategy(strategy.name, strategy.active),
+                totalTrades: strategy.performance.totalTrades ?? 0,
+                winRate: strategy.performance.winRate ?? 0.0,
+                totalPnl: strategy.performance.totalPnl ?? 0.0,
+                onToggle: (value) =>
+                    _toggleStrategy(strategy.name, strategy.active),
                 onTap: () => _showStrategyDetails(strategy),
                 onConfigure: () => _configureStrategy(strategy),
               );
-            }).toList(),
+            }),
           ],
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -222,19 +238,27 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
     Color? color,
   ]) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           label,
+          textAlign: TextAlign.center,
+          maxLines: 1,
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurfaceVariant,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
         const SizedBox(height: 4),
         Text(
           value,
+          textAlign: TextAlign.center,
+          maxLines: 1,
           style: theme.textTheme.titleSmall?.copyWith(
             fontWeight: FontWeight.bold,
             color: color ?? theme.colorScheme.onSurface,
+            overflow: TextOverflow.ellipsis,
           ),
         ),
       ],
@@ -255,7 +279,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final performance = strategy.performance;
 
     return Container(
@@ -286,11 +310,15 @@ class _StrategyDetailsSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          if (performance != null) ...[
-            _buildMetricRow(l10n.totalTrades, performance.totalTrades.toString(), theme),
-            _buildMetricRow(l10n.winRate, '${performance.winRate.toStringAsFixed(1)}%', theme),
-            _buildMetricRow(l10n.totalPnl, '+\$${performance.totalPnl.toStringAsFixed(2)}', theme),
-            _buildMetricRow(l10n.weight, '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
+          ...[
+            _buildMetricRow(
+                l10n.totalTrades, performance.totalTrades.toString(), theme),
+            _buildMetricRow(l10n.winRate,
+                '${performance.winRate.toStringAsFixed(1)}%', theme),
+            _buildMetricRow(l10n.totalPnl,
+                '+\$${performance.totalPnl.toStringAsFixed(2)}', theme),
+            _buildMetricRow(l10n.weight,
+                '${(strategy.weight * 100).toStringAsFixed(0)}%', theme),
             _buildMetricRow(
               l10n.avgWin,
               '\$${performance.avgWin.toStringAsFixed(2)}',
@@ -300,13 +328,6 @@ class _StrategyDetailsSheet extends StatelessWidget {
               l10n.avgLoss,
               '-\$${performance.avgLoss.abs().toStringAsFixed(2)}',
               theme,
-            ),
-          ] else ...[
-            Text(
-              'No performance data available',
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
             ),
           ],
           const SizedBox(height: 24),
@@ -326,7 +347,7 @@ class _StrategyDetailsSheet extends StatelessWidget {
                 entry.value.toString(),
                 theme,
               );
-            }).toList()
+            })
           else
             Text(
               'No configuration available',
@@ -370,10 +391,12 @@ class _StrategyConfigContent extends ConsumerStatefulWidget {
   const _StrategyConfigContent({required this.strategy});
 
   @override
-  ConsumerState<_StrategyConfigContent> createState() => _StrategyConfigContentState();
+  ConsumerState<_StrategyConfigContent> createState() =>
+      _StrategyConfigContentState();
 }
 
-class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> {
+class _StrategyConfigContentState
+    extends ConsumerState<_StrategyConfigContent> {
   final _formKey = GlobalKey<FormState>();
   late Map<String, TextEditingController> _controllers;
 
@@ -388,7 +411,9 @@ class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> 
 
   @override
   void dispose() {
-    _controllers.values.forEach((controller) => controller.dispose());
+    for (var controller in _controllers.values) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -406,14 +431,14 @@ class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> 
 
       try {
         await ref.read(strategyConfigUpdaterProvider.notifier).updateConfig(
-          strategyName: widget.strategy.name,
-          config: config,
-        );
+              strategyName: widget.strategy.name,
+              config: config,
+            );
 
         if (mounted) {
           Navigator.pop(context);
 
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.strategyConfigUpdated),
@@ -423,7 +448,7 @@ class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> 
         }
       } catch (e) {
         if (mounted) {
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Error: ${e.toString()}'),
@@ -443,7 +468,7 @@ class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return TikTokModal(
       title: l10n.configureStrategy(name: widget.strategy.name),
@@ -460,7 +485,8 @@ class _StrategyConfigContentState extends ConsumerState<_StrategyConfigContent> 
                   labelText: entry.key.replaceAll('_', ' ').toUpperCase(),
                   border: const OutlineInputBorder(),
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return l10n.pleaseEnterValue;

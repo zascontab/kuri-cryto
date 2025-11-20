@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import '../../lib/models/position.dart';
+import 'package:kuri_crypto/models/position.dart';
 
 void main() {
   group('Position Model', () {

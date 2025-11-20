@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart' hide ThemeMode;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'config/app_theme.dart';
-import 'l10n/l10n.dart';
+import 'l10n/l10n_export.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart' as theme_provider;
 import 'screens/main_screen.dart';

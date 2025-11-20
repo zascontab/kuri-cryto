@@ -2,7 +2,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/risk_state.dart';
 import '../models/risk_limits.dart';
 import '../models/exposure.dart';
-import '../services/risk_service.dart';
 import 'services_provider.dart';
 
 part 'risk_provider.g.dart';

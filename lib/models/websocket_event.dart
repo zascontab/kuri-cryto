@@ -2,8 +2,7 @@
 ///
 /// This file contains all data models for WebSocket events received from the backend.
 /// Supports Position updates, Trade executions, Metrics updates, Alerts, and Kill Switch events.
-
-import 'package:flutter/foundation.dart';
+library;
 
 /// Generic WebSocket Event wrapper
 ///
@@ -393,8 +392,8 @@ class Metrics {
       'Metrics(totalTrades: $totalTrades, winRate: $winRate%, pnl: $totalPnl)';
 }
 
-/// Alert model representing system alerts
-class Alert {
+/// Alert event model representing real-time WebSocket alerts
+class AlertEvent {
   /// Unique alert identifier
   final String id;
 
@@ -419,7 +418,7 @@ class Alert {
   /// Whether alert has been acknowledged
   final bool acknowledged;
 
-  Alert({
+  AlertEvent({
     required this.id,
     required this.type,
     required this.severity,
@@ -431,8 +430,8 @@ class Alert {
   });
 
   /// Create from JSON
-  factory Alert.fromJson(Map<String, dynamic> json) {
-    return Alert(
+  factory AlertEvent.fromJson(Map<String, dynamic> json) {
+    return AlertEvent(
       id: json['id'] as String? ?? '',
       type: json['type'] as String,
       severity: json['severity'] as String,
@@ -469,7 +468,7 @@ class Alert {
 
   @override
   String toString() =>
-      'Alert(id: $id, severity: $severity, message: $message)';
+      'AlertEvent(id: $id, severity: $severity, message: $message)';
 }
 
 /// Kill Switch Event model

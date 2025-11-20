@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:fl_chart/fl_chart.dart';
 import '../models/analysis.dart';
 import '../providers/analysis_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 
 /// Multi-Timeframe Analysis Screen
 ///
@@ -64,7 +63,7 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final analysisAsync = ref.watch(multiTimeframeAnalysisNotifierProvider);
 
     return Scaffold(
@@ -119,7 +118,7 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
                 return TabBarView(
                   controller: _tabController,
                   children: _timeframes.map((tf) {
-                    final tfAnalysis = analysis.getTimeframe(tf);
+                    final tfAnalysis = analysis.getTimeframe(tf.value);
                     if (tfAnalysis == null) {
                       return _buildEmptyState(theme, l10n);
                     }
@@ -186,7 +185,8 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
     L10n l10n,
     MultiTimeframeAnalysis analysis,
   ) {
-    final signalColor = _getSignalColor(analysis.consensusSignal);
+    final consensusSignal = SignalType.fromString(analysis.consensus.direction);
+    final signalColor = _getSignalColor(consensusSignal);
 
     return Card(
       margin: const EdgeInsets.all(16),
@@ -218,19 +218,19 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
               children: [
                 _buildConsensusMetric(
                   theme,
-                  l10n.currentPrice,
-                  '\$${analysis.currentPrice.toStringAsFixed(2)}',
+                  l10n.symbol,
+                  analysis.symbol,
                 ),
                 _buildConsensusMetric(
                   theme,
                   l10n.signal,
-                  analysis.consensusSignal.name.toUpperCase(),
+                  consensusSignal.name.toUpperCase(),
                   color: signalColor,
                 ),
                 _buildConsensusMetric(
                   theme,
                   l10n.confidence,
-                  '${analysis.consensusConfidence.toStringAsFixed(1)}%',
+                  '${analysis.consensus.confidence.toStringAsFixed(1)}%',
                   color: signalColor,
                 ),
               ],
@@ -285,9 +285,9 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
           _buildIndicatorsSection(theme, l10n, analysis),
           const SizedBox(height: 16),
 
-          // Recommendation
-          if (analysis.recommendation != null)
-            _buildRecommendationCard(theme, l10n, analysis.recommendation!),
+          // Recommendation (if available in future updates)
+          // if (analysis.recommendation != null)
+          //   _buildRecommendationCard(theme, l10n, analysis.recommendation!),
         ],
       ),
     );
@@ -298,7 +298,9 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
     L10n l10n,
     TimeframeAnalysis analysis,
   ) {
-    final signalColor = _getSignalColor(analysis.signal);
+    final signal = SignalType.fromString(analysis.signal);
+    final signalColor = _getSignalColor(signal);
+    final strengthPercent = analysis.strength * 100;
 
     return Card(
       child: Padding(
@@ -324,12 +326,12 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
                         vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: signalColor.withOpacity(0.1),
+                        color: signalColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(color: signalColor, width: 2),
                       ),
                       child: Text(
-                        analysis.signal.name.toUpperCase(),
+                        signal.name.toUpperCase(),
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: signalColor,
                           fontWeight: FontWeight.bold,
@@ -348,7 +350,7 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${analysis.confidence.toStringAsFixed(1)}%',
+                      '${strengthPercent.toStringAsFixed(1)}%',
                       style: theme.textTheme.headlineMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                         color: signalColor,
@@ -358,8 +360,8 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
                     SizedBox(
                       width: 100,
                       child: LinearProgressIndicator(
-                        value: analysis.confidence / 100,
-                        backgroundColor: theme.colorScheme.surfaceVariant,
+                        value: analysis.strength,
+                        backgroundColor: theme.colorScheme.surfaceContainerHighest,
                         color: signalColor,
                         minHeight: 8,
                       ),
@@ -379,8 +381,6 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
     L10n l10n,
     TimeframeAnalysis analysis,
   ) {
-    final indicators = analysis.indicators;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -393,25 +393,25 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
         const SizedBox(height: 12),
 
         // RSI
-        if (indicators.rsi != null) ...[
+        if (analysis.rsi != null) ...[
           _buildIndicatorCard(
             theme,
             'RSI',
-            indicators.rsi!.toStringAsFixed(2),
-            _getRSIColor(indicators.rsi!),
+            analysis.rsi!.toStringAsFixed(2),
+            _getRSIColor(analysis.rsi!),
           ),
           const SizedBox(height: 8),
         ],
 
         // MACD
-        if (indicators.macd != null) ...[
-          _buildMACDCard(theme, indicators.macd!),
+        if (analysis.macd != null) ...[
+          _buildMACDCard(theme, analysis.macd!),
           const SizedBox(height: 8),
         ],
 
         // Bollinger Bands
-        if (indicators.bollinger != null) ...[
-          _buildBollingerCard(theme, indicators.bollinger!),
+        if (analysis.bollinger != null) ...[
+          _buildBollingerCard(theme, analysis.bollinger!),
         ],
       ],
     );
@@ -429,7 +429,7 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
+            color: color.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
@@ -560,49 +560,6 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildRecommendationCard(
-    ThemeData theme,
-    L10n l10n,
-    String recommendation,
-  ) {
-    return Card(
-      color: theme.colorScheme.primaryContainer,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Icon(
-              Icons.lightbulb,
-              color: theme.colorScheme.onPrimaryContainer,
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    l10n.recommendation,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: theme.colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    recommendation,
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: theme.colorScheme.onPrimaryContainer,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 

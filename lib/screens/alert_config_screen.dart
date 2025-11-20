@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../models/alert_config.dart';
 import '../providers/alert_provider.dart';
 import '../widgets/tiktok_modal.dart';
@@ -52,7 +52,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final configAsync = ref.watch(alertConfigProvider);
 
@@ -372,7 +372,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
       await ref.read(alertConfiguratorProvider.notifier).configureAlerts(newConfig);
 
       if (mounted) {
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.alertConfigurationSaved),
@@ -383,7 +383,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.errorOccurred(error: e.toString())),
@@ -407,7 +407,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
   }
 
   void _showRuleDialog({required AlertConfig config, AlertRule? rule}) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final formKey = GlobalKey<FormState>();
     String name = rule?.name ?? '';
     AlertType type = rule?.type ?? AlertType.dailyDrawdown;
@@ -438,7 +438,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<AlertType>(
-                  value: type,
+                  initialValue: type,
                   decoration: InputDecoration(
                     labelText: l10n.alertType,
                     border: const OutlineInputBorder(),
@@ -476,7 +476,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
                   ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<AlertSeverity>(
-                  value: severity,
+                  initialValue: severity,
                   decoration: InputDecoration(
                     labelText: l10n.severity,
                     border: const OutlineInputBorder(),
@@ -577,7 +577,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
       );
     } catch (e) {
       if (mounted) {
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.errorOccurred(error: e.toString())),

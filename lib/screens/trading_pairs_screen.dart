@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/trading_pair.dart';
 import '../providers/trading_pairs_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/tiktok_modal.dart';
 
 /// Trading Pairs management screen
@@ -18,7 +18,7 @@ class TradingPairsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final pairsAsync = ref.watch(activePairsProvider);
 
     return Scaffold(
@@ -40,7 +40,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   Widget _buildPairsList(BuildContext context, WidgetRef ref, List<TradingPair> pairs) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     if (pairs.isEmpty) {
       return _buildEmptyState(context);
@@ -65,7 +65,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   Widget _buildEmptyState(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -96,7 +96,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   Widget _buildErrorState(BuildContext context, WidgetRef ref, Object error) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -123,7 +123,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   void _confirmRemovePair(BuildContext context, WidgetRef ref, TradingPair pair) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     // Check if pair has open positions
     if (pair.hasOpenPositions) {
@@ -157,7 +157,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   void _showCannotRemoveDialog(BuildContext context, TradingPair pair) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     showTikTokModal(
       context: context,
@@ -176,7 +176,7 @@ class TradingPairsScreen extends ConsumerWidget {
   }
 
   Future<void> _removePair(BuildContext context, WidgetRef ref, TradingPair pair) async {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       await ref.read(pairRemoverProvider.notifier).removePair(
@@ -231,7 +231,7 @@ class _TradingPairCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Dismissible(
@@ -366,7 +366,7 @@ class _StatusBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final isActive = status == 'active' && enabled;
 
     return Container(
@@ -438,7 +438,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final exchanges = ref.watch(supportedExchangesProvider);
 
@@ -478,7 +478,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
                   border: const OutlineInputBorder(),
                   prefixIcon: const Icon(Icons.account_balance),
                 ),
-                value: _selectedExchange,
+                initialValue: _selectedExchange,
                 items: exchanges.map((exchange) {
                   return DropdownMenuItem(
                     value: exchange,
@@ -558,7 +558,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
   }
 
   Widget _buildAvailablePairsList() {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final pairsAsync = ref.watch(availablePairsProvider(_selectedExchange!));
 
     return pairsAsync.when(
@@ -609,7 +609,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
   }
 
   Widget _buildPairPreview() {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
     final pair = _selectedPair!;
 
@@ -672,7 +672,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
       return;
     }
 
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       await ref.read(pairAdderProvider.notifier).addPair(

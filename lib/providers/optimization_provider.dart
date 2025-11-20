@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/optimization.dart';
-import '../services/optimization_service.dart';
 import 'services_provider.dart';
 
 part 'optimization_provider.g.dart';

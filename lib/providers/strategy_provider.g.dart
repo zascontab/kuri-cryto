@@ -755,7 +755,7 @@ final strategyTogglerProvider =
 );
 
 typedef _$StrategyToggler = AutoDisposeAsyncNotifier<void>;
-String _$strategyStatsHash() => r'acd7582d326c4fd3004def30e3be4cbff7073336';
+String _$strategyStatsHash() => r'56f3d17f61877cd21d5ab5bceccf3578f02fb28c';
 
 /// Provider for aggregated strategy statistics
 ///

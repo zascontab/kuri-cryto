@@ -6,18 +6,18 @@ part of 'alert_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$alertsHash() => r'49dfe2eeb5a4f96ac931861a4bd08586109cdec7';
+String _$alertsHash() => r'24edfe63c07ccb49f26cc03ccd67a380e68f2db9';
 
 /// Provider for real-time alerts stream via WebSocket
 ///
 /// Provides live updates of alerts as they occur.
 /// Uses WebSocket connection for real-time updates with <1s latency.
 ///
-/// Returns Stream<Alert> that emits whenever a new alert is triggered.
+/// Returns Stream<AlertEvent> that emits whenever a new alert is triggered.
 ///
 /// Copied from [alerts].
 @ProviderFor(alerts)
-final alertsProvider = AutoDisposeStreamProvider<Alert>.internal(
+final alertsProvider = AutoDisposeStreamProvider<AlertEvent>.internal(
   alerts,
   name: r'alertsProvider',
   debugGetCreateSourceHash:
@@ -26,7 +26,7 @@ final alertsProvider = AutoDisposeStreamProvider<Alert>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef AlertsRef = AutoDisposeStreamProviderRef<Alert>;
+typedef AlertsRef = AutoDisposeStreamProviderRef<AlertEvent>;
 String _$activeAlertsHash() => r'9570ff480d65e4b8b634a04a30ed1b18e7d9e869';
 
 /// Provider for active (unacknowledged) alerts
@@ -372,7 +372,7 @@ final unacknowledgedAlertCountProvider =
 );
 
 typedef UnacknowledgedAlertCountRef = AutoDisposeFutureProviderRef<int>;
-String _$alertsBySeverityHash() => r'4cd0bcfa709ea1a656216e3030c27dd476467ecd';
+String _$alertsBySeverityHash() => r'337b08075f2511dbd5ea92ab545161f8ac43b130';
 
 /// Provider for alerts grouped by severity
 ///

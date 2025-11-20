@@ -5,6 +5,7 @@
 /// - Execution history
 /// - Execution queue state
 /// - Performance metrics
+library;
 
 /// Latency Statistics
 ///

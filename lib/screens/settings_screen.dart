@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../providers/locale_provider.dart';
 import '../widgets/theme_toggle_button.dart';
 
@@ -11,7 +11,7 @@ class SettingsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final currentLocale = ref.watch(localeProvider);
 
     return Scaffold(

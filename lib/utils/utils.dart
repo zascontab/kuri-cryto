@@ -12,6 +12,7 @@
 /// final isValid = validatePrice(100);
 /// final color = AppColors.profit;
 /// ```
+library;
 
 // Formatters
 export 'formatters.dart';

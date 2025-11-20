@@ -14,7 +14,7 @@ import '../models/health_status.dart';
 /// - Trading pair management
 class ScalpingService {
   final ApiClient _apiClient;
-  static const String _basePath = '/scalping';
+  static const String _basePath = '';
 
   ScalpingService(this._apiClient);
 
@@ -32,7 +32,7 @@ class ScalpingService {
     try {
       developer.log('Fetching system status...', name: 'ScalpingService');
 
-      final response = await _apiClient.get<Map<String, dynamic>>('$_basePath/status');
+      final response = await _apiClient.get<Map<String, dynamic>>('/status');
 
       if (response['success'] == true && response['data'] != null) {
         final status = SystemStatus.fromJson(response['data']);
@@ -64,7 +64,7 @@ class ScalpingService {
     try {
       developer.log('Fetching system metrics...', name: 'ScalpingService');
 
-      final response = await _apiClient.get<Map<String, dynamic>>('$_basePath/metrics');
+      final response = await _apiClient.get<Map<String, dynamic>>('/metrics');
 
       if (response['success'] == true && response['data'] != null) {
         final metrics = Metrics.fromJson(response['data']);
@@ -98,7 +98,7 @@ class ScalpingService {
     try {
       developer.log('Fetching health status...', name: 'ScalpingService');
 
-      final response = await _apiClient.get<Map<String, dynamic>>('$_basePath/health');
+      final response = await _apiClient.get<Map<String, dynamic>>('/health');
 
       if (response['success'] == true && response['data'] != null) {
         final health = HealthStatus.fromJson(response['data']);
@@ -136,7 +136,7 @@ class ScalpingService {
     try {
       developer.log('Starting scalping engine...', name: 'ScalpingService');
 
-      final response = await _apiClient.post<Map<String, dynamic>>('$_basePath/start');
+      final response = await _apiClient.post<Map<String, dynamic>>('/start');
 
       if (response['success'] == true) {
         developer.log('Engine started successfully', name: 'ScalpingService');
@@ -173,7 +173,7 @@ class ScalpingService {
     try {
       developer.log('Stopping scalping engine...', name: 'ScalpingService');
 
-      final response = await _apiClient.post<Map<String, dynamic>>('$_basePath/stop');
+      final response = await _apiClient.post<Map<String, dynamic>>('/stop');
 
       if (response['success'] == true) {
         developer.log('Engine stopped successfully', name: 'ScalpingService');
@@ -207,7 +207,7 @@ class ScalpingService {
       developer.log('Adding trading pair: $exchange/$pair', name: 'ScalpingService');
 
       final response = await _apiClient.post<Map<String, dynamic>>(
-        '$_basePath/pairs/add',
+        '/pairs/add',
         data: {
           'exchange': exchange,
           'pair': pair,
@@ -246,7 +246,7 @@ class ScalpingService {
       developer.log('Removing trading pair: $exchange/$pair', name: 'ScalpingService');
 
       final response = await _apiClient.post<Map<String, dynamic>>(
-        '$_basePath/pairs/remove',
+        '/pairs/remove',
         data: {
           'exchange': exchange,
           'pair': pair,
@@ -284,7 +284,7 @@ class ScalpingService {
     try {
       developer.log('Fetching active trading pairs...', name: 'ScalpingService');
 
-      final response = await _apiClient.get<Map<String, dynamic>>('$_basePath/pairs/active');
+      final response = await _apiClient.get<Map<String, dynamic>>('/pairs/active');
 
       if (response['success'] == true && response['data'] != null) {
         final pairs = (response['data'] as List)
@@ -324,7 +324,7 @@ class ScalpingService {
       developer.log('Fetching available pairs for $exchange...', name: 'ScalpingService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
-        '$_basePath/pairs/available',
+        '/pairs/available',
         queryParameters: {'exchange': exchange},
       );
 

@@ -10,10 +10,10 @@ import 'l10n_es.dart';
 
 // ignore_for_file: type=lint
 
-/// Callers can lookup localized strings with an instance of L10n
-/// returned by `L10n.of(context)`.
+/// Callers can lookup localized strings with an instance of AppLocalizations
+/// returned by `AppLocalizations.of(context)`.
 ///
-/// Applications need to include `L10n.delegate()` in their app's
+/// Applications need to include `AppLocalizations.delegate()` in their app's
 /// `localizationDelegates` list, and the locales they support in the app's
 /// `supportedLocales` list. For example:
 ///
@@ -21,22 +21,58 @@ import 'l10n_es.dart';
 /// import 'l10n/l10n.dart';
 ///
 /// return MaterialApp(
-///   localizationsDelegates: L10n.localizationsDelegates,
-///   supportedLocales: L10n.supportedLocales,
+///   localizationsDelegates: AppLocalizations.localizationsDelegates,
+///   supportedLocales: AppLocalizations.supportedLocales,
 ///   home: MyApplicationHome(),
 /// );
 /// ```
-abstract class L10n {
-  L10n(String locale)
+///
+/// ## Update pubspec.yaml
+///
+/// Please make sure to update your pubspec.yaml to include the following
+/// packages:
+///
+/// ```yaml
+/// dependencies:
+///   # Internationalization support.
+///   flutter_localizations:
+///     sdk: flutter
+///   intl: any # Use the pinned version from flutter_localizations
+///
+///   # Rest of dependencies
+/// ```
+///
+/// ## iOS Applications
+///
+/// iOS applications define key application metadata, including supported
+/// locales, in an Info.plist file that is built into the application bundle.
+/// To configure the locales supported by your app, you’ll need to edit this
+/// file.
+///
+/// First, open your project’s ios/Runner.xcworkspace Xcode workspace file.
+/// Then, in the Project Navigator, open the Info.plist file under the Runner
+/// project’s Runner folder.
+///
+/// Next, select the Information Property List item, select Add Item from the
+/// Editor menu, then select Localizations from the pop-up menu.
+///
+/// Select and expand the newly-created Localizations item then, for each
+/// locale your application supports, add a new item and select the locale
+/// you wish to add from the pop-up menu in the Value field. This list should
+/// be consistent with the languages listed in the AppLocalizations.supportedLocales
+/// property.
+abstract class AppLocalizations {
+  AppLocalizations(String locale)
       : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
-  static L10n of(BuildContext context) {
-    return lookupL10n(Localizations.localeOf(context));
+  static AppLocalizations? of(BuildContext context) {
+    return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<L10n> delegate = _L10nDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -44,6 +80,10 @@ abstract class L10n {
   /// Returns a list of localizations delegates containing this delegate along with
   /// GlobalMaterialLocalizations.delegate, GlobalCupertinoLocalizations.delegate,
   /// and GlobalWidgetsLocalizations.delegate.
+  ///
+  /// Additional delegates can be added by appending to this list in
+  /// MaterialApp. This list does not have to be used at all if a custom list
+  /// of delegates is preferred or required.
   static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
       <LocalizationsDelegate<dynamic>>[
     delegate,
@@ -55,640 +95,1421 @@ abstract class L10n {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
-    Locale('es'),
+    Locale('es')
   ];
 
-  /// Dashboard - Scalping Engine
+  /// No description provided for @scalpingEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Scalping Engine'**
   String get scalpingEngine;
 
-  /// Engine status - Running
+  /// No description provided for @running.
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
   String get running;
 
-  /// Engine status - Stopped
+  /// No description provided for @stopped.
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
   String get stopped;
 
-  /// Health status - Healthy
+  /// No description provided for @healthy.
+  ///
+  /// In en, this message translates to:
+  /// **'Healthy'**
   String get healthy;
 
-  /// Health status - Degraded
+  /// No description provided for @degraded.
+  ///
+  /// In en, this message translates to:
+  /// **'Degraded'**
   String get degraded;
 
-  /// Health status - Down
+  /// No description provided for @down.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
   String get down;
 
-  /// Uptime label
+  /// No description provided for @uptime.
+  ///
+  /// In en, this message translates to:
+  /// **'Uptime'**
   String get uptime;
 
-  /// Active Positions label
+  /// No description provided for @activePositions.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Positions'**
   String get activePositions;
 
-  /// Total Trades label
+  /// No description provided for @totalTrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Trades'**
   String get totalTrades;
 
-  /// Start Engine button
+  /// No description provided for @startEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Start Engine'**
   String get startEngine;
 
-  /// Stop Engine button
+  /// No description provided for @stopEngine.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Engine'**
   String get stopEngine;
 
-  /// Start Engine confirmation message
+  /// No description provided for @startEngineConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to start the trading engine?'**
   String get startEngineConfirmation;
 
-  /// Stop Engine confirmation message
+  /// No description provided for @stopEngineConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to stop the trading engine? All positions will be closed.'**
   String get stopEngineConfirmation;
 
-  /// Cancel button
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
   String get cancel;
 
-  /// Start button
+  /// No description provided for @start.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
   String get start;
 
-  /// Stop button
+  /// No description provided for @stop.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop'**
   String get stop;
 
-  /// Trading Metrics section
+  /// No description provided for @tradingMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Metrics'**
   String get tradingMetrics;
 
-  /// Total P&L label
+  /// No description provided for @totalPnl.
+  ///
+  /// In en, this message translates to:
+  /// **'Total P&L'**
   String get totalPnl;
 
-  /// Daily P&L label
+  /// No description provided for @dailyPnl.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily P&L'**
   String get dailyPnl;
 
-  /// Win Rate label
+  /// No description provided for @winRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Win Rate'**
   String get winRate;
 
-  /// Average Latency label
+  /// No description provided for @avgLatency.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Latency'**
   String get avgLatency;
 
-  /// Milliseconds abbreviation
+  /// milliseconds abbreviation
+  ///
+  /// In en, this message translates to:
+  /// **'ms'**
   String get ms;
 
-  /// Loading state
+  /// No description provided for @loading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading...'**
   String get loading;
 
-  /// Error loading data
+  /// No description provided for @errorLoadingData.
+  ///
+  /// In en, this message translates to:
+  /// **'Error loading data'**
   String get errorLoadingData;
 
-  /// Stop engine confirmation message
+  /// No description provided for @stopEngineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will stop the scalping engine. Open positions will remain active. Continue?'**
   String get stopEngineMessage;
 
-  /// Start engine confirmation message
+  /// No description provided for @startEngineMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'This will start the scalping engine and begin trading. Continue?'**
   String get startEngineMessage;
 
-  /// Engine started success message
+  /// No description provided for @engineStartedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine started successfully'**
   String get engineStartedSuccess;
 
-  /// Engine stopped success message
+  /// No description provided for @engineStoppedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Engine stopped successfully'**
   String get engineStoppedSuccess;
 
-  /// Key Metrics section title
+  /// No description provided for @keyMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Key Metrics'**
   String get keyMetrics;
 
-  /// Today label
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'today'**
   String get today;
 
-  /// Above target label
+  /// No description provided for @aboveTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Above target'**
   String get aboveTarget;
 
-  /// Below target label
+  /// No description provided for @belowTarget.
+  ///
+  /// In en, this message translates to:
+  /// **'Below target'**
   String get belowTarget;
 
-  /// Open trades label
+  /// No description provided for @openTrades.
+  ///
+  /// In en, this message translates to:
+  /// **'Open trades'**
   String get openTrades;
 
-  /// Excellent rating
+  /// No description provided for @excellent.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent'**
   String get excellent;
 
-  /// Good rating
+  /// No description provided for @good.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
   String get good;
 
-  /// Quick Actions section
+  /// No description provided for @quickActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Quick Actions'**
   String get quickActions;
 
-  /// Refresh Data action
+  /// No description provided for @refreshData.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Data'**
   String get refreshData;
 
-  /// Last updated now
+  /// No description provided for @lastUpdatedNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Last updated just now'**
   String get lastUpdatedNow;
 
-  /// View Analytics action
+  /// No description provided for @viewAnalytics.
+  ///
+  /// In en, this message translates to:
+  /// **'View Analytics'**
   String get viewAnalytics;
 
-  /// Detailed charts label
+  /// No description provided for @detailedCharts.
+  ///
+  /// In en, this message translates to:
+  /// **'Detailed performance charts'**
   String get detailedCharts;
 
-  /// Settings
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
   String get settings;
 
-  /// Language
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
   String get language;
 
-  /// Select Language
+  /// No description provided for @selectLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Language'**
   String get selectLanguage;
 
-  /// English
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
   String get english;
 
-  /// Spanish
+  /// No description provided for @spanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
   String get spanish;
 
-  // Navigation & Main Screen
-  String get tradingDashboard;
-  String get positions;
-  String get strategies;
-  String get riskMonitor;
-  String get more;
-  String get tradingMCP;
-  String get home;
-  String get risk;
-
-  // More Screen
-  String get executionStats;
-  String get viewLatencyPerformance;
-  String get tradingPairs;
-  String get manageTradingPairs;
-  String get alerts;
-  String get configureNotifications;
-  String get appPreferences;
-  String get about;
-  String get appInformation;
-  String get appVersion;
-  String get appDescription;
-  String get backendVersion;
-
-  // Positions Screen
+  /// No description provided for @openPositions.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Positions'**
   String get openPositions;
+
+  /// No description provided for @history.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
   String get history;
-  String closingPosition({required String positionId});
+
+  /// No description provided for @closingPosition.
+  ///
+  /// In en, this message translates to:
+  /// **'Closing position {positionId}...'**
+  String closingPosition(String positionId);
+
+  /// No description provided for @movingStopLossBreakeven.
+  ///
+  /// In en, this message translates to:
+  /// **'Moving stop loss to breakeven...'**
   String get movingStopLossBreakeven;
+
+  /// No description provided for @enablingTrailingStop.
+  ///
+  /// In en, this message translates to:
+  /// **'Enabling trailing stop...'**
   String get enablingTrailingStop;
+
+  /// No description provided for @noOpenPositions.
+  ///
+  /// In en, this message translates to:
+  /// **'No Open Positions'**
   String get noOpenPositions;
+
+  /// No description provided for @startEngineToTrade.
+  ///
+  /// In en, this message translates to:
+  /// **'Start the engine to begin trading'**
   String get startEngineToTrade;
+
+  /// No description provided for @closedPositionsHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Your closed positions will appear here'**
   String get closedPositionsHere;
+
+  /// No description provided for @slTpUpdatedSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'SL/TP updated successfully'**
   String get slTpUpdatedSuccess;
+
+  /// No description provided for @editStopLossTakeProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Stop Loss & Take Profit'**
   String get editStopLossTakeProfit;
+
+  /// No description provided for @stopLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Loss'**
   String get stopLoss;
+
+  /// No description provided for @priceCloseIfLosing.
+  ///
+  /// In en, this message translates to:
+  /// **'Price to close position if losing'**
   String get priceCloseIfLosing;
+
+  /// No description provided for @pleaseEnterStopLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter stop loss price'**
   String get pleaseEnterStopLoss;
+
+  /// No description provided for @pleaseEnterValidPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid price'**
   String get pleaseEnterValidPrice;
+
+  /// No description provided for @takeProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Profit'**
   String get takeProfit;
+
+  /// No description provided for @priceCloseIfWinning.
+  ///
+  /// In en, this message translates to:
+  /// **'Price to close position if winning'**
   String get priceCloseIfWinning;
+
+  /// No description provided for @pleaseEnterTakeProfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter take profit price'**
   String get pleaseEnterTakeProfit;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
   String get save;
 
-  // Risk Screen
+  /// No description provided for @killSwitchActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill Switch ACTIVATED - All trading stopped'**
   String get killSwitchActivated;
+
+  /// No description provided for @killSwitchDeactivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Kill Switch deactivated - Trading resumed'**
   String get killSwitchDeactivated;
+
+  /// No description provided for @selectRiskMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Risk Mode'**
   String get selectRiskMode;
+
+  /// No description provided for @conservative.
+  ///
+  /// In en, this message translates to:
+  /// **'Conservative'**
   String get conservative;
+
+  /// No description provided for @lowerRiskSmallerPositions.
+  ///
+  /// In en, this message translates to:
+  /// **'Lower risk, smaller positions'**
   String get lowerRiskSmallerPositions;
+
+  /// No description provided for @normal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
   String get normal;
+
+  /// No description provided for @balancedRiskReward.
+  ///
+  /// In en, this message translates to:
+  /// **'Balanced risk and reward'**
   String get balancedRiskReward;
+
+  /// No description provided for @aggressive.
+  ///
+  /// In en, this message translates to:
+  /// **'Aggressive'**
   String get aggressive;
+
+  /// No description provided for @higherRiskLargerPositions.
+  ///
+  /// In en, this message translates to:
+  /// **'Higher risk, larger positions'**
   String get higherRiskLargerPositions;
-  String riskModeChanged({required String mode});
+
+  /// No description provided for @riskModeChanged.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk mode changed to {mode}'**
+  String riskModeChanged(String mode);
+
+  /// No description provided for @riskLimitsUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk limits updated successfully'**
   String get riskLimitsUpdated;
+
+  /// No description provided for @riskLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Limits'**
   String get riskLimits;
+
+  /// No description provided for @editLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit limits'**
   String get editLimits;
+
+  /// No description provided for @maxPositionSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Position Size'**
   String get maxPositionSize;
+
+  /// No description provided for @maxTotalExposure.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Total Exposure'**
   String get maxTotalExposure;
+
+  /// No description provided for @stopLossPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Loss %'**
   String get stopLossPercent;
+
+  /// No description provided for @takeProfitPercent.
+  ///
+  /// In en, this message translates to:
+  /// **'Take Profit %'**
   String get takeProfitPercent;
+
+  /// No description provided for @maxDailyLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Max Daily Loss'**
   String get maxDailyLoss;
-  String get maxConsecutiveLosses;
+
+  /// No description provided for @riskMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Mode'**
   String get riskMode;
+
+  /// No description provided for @tapToChangeMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to change mode'**
   String get tapToChangeMode;
+
+  /// No description provided for @exposureBySymbol.
+  ///
+  /// In en, this message translates to:
+  /// **'Exposure by Symbol'**
   String get exposureBySymbol;
+
+  /// No description provided for @editRiskLimits.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Risk Limits'**
   String get editRiskLimits;
+
+  /// No description provided for @pleaseEnterValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a value'**
   String get pleaseEnterValue;
+
+  /// No description provided for @pleaseEnterValidAmount.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid amount'**
   String get pleaseEnterValidAmount;
+
+  /// No description provided for @pleaseEnterValidPercentage.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid percentage'**
   String get pleaseEnterValidPercentage;
-  String get activateKillSwitch;
-  String get killSwitchWarning;
-  String get allTradingWillStop;
-  String get allPositionsWillClose;
-  String get requiresManualReactivation;
-  String get areYouSure;
-  String get activate;
-  String get deactivateKillSwitch;
-  String get thisWillResumeTrading;
-  String get continue_;
-  String get confirmDeactivation;
-  String get confirmResumeTrading;
-  String get resume;
-  String errorOccurred({required String error});
-  String get ok;
-  String get dismiss;
-  String get killSwitchActive;
-  String get tradingDisabled;
-  String get retry;
 
-  // Strategies Screen
+  /// No description provided for @strategiesOverview.
+  ///
+  /// In en, this message translates to:
+  /// **'Strategies Overview'**
   String get strategiesOverview;
+
+  /// No description provided for @active.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
   String get active;
+
+  /// No description provided for @avgWinRate.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Win Rate'**
   String get avgWinRate;
+
+  /// No description provided for @availableStrategies.
+  ///
+  /// In en, this message translates to:
+  /// **'Available Strategies'**
   String get availableStrategies;
-  String strategyActivated({required String name});
-  String strategyDeactivated({required String name});
+
+  /// No description provided for @strategyActivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Strategy \"{name}\" activated'**
+  String strategyActivated(String name);
+
+  /// No description provided for @strategyDeactivated.
+  ///
+  /// In en, this message translates to:
+  /// **'Strategy \"{name}\" deactivated'**
+  String strategyDeactivated(String name);
+
+  /// No description provided for @performanceMetrics.
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Metrics'**
   String get performanceMetrics;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
   String get weight;
+
+  /// No description provided for @avgWin.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Win'**
   String get avgWin;
+
+  /// No description provided for @avgLoss.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg Loss'**
   String get avgLoss;
+
+  /// No description provided for @configuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration'**
   String get configuration;
+
+  /// No description provided for @strategyConfigUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Strategy configuration updated'**
   String get strategyConfigUpdated;
-  String configureStrategy({required String name});
 
-  // Multi-Timeframe Analysis
-  String get multiTimeframeAnalysis;
-  String get technicalAnalysisMultipleTimeframes;
-  String get symbol;
-  String get consensusSignal;
-  String get currentPrice;
-  String get signal;
-  String get confidence;
-  String get tradingSignal;
-  String get technicalIndicators;
-  String get recommendation;
-  String get selectSymbolToAnalyze;
+  /// No description provided for @configureStrategy.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure {name}'**
+  String configureStrategy(String name);
 
-  // Backtesting
-  String get backtesting;
-  String get testStrategiesWithHistoricalData;
-  String get newBacktest;
-  String get backtestConfiguration;
-  String get strategy;
-  String get dateRange;
-  String get startDate;
-  String get endDate;
-  String get initialCapital;
-  String get enterAmount;
-  String get runBacktest;
-  String get backtestStarted;
-  String get error;
-  String get backtestRunning;
-  String get backtestFailed;
-  String get backToForm;
-  String get equityCurve;
-  String get tradeHistory;
-  String get entryTime;
-  String get exitTime;
-  String get side;
-  String get entryPrice;
-  String get exitPrice;
-  String get pnl;
-  String get showing;
-  String get ofLabel;
-  String get trades;
-  String get noBacktestsYet;
-  String get profitFactor;
-  String get sharpeRatio;
-  String get maxDrawdown;
+  /// No description provided for @tradingDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Dashboard'**
+  String get tradingDashboard;
 
-  // Parameter Optimization
-  String get parameterOptimization;
-  String get optimizeStrategyParameters;
-  String get newOptimization;
-  String get optimizationConfiguration;
-  String get parameterRanges;
-  String get addParameter;
-  String get editParameter;
-  String get parameterName;
-  String get minimumValue;
-  String get maximumValue;
-  String get stepSize;
-  String get noParametersConfigured;
-  String get optimizationMethod;
-  String get gridSearch;
-  String get gridSearchDesc;
-  String get randomSearch;
-  String get randomSearchDesc;
-  String get bayesianOptimization;
-  String get bayesianOptimizationDesc;
-  String get maxIterations;
-  String get objectiveToOptimize;
-  String get sharpeRatioDesc;
-  String get totalPnlDesc;
-  String get winRateDesc;
-  String get optimizationSummary;
-  String get estimatedCombinations;
-  String get pleaseFixConfigurationErrors;
-  String get runOptimization;
-  String get optimizationStarted;
-  String get optimizationResults;
-  String get loadingResults;
-  String get optimizationRunning;
-  String get combinations;
-  String get estimatedTimeRemaining;
-  String get cancelOptimization;
-  String get optimizationFailed;
-  String get optimizationCancelled;
-  String get goBack;
-  String get bestParameters;
-  String get score;
-  String get applyTheseParameters;
-  String get scoreDistribution;
-  String get allResults;
-  String get sortBy;
-  String get rank;
-  String get parameters;
-  String get results;
-  String get applyParameters;
-  String get applyParametersConfirmation;
-  String get apply;
-  String get parametersAppliedSuccessfully;
-  String get cancelOptimizationConfirmation;
-  String get no;
-  String get yes;
-  String get optimizationCancelledSuccessfully;
-  String get noOptimizationsYet;
-  String get started;
-  String get bestScore;
-  String get totalCombinations;
-  String get deleteOptimization;
-  String get deleteOptimizationConfirmation;
-  String get delete;
-  String get optimizationDeletedSuccessfully;
-  String get completed;
-  String get failed;
-  String get cancelled;
-  String get min;
-  String get max;
-  String get step;
-  String get pleaseEnterValidNumber;
-  String get add;
-  String get duration;
-  String get objective;
+  /// No description provided for @positions.
+  ///
+  /// In en, this message translates to:
+  /// **'Positions'**
+  String get positions;
 
-  // Execution Stats Screen
-  String get latency;
-  String get queue;
-  String get performance;
-  String get latencyStatistics;
-  String get average;
-  String get median;
-  String get percentile95;
-  String get percentile99;
-  String get maximum;
-  String get minimum;
-  String get executionsTracked;
-  String get executionHistory;
-  String get filled;
-  String get partial;
-  String get rejected;
-  String get all;
-  String get filterByStatus;
-  String get noExecutionsYet;
-  String get executionQueue;
-  String get queueEmpty;
-  String get queueLength;
-  String get avgWaitTime;
-  String get queueStatus;
-  String get orderId;
-  String get orderType;
-  String get queuePosition;
-  String get timeInQueue;
-  String get executionPerformance;
-  String get fillRate;
-  String get avgSlippage;
-  String get successfulExecutions;
-  String get failedExecutions;
-  String get errorRate;
-  String get avgExecutionTime;
-  String get slippageBySymbol;
-  String get successRateBySymbol;
-  String get basisPoints;
-  String get refreshStats;
-  String get exportMetrics;
-  String get selectPeriod;
-  String get selectFormat;
-  String get selectMetrics;
-  String get export;
-  String get exportSuccess;
-  String get downloadFile;
-  String get period7d;
-  String get period30d;
-  String get period90d;
-  String get periodAll;
+  /// No description provided for @strategies.
+  ///
+  /// In en, this message translates to:
+  /// **'Strategies'**
+  String get strategies;
 
-  // Performance Charts Screen
-  String get performanceCharts;
-  String get pnlChart;
-  String get winRateChart;
-  String get drawdownChart;
-  String get latencyChart;
-  String get daily;
-  String get weekly;
-  String get monthly;
-  String get filterByStrategy;
-  String get filterBySymbol;
-  String get allStrategies;
-  String get allSymbols;
-  String get noDataAvailable;
-  String get loadingCharts;
-  String get price;
-  String get size;
-  String get time;
-  String get status;
+  /// No description provided for @riskMonitor.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Monitor'**
+  String get riskMonitor;
 
-  // Trading Pairs Screen
-  String get addPair;
-  String get noTradingPairs;
-  String get tapAddPairToStart;
-  String get removePair;
-  String removePairConfirmation(
-      {required String exchange, required String symbol});
-  String get remove;
-  String get cannotRemovePair;
-  String cannotRemovePairWithPositions({required int count});
-  String pairRemovedSuccess({required String symbol});
-  String pairAddedSuccess({required String symbol});
-  String get addNewPair;
-  String get exchange;
-  String get pleaseSelectExchange;
-  String get searchPairs;
-  String get noPairsFound;
-  String get selectedPair;
-  String get inactive;
-  String get notAvailable;
-  String get lastPrice;
-  String get volume24h;
-  String get exposure;
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
 
-  // Alerts Screen
-  String get activeAlerts;
-  String get alertConfiguration;
-  String get noActiveAlerts;
-  String get allClear;
-  String get noAlertsYet;
-  String get alertHistoryWillAppearHere;
-  String get manageAlertRules;
-  String get configureAlertConditions;
-  String get testAlertSystem;
-  String get sendTestAlert;
-  String get alertAcknowledged;
-  String get alertDismissed;
-  String get trigger;
-  String get value;
-  String get acknowledge;
-  String get errorLoadingAlerts;
-  String get enableAlerts;
-  String get toggleAlertSystem;
-  String get notificationSettings;
-  String get pushNotifications;
-  String get inAppNotifications;
-  String get telegramConfiguration;
-  String get telegramBotToken;
-  String get telegramChatId;
-  String get pleaseEnterTelegramToken;
-  String get pleaseEnterTelegramChatId;
-  String get telegramSetupInstructions;
-  String get alertRules;
-  String get addRule;
-  String get noAlertRulesYet;
-  String get tapAddToCreateRule;
-  String get type;
-  String get threshold;
-  String get edit;
-  String get errorLoadingConfiguration;
-  String get alertConfigurationSaved;
-  String get ruleAdded;
-  String get ruleUpdated;
-  String get deleteRule;
-  String confirmDeleteRule({required String name});
-  String get ruleDeleted;
-  String get addAlertRule;
-  String get editAlertRule;
-  String get ruleName;
-  String get pleaseEnterRuleName;
-  String get alertType;
-  String get severity;
-  String get cooldownMinutes;
-  String get preventDuplicateAlerts;
-  String get testAlertSent;
+  /// No description provided for @tradingMCP.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading MCP'**
+  String get tradingMCP;
 
-  // AI Bot Screen
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @risk.
+  ///
+  /// In en, this message translates to:
+  /// **'Risk'**
+  String get risk;
+
+  /// No description provided for @executionStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Execution Stats'**
+  String get executionStats;
+
+  /// No description provided for @viewLatencyPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'View latency and performance'**
+  String get viewLatencyPerformance;
+
+  /// No description provided for @tradingPairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Pairs'**
+  String get tradingPairs;
+
+  /// No description provided for @manageTradingPairs.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage trading pairs'**
+  String get manageTradingPairs;
+
+  /// No description provided for @alerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Alerts'**
+  String get alerts;
+
+  /// No description provided for @configureNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Configure notifications'**
+  String get configureNotifications;
+
+  /// No description provided for @appPreferences.
+  ///
+  /// In en, this message translates to:
+  /// **'App preferences'**
+  String get appPreferences;
+
+  /// No description provided for @about.
+  ///
+  /// In en, this message translates to:
+  /// **'About'**
+  String get about;
+
+  /// No description provided for @appInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'App information'**
+  String get appInformation;
+
+  /// No description provided for @appVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'1.0.0'**
+  String get appVersion;
+
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Advanced cryptocurrency trading automation platform'**
+  String get appDescription;
+
+  /// No description provided for @backendVersion.
+  ///
+  /// In en, this message translates to:
+  /// **'Backend: Trading MCP Server v1.0.0'**
+  String get backendVersion;
+
+  /// Title for AI Bot control panel
+  ///
+  /// In en, this message translates to:
+  /// **'AI Bot Control'**
   String get aiBotTitle;
+
+  /// Label for AI Bot status
+  ///
+  /// In en, this message translates to:
+  /// **'Bot Status'**
   String get aiBotStatus;
+
+  /// AI Bot status: running
+  ///
+  /// In en, this message translates to:
+  /// **'Running'**
   String get aiBotRunning;
+
+  /// AI Bot status: paused
+  ///
+  /// In en, this message translates to:
+  /// **'Paused'**
   String get aiBotPaused;
+
+  /// AI Bot status: stopped
+  ///
+  /// In en, this message translates to:
+  /// **'Stopped'**
   String get aiBotStopped;
-  String get aiBotEmergencyStop;
-  String get aiBotAnalysisCount;
-  String get aiBotExecutionCount;
-  String get aiBotErrorCount;
-  String get aiBotOpenPositions;
-  String get aiBotDailyLoss;
-  String get aiBotDailyTrades;
+
+  /// Button to start AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Start Bot'**
   String get aiBotStart;
+
+  /// Button to stop AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Bot'**
   String get aiBotStop;
+
+  /// Button to pause AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Pause Bot'**
   String get aiBotPause;
+
+  /// Button to resume AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Bot'**
   String get aiBotResume;
+
+  /// Button for emergency stop of AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Stop'**
+  String get aiBotEmergencyStop;
+
+  /// Number of analyses performed by AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Analyses'**
+  String get aiBotAnalysisCount;
+
+  /// Number of executions performed by AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Executions'**
+  String get aiBotExecutionCount;
+
+  /// Number of errors encountered by AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Errors'**
+  String get aiBotErrorCount;
+
+  /// Number of open positions for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Open Positions'**
+  String get aiBotOpenPositions;
+
+  /// Daily loss for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Loss'**
+  String get aiBotDailyLoss;
+
+  /// Number of daily trades for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Trades'**
+  String get aiBotDailyTrades;
+
+  /// Confirmation message before starting AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to start the AI Bot?'**
   String get aiBotConfirmStart;
+
+  /// Confirmation message before stopping AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to stop the AI Bot?'**
   String get aiBotConfirmStop;
+
+  /// Confirmation message before emergency stop
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency stop will immediately halt all AI Bot operations. Continue?'**
   String get aiBotConfirmEmergency;
+
+  /// Success message when AI Bot starts
+  ///
+  /// In en, this message translates to:
+  /// **'AI Bot started successfully'**
   String get aiBotStartedSuccess;
+
+  /// Success message when AI Bot stops
+  ///
+  /// In en, this message translates to:
+  /// **'AI Bot stopped successfully'**
   String get aiBotStoppedSuccess;
+
+  /// AI Bot configuration section
+  ///
+  /// In en, this message translates to:
+  /// **'Bot Configuration'**
   String get aiBotConfig;
+
+  /// Title for AI Bot configuration screen
+  ///
+  /// In en, this message translates to:
+  /// **'Configure AI Bot'**
   String get aiBotConfigTitle;
+
+  /// Button to save AI Bot configuration
+  ///
+  /// In en, this message translates to:
+  /// **'Save Configuration'**
   String get aiBotConfigSave;
+
+  /// AI Bot dry run mode (simulation)
+  ///
+  /// In en, this message translates to:
+  /// **'Dry Run Mode'**
   String get aiBotDryRun;
+
+  /// AI Bot live trading mode
+  ///
+  /// In en, this message translates to:
+  /// **'Live Trading Mode'**
   String get aiBotLiveMode;
+
+  /// AI Bot auto execution toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Auto Execute'**
   String get aiBotAutoExecute;
+
+  /// Minimum confidence threshold for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence Threshold'**
   String get aiBotConfidenceThreshold;
+
+  /// Trade size for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Trade Size'**
   String get aiBotTradeSize;
+
+  /// Leverage for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Leverage'**
   String get aiBotLeverage;
+
+  /// Maximum daily loss limit for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Max Daily Loss'**
   String get aiBotMaxDailyLoss;
+
+  /// Maximum daily trades limit for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Max Daily Trades'**
   String get aiBotMaxDailyTrades;
+
+  /// Trading pair for AI Bot
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Pair'**
   String get aiBotTradingPair;
+
+  /// Conservative preset for AI Bot configuration
+  ///
+  /// In en, this message translates to:
+  /// **'Conservative'**
   String get aiBotPresetConservative;
+
+  /// Intermediate preset for AI Bot configuration
+  ///
+  /// In en, this message translates to:
+  /// **'Intermediate'**
   String get aiBotPresetIntermediate;
+
+  /// Aggressive preset for AI Bot configuration
+  ///
+  /// In en, this message translates to:
+  /// **'Aggressive'**
   String get aiBotPresetAggressive;
+
+  /// Warning message for live trading mode
+  ///
+  /// In en, this message translates to:
+  /// **'Warning: Live trading mode will execute real trades with real funds'**
   String get aiBotWarningLiveMode;
+
+  /// Success message when AI Bot config is updated
+  ///
+  /// In en, this message translates to:
+  /// **'AI Bot configuration updated successfully'**
   String get aiBotConfigUpdated;
 
-  // Analysis Screen
+  /// Title for comprehensive analysis screen
+  ///
+  /// In en, this message translates to:
+  /// **'Market Analysis'**
   String get analysisTitle;
+
+  /// Button to refresh market analysis
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Analysis'**
   String get analysisRefresh;
+
+  /// Loading message for market analysis
+  ///
+  /// In en, this message translates to:
+  /// **'Analyzing market data...'**
   String get analysisLoading;
+
+  /// Technical analysis section
+  ///
+  /// In en, this message translates to:
+  /// **'Technical Analysis'**
   String get analysisTechnical;
+
+  /// Multi-timeframe analysis section
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Timeframe Analysis'**
   String get analysisMultiTimeframe;
+
+  /// Trading recommendation section
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Recommendation'**
   String get analysisRecommendation;
+
+  /// Trading scenarios section
+  ///
+  /// In en, this message translates to:
+  /// **'Scenarios'**
   String get analysisScenarios;
+
+  /// Risk analysis section
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Analysis'**
   String get analysisRisk;
+
+  /// Market condition: oversold
+  ///
+  /// In en, this message translates to:
+  /// **'Oversold'**
   String get analysisOversold;
+
+  /// Market condition: overbought
+  ///
+  /// In en, this message translates to:
+  /// **'Overbought'**
   String get analysisOverbought;
+
+  /// Market condition: neutral
+  ///
+  /// In en, this message translates to:
+  /// **'Neutral'**
   String get analysisNeutral;
+
+  /// Market sentiment: bullish
+  ///
+  /// In en, this message translates to:
+  /// **'Bullish'**
   String get analysisBullish;
+
+  /// Market sentiment: bearish
+  ///
+  /// In en, this message translates to:
+  /// **'Bearish'**
   String get analysisBearish;
+
+  /// Risk level: low
+  ///
+  /// In en, this message translates to:
+  /// **'Low Risk'**
   String get analysisLowRisk;
+
+  /// Risk level: medium
+  ///
+  /// In en, this message translates to:
+  /// **'Medium Risk'**
   String get analysisMediumRisk;
+
+  /// Risk level: high
+  ///
+  /// In en, this message translates to:
+  /// **'High Risk'**
   String get analysisHighRisk;
+
+  /// Analysis confidence level
+  ///
+  /// In en, this message translates to:
+  /// **'Confidence'**
   String get analysisConfidence;
+
+  /// Recommended entry price
+  ///
+  /// In en, this message translates to:
+  /// **'Entry Price'**
   String get analysisEntry;
+
+  /// Recommended stop loss price
+  ///
+  /// In en, this message translates to:
+  /// **'Stop Loss'**
   String get analysisStopLoss;
+
+  /// Recommended take profit price
+  ///
+  /// In en, this message translates to:
+  /// **'Take Profit'**
   String get analysisTakeProfit;
 
-  // Futures
+  /// Title for futures positions
+  ///
+  /// In en, this message translates to:
+  /// **'Futures Positions'**
   String get futuresPositions;
+
+  /// Button to close a futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Close Position'**
   String get futuresClose;
+
+  /// Button to close all futures positions
+  ///
+  /// In en, this message translates to:
+  /// **'Close All Positions'**
   String get futuresCloseAll;
+
+  /// Confirmation message before closing futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to close this position?'**
   String get futuresCloseConfirm;
+
+  /// Success message when futures position is closed
+  ///
+  /// In en, this message translates to:
+  /// **'Position closed successfully'**
   String get futuresClosedSuccess;
+
+  /// Size of futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Position Size'**
   String get futuresSize;
+
+  /// Leverage for futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Leverage'**
   String get futuresLeverage;
+
+  /// Margin for futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Margin'**
   String get futuresMargin;
+
+  /// Liquidation price for futures position
+  ///
+  /// In en, this message translates to:
+  /// **'Liquidation Price'**
   String get futuresLiquidation;
+
+  /// Unrealized profit and loss
+  ///
+  /// In en, this message translates to:
+  /// **'Unrealized P&L'**
   String get futuresUnrealizedPnl;
+
+  /// Realized profit and loss
+  ///
+  /// In en, this message translates to:
+  /// **'Realized P&L'**
   String get futuresRealizedPnl;
+
+  /// Total profit and loss
+  ///
+  /// In en, this message translates to:
+  /// **'Total P&L'**
   String get futuresTotalPnl;
 
-  // General
+  /// Generic confirm button
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
   String get confirm;
+
+  /// Generic error label
+  ///
+  /// In en, this message translates to:
+  /// **'Error'**
+  String get error;
+
+  /// Generic success label
+  ///
+  /// In en, this message translates to:
+  /// **'Success'**
   String get success;
+
+  /// Generic refresh button
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh'**
   String get refresh;
+
+  /// Generic back button
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
   String get back;
+
+  /// Generic close button
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
   String get close;
 
-  // Additional
+  /// Title for multi-timeframe analysis
+  ///
+  /// In en, this message translates to:
+  /// **'Multi-Timeframe Analysis'**
+  String get multiTimeframeAnalysis;
+
+  /// Description for multi-timeframe analysis
+  ///
+  /// In en, this message translates to:
+  /// **'Technical analysis across multiple timeframes'**
+  String get technicalAnalysisMultipleTimeframes;
+
+  /// Title for backtesting feature
+  ///
+  /// In en, this message translates to:
+  /// **'Backtesting'**
+  String get backtesting;
+
+  /// Description for backtesting
+  ///
+  /// In en, this message translates to:
+  /// **'Test strategies with historical data'**
+  String get testStrategiesWithHistoricalData;
+
+  /// Title for parameter optimization
+  ///
+  /// In en, this message translates to:
+  /// **'Parameter Optimization'**
+  String get parameterOptimization;
+
+  /// Description for parameter optimization
+  ///
+  /// In en, this message translates to:
+  /// **'Optimize strategy parameters'**
+  String get optimizeStrategyParameters;
+
+  /// Title for performance charts
+  ///
+  /// In en, this message translates to:
+  /// **'Performance Charts'**
+  String get performanceCharts;
+
+  /// Message when emergency stop is activated
+  ///
+  /// In en, this message translates to:
+  /// **'Emergency Stop Activated'**
   String get emergencyStopActivated;
+
+  /// Success message when bot is resumed
+  ///
+  /// In en, this message translates to:
+  /// **'Bot resumed successfully'**
   String get botResumedSuccess;
+
+  /// Label for mode setting
+  ///
+  /// In en, this message translates to:
+  /// **'Mode'**
   String get mode;
+
+  /// Section title for bot metrics
+  ///
+  /// In en, this message translates to:
+  /// **'Bot Metrics'**
   String get botMetrics;
+
+  /// Label for total count
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
   String get total;
+
+  /// Label for executed items
+  ///
+  /// In en, this message translates to:
+  /// **'Executed'**
   String get executed;
+
+  /// Label for percentage used
+  ///
+  /// In en, this message translates to:
+  /// **'% used'**
   String get percentUsed;
+
+  /// Section title for daily limits
+  ///
+  /// In en, this message translates to:
+  /// **'Daily Limits'**
   String get dailyLimits;
+
+  /// Label for consecutive count
+  ///
+  /// In en, this message translates to:
+  /// **'consecutive'**
   String get consecutive;
+
+  /// Section title for trading mode
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Mode'**
   String get tradingMode;
+
+  /// Description for simulation/dry run mode
+  ///
+  /// In en, this message translates to:
+  /// **'Simulation mode - no real trades'**
   String get simulationMode;
+
+  /// Description for auto execute toggle
+  ///
+  /// In en, this message translates to:
+  /// **'Automatically execute AI recommendations'**
   String get autoExecuteDescription;
+
+  /// Section title for trading parameters
+  ///
+  /// In en, this message translates to:
+  /// **'Trading Parameters'**
   String get tradingParameters;
+
+  /// Description for confidence threshold
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum confidence required for trades'**
   String get minimumConfidenceDescription;
+
+  /// Description for leverage setting
+  ///
+  /// In en, this message translates to:
+  /// **'Trading leverage multiplier'**
   String get leverageDescription;
+
+  /// Validation message for required field
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
   String get required;
+
+  /// Validation message for positive number
+  ///
+  /// In en, this message translates to:
+  /// **'Must be positive'**
   String get mustBePositive;
+
+  /// Section title for safety limits
+  ///
+  /// In en, this message translates to:
+  /// **'Safety Limits'**
   String get safetyLimits;
+
+  /// Section title for configuration presets
+  ///
+  /// In en, this message translates to:
+  /// **'Configuration Presets'**
   String get configurationPresets;
+
+  /// Label for 24-hour high price
+  ///
+  /// In en, this message translates to:
+  /// **'High 24h'**
   String get high24h;
+
+  /// Label for 24-hour low price
+  ///
+  /// In en, this message translates to:
+  /// **'Low 24h'**
   String get low24h;
+
+  /// Label for trading volume
+  ///
+  /// In en, this message translates to:
+  /// **'Volume'**
   String get volume;
+
+  /// Label for market trend
+  ///
+  /// In en, this message translates to:
+  /// **'Trend'**
   String get trend;
+
+  /// Label when timeframes are aligned
+  ///
+  /// In en, this message translates to:
+  /// **'ALIGNED'**
   String get aligned;
+
+  /// Label when timeframes are not aligned
+  ///
+  /// In en, this message translates to:
+  /// **'NOT ALIGNED'**
   String get notAligned;
+
+  /// Label for reasoning section
+  ///
+  /// In en, this message translates to:
+  /// **'Reasoning:'**
   String get reasoning;
+
+  /// Label for target price
+  ///
+  /// In en, this message translates to:
+  /// **'Target'**
   String get target;
+
+  /// Label for risk score
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Score:'**
   String get riskScore;
+
+  /// Label for volatility
+  ///
+  /// In en, this message translates to:
+  /// **'Volatility:'**
   String get volatility;
+
+  /// Label for risk factors section
+  ///
+  /// In en, this message translates to:
+  /// **'Risk Factors:'**
   String get riskFactors;
 }
 
-class _L10nDelegate extends LocalizationsDelegate<L10n> {
-  const _L10nDelegate();
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
+  const _AppLocalizationsDelegate();
 
   @override
-  Future<L10n> load(Locale locale) {
-    return SynchronousFuture<L10n>(lookupL10n(locale));
+  Future<AppLocalizations> load(Locale locale) {
+    return SynchronousFuture<AppLocalizations>(lookupAppLocalizations(locale));
   }
 
   @override
@@ -696,19 +1517,20 @@ class _L10nDelegate extends LocalizationsDelegate<L10n> {
       <String>['en', 'es'].contains(locale.languageCode);
 
   @override
-  bool shouldReload(_L10nDelegate old) => false;
+  bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
-L10n lookupL10n(Locale locale) {
+AppLocalizations lookupAppLocalizations(Locale locale) {
+  // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
     case 'en':
-      return L10nEn();
+      return AppLocalizationsEn();
     case 'es':
-      return L10nEs();
+      return AppLocalizationsEs();
   }
 
   throw FlutterError(
-      'L10n.delegate failed to load unsupported locale "$locale". This is likely '
+      'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
       'an issue with the localizations generation tool. Please file an issue '
       'on GitHub with a reproducible sample app and the gen-l10n configuration '
       'that was used.');

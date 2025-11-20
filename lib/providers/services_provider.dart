@@ -3,6 +3,7 @@
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:dio/dio.dart';
+import '../config/api_config.dart';
 import '../services/api_client.dart';
 import '../services/scalping_service.dart';
 import '../services/position_service.dart';
@@ -14,44 +15,44 @@ import '../services/backtest_service.dart';
 import '../services/optimization_service.dart';
 import '../services/execution_service.dart';
 import '../services/alert_service.dart';
+import '../services/ai_bot_service.dart';
+import '../services/comprehensive_analysis_service.dart';
+import '../services/futures_service.dart';
 
 part 'services_provider.g.dart';
-
-/// API Base URL configuration
-const String apiBaseUrl = 'http://localhost:8081/api/v1';
-const String websocketUrl = 'ws://localhost:8081/ws';
 
 /// Provider for Dio HTTP client
 ///
 /// Configured with:
-/// - Base URL
+/// - Base URL (API Gateway)
 /// - Connect timeout: 10s
 /// - Receive timeout: 30s
+/// - Send timeout: 30s
 /// - JSON content type
 /// - Logging interceptor (debug mode)
 @riverpod
 Dio dio(DioRef ref) {
   final dio = Dio(
     BaseOptions(
-      baseUrl: apiBaseUrl,
-      connectTimeout: const Duration(seconds: 10),
-      receiveTimeout: const Duration(seconds: 30),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
+      baseUrl: ApiConfig.apiBaseUrl,
+      connectTimeout: ApiConfig.connectTimeout,
+      receiveTimeout: ApiConfig.receiveTimeout,
+      sendTimeout: ApiConfig.sendTimeout,
+      headers: ApiConfig.defaultHeaders,
     ),
   );
 
   // Add interceptor for logging in debug mode
-  dio.interceptors.add(
-    LogInterceptor(
-      requestBody: true,
-      responseBody: true,
-      error: true,
-      logPrint: (obj) => print('[API] $obj'),
-    ),
-  );
+  if (ApiConfig.enableLogging) {
+    dio.interceptors.add(
+      LogInterceptor(
+        requestBody: ApiConfig.logRequestBody,
+        responseBody: ApiConfig.logResponseBody,
+        error: true,
+        logPrint: (obj) => print('[API] $obj'),
+      ),
+    );
+  }
 
   return dio;
 }
@@ -128,7 +129,7 @@ RiskService riskService(RiskServiceRef ref) {
 /// Auto-reconnection with exponential backoff
 @riverpod
 WebSocketService websocketService(WebsocketServiceRef ref) {
-  final service = WebSocketService(url: websocketUrl);
+  final service = WebSocketService(url: ApiConfig.wsBaseUrl);
 
   // Ensure cleanup on provider disposal
   ref.onDispose(() {
@@ -201,4 +202,51 @@ ExecutionService executionService(ExecutionServiceRef ref) {
 AlertService alertService(AlertServiceRef ref) {
   final client = ref.watch(apiClientProvider);
   return AlertService(client);
+}
+
+/// Provider for AI Bot Service
+///
+/// Manages AI trading bot operations:
+/// - Bot control (start/stop/pause/resume)
+/// - Status monitoring
+/// - Configuration management
+/// - Position tracking
+/// - Market analysis with AI
+/// - Emergency stop
+@riverpod
+AiBotService aiBotService(AiBotServiceRef ref) {
+  final dio = ref.watch(dioProvider);
+  return AiBotService(dio);
+}
+
+/// Provider for Comprehensive Analysis Service
+///
+/// Provides detailed market analysis with AI:
+/// - Current price and 24h statistics
+/// - Technical analysis (RSI, MACD, Bollinger, EMAs)
+/// - Multi-timeframe analysis (1m, 5m, 15m, 1h)
+/// - Recent movement analysis
+/// - Key support/resistance levels
+/// - Trading recommendations (BUY/SELL/WAIT)
+/// - Market scenarios and risk evaluation
+@riverpod
+ComprehensiveAnalysisService comprehensiveAnalysisService(
+  ComprehensiveAnalysisServiceRef ref,
+) {
+  final dio = ref.watch(dioProvider);
+  return ComprehensiveAnalysisService(dio);
+}
+
+/// Provider for Futures Service
+///
+/// Handles futures trading operations on KuCoin:
+/// - Get open futures positions
+/// - Close positions (single/all/filtered)
+/// - Stop loss and take profit management
+/// - Mark and index price retrieval
+/// - Symbol conversion helpers (spot <-> futures)
+@riverpod
+FuturesService futuresService(FuturesServiceRef ref) {
+  final dio = ref.watch(dioProvider);
+  return FuturesService(dio);
 }

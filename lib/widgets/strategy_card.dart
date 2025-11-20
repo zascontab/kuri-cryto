@@ -69,7 +69,7 @@ class StrategyCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       color: isActive
                           ? colorScheme.primaryContainer
-                          : colorScheme.surfaceVariant,
+                          : colorScheme.surfaceContainerHighest,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Icon(
@@ -153,7 +153,7 @@ class StrategyCard extends StatelessWidget {
                     child: LinearProgressIndicator(
                       value: weight,
                       minHeight: 6,
-                      backgroundColor: colorScheme.surfaceVariant,
+                      backgroundColor: colorScheme.surfaceContainerHighest,
                       valueColor: AlwaysStoppedAnimation<Color>(
                         isActive ? colorScheme.primary : Colors.grey,
                       ),

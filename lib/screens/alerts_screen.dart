@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../l10n/l10n.dart';
-import '../models/websocket_event.dart';
+import '../l10n/l10n_export.dart';
+import '../models/alert_config.dart';
 import '../providers/alert_provider.dart';
 import 'alert_config_screen.dart';
 
@@ -43,7 +43,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final theme = Theme.of(context);
 
     return Scaffold(
@@ -105,8 +105,8 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
           // Sort by severity: critical > warning > info
           final sortedAlerts = [...alerts]..sort((a, b) {
             final severityOrder = {'critical': 3, 'warning': 2, 'info': 1};
-            final aSeverity = severityOrder[a.severity] ?? 0;
-            final bSeverity = severityOrder[b.severity] ?? 0;
+            final aSeverity = severityOrder[a.severity.value] ?? 0;
+            final bSeverity = severityOrder[b.severity.value] ?? 0;
             return bSeverity.compareTo(aSeverity);
           });
 
@@ -207,7 +207,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
     // Determine severity color
     Color severityColor;
     IconData severityIcon;
-    switch (alert.severity) {
+    switch (alert.severity.value) {
       case 'critical':
         severityColor = const Color(0xFFF44336);
         severityIcon = Icons.error;
@@ -230,7 +230,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: severityColor.withOpacity(0.1),
+              color: severityColor.withValues(alpha: 0.1),
               borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(12),
                 topRight: Radius.circular(12),
@@ -241,7 +241,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
                 Icon(severityIcon, color: severityColor, size: 20),
                 const SizedBox(width: 8),
                 Text(
-                  alert.severity.toUpperCase(),
+                  alert.severity.value.toUpperCase(),
                   style: theme.textTheme.labelLarge?.copyWith(
                     color: severityColor,
                     fontWeight: FontWeight.bold,
@@ -269,37 +269,38 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
                   style: theme.textTheme.bodyLarge,
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.label_outline,
-                      size: 16,
-                      color: theme.colorScheme.onSurfaceVariant,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      '${l10n.trigger}: ${alert.trigger}',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                    if (alert.value != null) ...[
-                      const SizedBox(width: 16),
+                if (alert.trigger != null)
+                  Row(
+                    children: [
                       Icon(
-                        Icons.trending_up,
+                        Icons.label_outline,
                         size: 16,
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        '${l10n.value}: ${alert.value}',
+                        '${l10n.trigger}: ${alert.trigger}',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),
                       ),
+                      if (alert.value != null) ...[
+                        const SizedBox(width: 16),
+                        Icon(
+                          Icons.trending_up,
+                          size: 16,
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          '${l10n.value}: ${alert.value}',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
                     ],
-                  ],
-                ),
+                  ),
               ],
             ),
           ),
@@ -346,7 +347,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
           Icon(
             icon,
             size: 80,
-            color: theme.colorScheme.onSurfaceVariant.withOpacity(0.5),
+            color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 16),
           Text(
@@ -359,7 +360,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
           Text(
             subtitle,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+              color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.7),
             ),
           ),
         ],

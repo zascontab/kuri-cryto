@@ -7,56 +7,71 @@ class ApiConfig {
   ApiConfig._();
 
   // ============================================================================
-  // URLs Base
+  // URLs Base - API Gateway
   // ============================================================================
 
-  /// URL base de la API REST
-  static const String apiBaseUrl = 'http://localhost:8081/api/v1';
-
-  /// URL base de WebSocket
-  static const String wsBaseUrl = 'ws://localhost:8081/ws';
-
   // ============================================================================
-  // Endpoints de la API
+  // Network Configuration
   // ============================================================================
 
-  /// Endpoints de autenticación
-  static const String authLogin = '/auth/login';
-  static const String authRegister = '/auth/register';
-  static const String authRefresh = '/auth/refresh';
-  static const String authLogout = '/auth/logout';
+  /// IP del servidor backend
+  static const String serverIp = '192.168.100.145';
 
-  /// Endpoints de mercado
-  static const String marketTickers = '/market/tickers';
-  static const String marketCandles = '/market/candles';
-  static const String marketOrderbook = '/market/orderbook';
-  static const String marketTrades = '/market/trades';
+  /// ⭐ RECOMENDADO - API Gateway (puerto 9090)
+  /// Enruta al Scalping API (8081) y MCP Server (10600)
+  static const String gatewayBaseUrl = 'http://$serverIp:9090';
 
-  /// Endpoints de trading
-  static const String tradingOrders = '/trading/orders';
-  static const String tradingPositions = '/trading/positions';
-  static const String tradingBalance = '/trading/balance';
+  /// URL base del Scalping API (conexión directa al puerto 8081)
+  static const String scalpingDirectUrl = 'http://$serverIp:8081';
 
-  /// Endpoints de usuario
-  static const String userProfile = '/user/profile';
-  static const String userHistory = '/user/history';
-  static const String userSettings = '/user/settings';
+  /// URL base del MCP Server (conexión directa al puerto 10600)
+  static const String mcpDirectUrl = 'http://$serverIp:10600';
+
+  /// ⭐ URL base para ApiClient - Scalping API via Gateway
+  /// Incluye el path completo hasta /scalping para que los servicios
+  /// puedan usar paths relativos simples
+  static const String apiBaseUrl = '$gatewayBaseUrl/api/scalping/api/v1/scalping';
 
   // ============================================================================
-  // WebSocket Channels
+  // MCP Server - AI Bot & Trading Tools Endpoints
   // ============================================================================
 
-  /// Canal de tickers en tiempo real
-  static const String wsTicker = '/ticker';
+  /// URL base para MCP Server tools execution (via Gateway)
+  static const String mcpToolsUrl = '$gatewayBaseUrl/api/mcp/tools/execute';
 
-  /// Canal de libro de órdenes
-  static const String wsOrderbook = '/orderbook';
+  /// URL base para AI Bot endpoints (conexión directa al MCP Server)
+  static const String aiBotBaseUrl = '$mcpDirectUrl/api/v1/ai-bot';
 
-  /// Canal de trades
-  static const String wsTrades = '/trades';
+  /// URL para análisis comprehensivo con AI
+  static const String comprehensiveAnalysisUrl = '$aiBotBaseUrl/comprehensive-analysis';
 
-  /// Canal de actualizaciones de usuario
-  static const String wsUserUpdates = '/user';
+  /// URL para control del AI Bot
+  static const String aiBotControlUrl = '$aiBotBaseUrl';
+
+  /// URL para configuración dinámica del bot
+  static const String aiBotConfigUrl = '$aiBotBaseUrl/config';
+
+  /// Alternativa: URL base para conexión directa (sin Gateway)
+  static const String apiBaseUrlDirect = '$scalpingDirectUrl/api/v1/scalping';
+
+  /// URL base de WebSocket (conexión directa - WebSocket aún no disponible vía Gateway)
+  static const String wsBaseUrl = 'ws://$serverIp:8081/ws';
+
+  // ============================================================================
+  // Gateway Endpoints (paths absolutos desde gateway root)
+  // ============================================================================
+
+  /// Gateway health check
+  static const String gatewayHealth = '/health';
+
+  /// Gateway information
+  static const String gatewayInfo = '/api/gateway/info';
+
+  /// Scalping API base path (desde gateway root)
+  static const String scalpingBase = '/api/scalping/api/v1/scalping';
+
+  /// MCP Server base path (desde gateway root)
+  static const String mcpBase = '/api/mcp';
 
   // ============================================================================
   // Configuración de Timeouts
@@ -161,19 +176,20 @@ class ApiConfig {
 
   /// Get base URL for environment
   static String getBaseUrl(String environment) {
-    // For now, we only support localhost
+    // For now, we use the API Gateway
     // In the future, you can add staging, production URLs here
-    return apiBaseUrl;
-  }
-
-  /// Construye la URL completa para un endpoint
-  static String getApiUrl(String endpoint) {
-    return '$apiBaseUrl$endpoint';
+    switch (environment) {
+      case 'production':
+        return apiBaseUrl;
+      case 'development':
+      default:
+        return apiBaseUrl;
+    }
   }
 
   /// Construye la URL completa para un WebSocket channel
   static String getWsUrl(String channel) {
-    return '$wsBaseUrl$channel';
+    return wsBaseUrl; // Ya incluye /ws, no necesita channel
   }
 
   /// Calcula el delay de reintento con backoff exponencial

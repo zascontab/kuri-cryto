@@ -40,7 +40,7 @@ final tradingAllowedProvider = AutoDisposeProvider<bool>.internal(
 );
 
 typedef TradingAllowedRef = AutoDisposeProviderRef<bool>;
-String _$riskSentinelHash() => r'45c554178278e2abd9f75ae16434ff7998cc80b2';
+String _$riskSentinelHash() => r'83cc33805dd40ca9e75b5be86e849115c99acb68';
 
 /// Provider for Risk Sentinel state with real-time WebSocket updates
 ///

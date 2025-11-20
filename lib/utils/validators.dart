@@ -15,6 +15,7 @@
 ///   print('Valid email!');
 /// }
 /// ```
+library;
 
 /// Resultado de una validación
 class ValidationResult {

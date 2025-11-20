@@ -13,7 +13,7 @@ import '../models/execution_stats.dart';
 /// - Metrics export
 class ExecutionService {
   final ApiClient _apiClient;
-  static const String _basePath = '/api/v1';
+  static const String _basePath = '/execution';
 
   ExecutionService(this._apiClient);
 
@@ -33,7 +33,7 @@ class ExecutionService {
       developer.log('Fetching latency statistics...', name: 'ExecutionService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
-        '$_basePath/scalping/execution/latency',
+        '$_basePath/latency',
       );
 
       if (response['success'] == true && response['data'] != null) {
@@ -69,7 +69,7 @@ class ExecutionService {
       developer.log('Fetching execution history (limit: $limit)...', name: 'ExecutionService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
-        '$_basePath/scalping/execution/history',
+        '$_basePath/history',
         queryParameters: {'limit': limit},
       );
 
@@ -105,7 +105,7 @@ class ExecutionService {
       developer.log('Fetching execution queue...', name: 'ExecutionService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
-        '$_basePath/execution/queue',
+        '$_basePath/queue',
       );
 
       if (response['success'] == true && response['data'] != null) {
@@ -140,7 +140,7 @@ class ExecutionService {
       developer.log('Fetching execution performance...', name: 'ExecutionService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
-        '$_basePath/execution/performance',
+        '$_basePath/performance',
       );
 
       if (response['success'] == true && response['data'] != null) {
@@ -189,7 +189,7 @@ class ExecutionService {
       );
 
       final response = await _apiClient.post<Map<String, dynamic>>(
-        '$_basePath/monitoring/metrics/export',
+        '/monitoring/metrics/export',
         data: {
           'format': format,
           'period': period,

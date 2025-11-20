@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/position_card.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../providers/position_provider.dart';
-import '../providers/services_provider.dart';
 import '../models/position.dart';
 
 /// Positions screen with tabs for open and closed positions
@@ -42,7 +41,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
 
   void _closePosition(String positionId) async {
     HapticFeedback.heavyImpact();
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       await ref.read(positionCloserProvider.notifier).closePosition(positionId);
@@ -88,7 +87,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
 
   void _moveToBreakeven(String positionId) async {
     HapticFeedback.mediumImpact();
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       await ref.read(breakevenMoverProvider.notifier).moveToBreakeven(positionId);
@@ -121,7 +120,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
 
   void _enableTrailing(String positionId) async {
     HapticFeedback.mediumImpact();
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     try {
       // Use default 0.5% trailing distance
@@ -158,7 +157,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     // Listen to position stream and update local list
     ref.listen<AsyncValue<Position>>(positionsProvider, (previous, next) {
@@ -204,70 +203,37 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
   }
 
   Widget _buildOpenPositionsList() {
-    final positionsStream = ref.watch(positionsProvider);
+    // Show cached positions immediately, stream updates in background
+    if (_openPositions.isEmpty) {
+      return _buildEmptyState(true);
+    }
 
-    return positionsStream.when(
-      data: (_) {
-        // Stream is connected, show cached positions
-        if (_openPositions.isEmpty) {
-          return _buildEmptyState(true);
-        }
-
-        return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: ListView.builder(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            itemCount: _openPositions.length,
-            itemBuilder: (context, index) {
-              final position = _openPositions[index];
-              return PositionCard(
-                symbol: position.symbol,
-                side: position.side,
-                entryPrice: position.entryPrice,
-                currentPrice: position.currentPrice,
-                size: position.size,
-                leverage: position.leverage,
-                stopLoss: position.stopLoss,
-                takeProfit: position.takeProfit,
-                unrealizedPnl: position.unrealizedPnl,
-                strategy: position.strategy,
-                openTime: position.openTime,
-                status: position.status,
-                onClose: () => _closePosition(position.id),
-                onEditSLTP: () => _editSLTP(position.id, position),
-                onBreakeven: () => _moveToBreakeven(position.id),
-                onTrailing: () => _enableTrailing(position.id),
-              );
-            },
-          ),
-        );
-      },
-      loading: () => const Center(child: CircularProgressIndicator()),
-      error: (e, stack) => Center(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.error, color: Colors.red, size: 64),
-              const SizedBox(height: 16),
-              Text(
-                'Error: ${e.toString()}',
-                style: const TextStyle(color: Colors.red),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 24),
-              ElevatedButton.icon(
-                onPressed: () {
-                  // Reconnect WebSocket
-                  ref.read(websocketServiceProvider).connect();
-                },
-                icon: const Icon(Icons.refresh),
-                label: Text(L10n.of(context).retry),
-              ),
-            ],
-          ),
-        ),
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        itemCount: _openPositions.length,
+        itemBuilder: (context, index) {
+          final position = _openPositions[index];
+          return PositionCard(
+            symbol: position.symbol,
+            side: position.side,
+            entryPrice: position.entryPrice,
+            currentPrice: position.currentPrice,
+            size: position.size,
+            leverage: position.leverage,
+            stopLoss: position.stopLoss,
+            takeProfit: position.takeProfit,
+            unrealizedPnl: position.unrealizedPnl,
+            strategy: position.strategy,
+            openTime: position.openTime,
+            status: position.status,
+            onClose: () => _closePosition(position.id),
+            onEditSLTP: () => _editSLTP(position.id, position),
+            onBreakeven: () => _moveToBreakeven(position.id),
+            onTrailing: () => _enableTrailing(position.id),
+          );
+        },
       ),
     );
   }
@@ -328,7 +294,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
               ElevatedButton.icon(
                 onPressed: _onRefresh,
                 icon: const Icon(Icons.refresh),
-                label: Text(L10n.of(context).retry),
+                label: Text(context.l10n.retry),
               ),
             ],
           ),
@@ -338,7 +304,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
   }
 
   Widget _buildEmptyState(bool isOpen) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -425,7 +391,7 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
         if (mounted) {
           Navigator.pop(context);
 
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(l10n.slTpUpdatedSuccess),
@@ -435,7 +401,7 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
         }
       } catch (e) {
         if (mounted) {
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Error: ${e.toString()}'),
@@ -455,7 +421,7 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return Padding(
       padding: EdgeInsets.only(

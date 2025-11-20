@@ -5,7 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../models/backtest.dart';
 import '../providers/backtest_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 
 /// Backtest Screen
 ///
@@ -37,7 +37,7 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -148,7 +148,7 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: currentSymbol,
+          initialValue: currentSymbol,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -186,7 +186,7 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: currentStrategy,
+          initialValue: currentStrategy,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -275,12 +275,16 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(DateFormat('MMM dd, yyyy').format(currentDate)),
+            Text(
+              DateFormat('MMM dd, yyyy').format(currentDate),
+              style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12),
+            ),
             const Icon(Icons.calendar_today, size: 20),
           ],
         ),
@@ -310,7 +314,8 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
             border: const OutlineInputBorder(),
             prefixText: '\$ ',
             hintText: l10n.enterAmount,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           onChanged: (value) {
             final capital = double.tryParse(value);
@@ -578,7 +583,8 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
               ),
             ),
             const SizedBox(height: 16),
-            _buildMetricRow(theme, l10n.totalTrades, metrics.totalTrades.toString()),
+            _buildMetricRow(
+                theme, l10n.totalTrades, metrics.totalTrades.toString()),
             _buildMetricRow(
               theme,
               l10n.winRate,
@@ -666,12 +672,10 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
       );
     }).toList();
 
-    final minEquity = result.equityCurve
-        .map((e) => e.equity)
-        .reduce((a, b) => a < b ? a : b);
-    final maxEquity = result.equityCurve
-        .map((e) => e.equity)
-        .reduce((a, b) => a > b ? a : b);
+    final minEquity =
+        result.equityCurve.map((e) => e.equity).reduce((a, b) => a < b ? a : b);
+    final maxEquity =
+        result.equityCurve.map((e) => e.equity).reduce((a, b) => a > b ? a : b);
 
     return Card(
       child: Padding(
@@ -787,7 +791,8 @@ class _BacktestScreenState extends ConsumerState<BacktestScreen>
                         DateFormat('MMM dd HH:mm').format(trade.exitTime),
                       )),
                       DataCell(Text(trade.side.toUpperCase())),
-                      DataCell(Text('\$${trade.entryPrice.toStringAsFixed(2)}')),
+                      DataCell(
+                          Text('\$${trade.entryPrice.toStringAsFixed(2)}')),
                       DataCell(Text('\$${trade.exitPrice.toStringAsFixed(2)}')),
                       DataCell(
                         Text(

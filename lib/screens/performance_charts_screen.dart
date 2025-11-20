@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/tiktok_modal.dart';
 
 /// Performance Charts Screen
@@ -20,10 +20,12 @@ class PerformanceChartsScreen extends ConsumerStatefulWidget {
   const PerformanceChartsScreen({super.key});
 
   @override
-  ConsumerState<PerformanceChartsScreen> createState() => _PerformanceChartsScreenState();
+  ConsumerState<PerformanceChartsScreen> createState() =>
+      _PerformanceChartsScreenState();
 }
 
-class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScreen>
+class _PerformanceChartsScreenState
+    extends ConsumerState<PerformanceChartsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   String _selectedPeriod = '7d';
@@ -52,7 +54,7 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -75,7 +77,9 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
           tabs: [
             Tab(text: l10n.pnlChart, icon: const Icon(Icons.show_chart)),
             Tab(text: l10n.winRateChart, icon: const Icon(Icons.trending_up)),
-            Tab(text: l10n.drawdownChart, icon: const Icon(Icons.trending_down)),
+            Tab(
+                text: l10n.drawdownChart,
+                icon: const Icon(Icons.trending_down)),
             Tab(text: l10n.latencyChart, icon: const Icon(Icons.speed)),
           ],
         ),
@@ -86,12 +90,19 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
           Container(
             padding: const EdgeInsets.all(16),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                _buildPeriodChip(theme, l10n, l10n.period7d, '7d'),
-                _buildPeriodChip(theme, l10n, l10n.period30d, '30d'),
-                _buildPeriodChip(theme, l10n, l10n.period90d, '90d'),
-                _buildPeriodChip(theme, l10n, l10n.periodAll, 'all'),
+                Expanded(
+                    child: _buildPeriodChip(theme, l10n, l10n.period7d, '7d')),
+                Expanded(
+                    child:
+                        _buildPeriodChip(theme, l10n, l10n.period30d, '30d')),
+                Expanded(
+                    child:
+                        _buildPeriodChip(theme, l10n, l10n.period90d, '90d')),
+                Expanded(
+                    child:
+                        _buildPeriodChip(theme, l10n, l10n.periodAll, 'all')),
               ],
             ),
           ),
@@ -135,10 +146,15 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
     );
   }
 
-  Widget _buildPeriodChip(ThemeData theme, L10n l10n, String label, String value) {
+  Widget _buildPeriodChip(
+      ThemeData theme, L10n l10n, String label, String value) {
     final isSelected = _selectedPeriod == value;
     return ChoiceChip(
-      label: Text(label),
+      labelStyle: const TextStyle(fontSize: 12, overflow: TextOverflow.ellipsis),
+      label: Text(
+        label,
+        maxLines: 2,
+      ),
       selected: isSelected,
       onSelected: (selected) {
         if (selected) {
@@ -172,7 +188,8 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
+                color:
+                    theme.colorScheme.primaryContainer.withValues(alpha: 0.3),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Column(
@@ -194,7 +211,8 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
                   const SizedBox(height: 16),
                   _buildMockDataInfo(theme, l10n, [
                     'Period: $_selectedPeriod',
-                    if (_selectedStrategy != 'all') 'Strategy: $_selectedStrategy',
+                    if (_selectedStrategy != 'all')
+                      'Strategy: $_selectedStrategy',
                     if (_selectedSymbol != 'all') 'Symbol: $_selectedSymbol',
                   ]),
                 ],
@@ -251,7 +269,8 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
                   const SizedBox(height: 16),
                   _buildMockDataInfo(theme, l10n, [
                     'Period: $_selectedPeriod',
-                    if (_selectedStrategy != 'all') 'Strategy: $_selectedStrategy',
+                    if (_selectedStrategy != 'all')
+                      'Strategy: $_selectedStrategy',
                     if (_selectedSymbol != 'all') 'Symbol: $_selectedSymbol',
                   ]),
                 ],
@@ -308,7 +327,8 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
                   const SizedBox(height: 16),
                   _buildMockDataInfo(theme, l10n, [
                     'Period: $_selectedPeriod',
-                    if (_selectedStrategy != 'all') 'Strategy: $_selectedStrategy',
+                    if (_selectedStrategy != 'all')
+                      'Strategy: $_selectedStrategy',
                     if (_selectedSymbol != 'all') 'Symbol: $_selectedSymbol',
                   ]),
                 ],
@@ -365,7 +385,8 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
                   const SizedBox(height: 16),
                   _buildMockDataInfo(theme, l10n, [
                     'Period: $_selectedPeriod',
-                    if (_selectedStrategy != 'all') 'Strategy: $_selectedStrategy',
+                    if (_selectedStrategy != 'all')
+                      'Strategy: $_selectedStrategy',
                     if (_selectedSymbol != 'all') 'Symbol: $_selectedSymbol',
                   ]),
                 ],
@@ -439,17 +460,21 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: tempStrategy,
+              initialValue: tempStrategy,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: l10n.strategy,
               ),
               items: [
                 DropdownMenuItem(value: 'all', child: Text(l10n.allStrategies)),
-                const DropdownMenuItem(value: 'rsi', child: Text('RSI Scalping')),
-                const DropdownMenuItem(value: 'macd', child: Text('MACD Scalping')),
-                const DropdownMenuItem(value: 'bollinger', child: Text('Bollinger Scalping')),
-                const DropdownMenuItem(value: 'volume', child: Text('Volume Scalping')),
+                const DropdownMenuItem(
+                    value: 'rsi', child: Text('RSI Scalping')),
+                const DropdownMenuItem(
+                    value: 'macd', child: Text('MACD Scalping')),
+                const DropdownMenuItem(
+                    value: 'bollinger', child: Text('Bollinger Scalping')),
+                const DropdownMenuItem(
+                    value: 'volume', child: Text('Volume Scalping')),
               ],
               onChanged: (value) {
                 if (value != null) {
@@ -466,16 +491,19 @@ class _PerformanceChartsScreenState extends ConsumerState<PerformanceChartsScree
             ),
             const SizedBox(height: 8),
             DropdownButtonFormField<String>(
-              value: tempSymbol,
+              initialValue: tempSymbol,
               decoration: InputDecoration(
                 border: const OutlineInputBorder(),
                 labelText: l10n.symbol,
               ),
               items: [
                 DropdownMenuItem(value: 'all', child: Text(l10n.allSymbols)),
-                const DropdownMenuItem(value: 'BTC-USDT', child: Text('BTC-USDT')),
-                const DropdownMenuItem(value: 'ETH-USDT', child: Text('ETH-USDT')),
-                const DropdownMenuItem(value: 'DOGE-USDT', child: Text('DOGE-USDT')),
+                const DropdownMenuItem(
+                    value: 'BTC-USDT', child: Text('BTC-USDT')),
+                const DropdownMenuItem(
+                    value: 'ETH-USDT', child: Text('ETH-USDT')),
+                const DropdownMenuItem(
+                    value: 'DOGE-USDT', child: Text('DOGE-USDT')),
               ],
               onChanged: (value) {
                 if (value != null) {

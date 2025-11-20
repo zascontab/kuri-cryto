@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
 import '../models/optimization.dart';
 import '../providers/optimization_provider.dart';
-import '../services/optimization_service.dart';
 import '../providers/services_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/tiktok_modal.dart';
 
 /// Optimization Results Screen
@@ -34,7 +32,7 @@ class _OptimizationResultsScreenState
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final resultAsync = ref.watch(optimizationResultProvider(widget.optimizationId));
 
     return Scaffold(
@@ -387,7 +385,7 @@ class _OptimizationResultsScreenState
                   ],
                 ),
               );
-            }).toList(),
+            }),
             const Divider(height: 32),
             _buildMetricRow(theme, l10n.score, best.score.toStringAsFixed(4)),
             _buildMetricRow(theme, l10n.winRate, '${best.winRate.toStringAsFixed(1)}%'),
@@ -507,7 +505,7 @@ class _OptimizationResultsScreenState
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
-                  gridData: FlGridData(
+                  gridData: const FlGridData(
                     show: true,
                     drawVerticalLine: false,
                   ),
@@ -674,11 +672,11 @@ class _OptimizationResultsScreenState
       message: l10n.applyParametersConfirmation,
       actions: [
         TikTokModalButton(
-          label: l10n.cancel,
+          text: l10n.cancel,
           onPressed: () => Navigator.of(context).pop(false),
         ),
         TikTokModalButton(
-          label: l10n.apply,
+          text: l10n.apply,
           isPrimary: true,
           onPressed: () => Navigator.of(context).pop(true),
         ),
@@ -721,11 +719,11 @@ class _OptimizationResultsScreenState
       message: l10n.cancelOptimizationConfirmation,
       actions: [
         TikTokModalButton(
-          label: l10n.no,
+          text: l10n.no,
           onPressed: () => Navigator.of(context).pop(false),
         ),
         TikTokModalButton(
-          label: l10n.yes,
+          text: l10n.yes,
           isPrimary: true,
           backgroundColor: Colors.red,
           onPressed: () => Navigator.of(context).pop(true),

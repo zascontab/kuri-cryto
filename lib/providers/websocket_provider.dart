@@ -119,7 +119,7 @@ Stream<Metrics> metricsUpdatesStream(MetricsUpdatesStreamRef ref) {
 /// - Volume alerts
 /// - System errors
 @riverpod
-Stream<Alert> alertsStream(AlertsStreamRef ref) {
+Stream<AlertEvent> alertsStream(AlertsStreamRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
   wsService.connect();

@@ -13,7 +13,7 @@ import '../models/strategy.dart';
 /// - Get performance metrics
 class StrategyService {
   final ApiClient _apiClient;
-  static const String _basePath = '/scalping/strategies';
+  static const String _basePath = '/strategies';
 
   StrategyService(this._apiClient);
 

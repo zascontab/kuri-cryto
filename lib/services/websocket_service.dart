@@ -10,6 +10,7 @@
 /// - Subscription management
 /// - Connection state tracking
 /// - Comprehensive error handling and logging
+library;
 
 import 'dart:async';
 import 'dart:convert';
@@ -61,6 +62,12 @@ class WebSocketService {
   /// Heartbeat interval in seconds
   static const int _heartbeatInterval = 30;
 
+  /// Current reconnection attempt count
+  int _reconnectAttempts = 0;
+
+  /// Maximum reconnection attempts before giving up
+  static const int _maxReconnectAttempts = 5;
+
   /// List of subscribed channels
   final Set<String> _subscribedChannels = {};
 
@@ -71,7 +78,7 @@ class WebSocketService {
       StreamController<Trade>.broadcast();
   final _metricsUpdateController =
       StreamController<Metrics>.broadcast();
-  final _alertController = StreamController<Alert>.broadcast();
+  final _alertController = StreamController<AlertEvent>.broadcast();
   final _killSwitchController =
       StreamController<KillSwitchEvent>.broadcast();
   final _connectionStateController =
@@ -90,7 +97,7 @@ class WebSocketService {
       _metricsUpdateController.stream;
 
   /// Stream of alerts
-  Stream<Alert> get alerts => _alertController.stream;
+  Stream<AlertEvent> get alerts => _alertController.stream;
 
   /// Stream of kill switch events
   Stream<KillSwitchEvent> get killSwitchEvents =>
@@ -137,8 +144,9 @@ class WebSocketService {
       _logger.i('WebSocket connection established');
       _updateConnectionState(WebSocketConnectionState.connected);
 
-      // Reset backoff delay on successful connection
+      // Reset backoff delay and reconnect attempts on successful connection
       _currentBackoffDelay = 1;
+      _reconnectAttempts = 0;
 
       // Setup message handler
       _setupMessageHandler();
@@ -272,7 +280,7 @@ class WebSocketService {
   void _handleMessage(dynamic message) {
     try {
       if (message is String) {
-        _logger.d('Received message: ${message.length > 200 ? message.substring(0, 200) + '...' : message}');
+        _logger.d('Received message: ${message.length > 200 ? '${message.substring(0, 200)}...' : message}');
 
         final Map<String, dynamic> json = jsonDecode(message);
         final String type = json['type'] as String;
@@ -342,7 +350,7 @@ class WebSocketService {
   /// Handle alert message
   void _handleAlert(Map<String, dynamic> json) {
     try {
-      final alert = Alert.fromJson(json['data'] as Map<String, dynamic>);
+      final alert = AlertEvent.fromJson(json['data'] as Map<String, dynamic>);
       _logger.w('Alert received: [${alert.severity}] ${alert.message}');
       _alertController.add(alert);
     } catch (e, stackTrace) {
@@ -458,7 +466,14 @@ class WebSocketService {
   void _scheduleReconnect() {
     _cancelReconnect();
 
-    _logger.i('Scheduling reconnection in ${_currentBackoffDelay}s');
+    // Check if max reconnect attempts reached
+    if (_reconnectAttempts >= _maxReconnectAttempts) {
+      _logger.w('Max reconnection attempts ($_maxReconnectAttempts) reached. WebSocket disabled. Call connect() manually to retry.');
+      return;
+    }
+
+    _reconnectAttempts++;
+    _logger.i('Scheduling reconnection in ${_currentBackoffDelay}s (attempt $_reconnectAttempts/$_maxReconnectAttempts)');
 
     _reconnectTimer = Timer(
       Duration(seconds: _currentBackoffDelay),

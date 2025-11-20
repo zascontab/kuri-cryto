@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import '../../lib/models/system_status.dart';
+import 'package:kuri_crypto/models/system_status.dart';
 
 void main() {
   group('SystemStatus Model', () {
@@ -87,17 +87,17 @@ void main() {
     });
 
     test('should check if system is healthy', () {
-      final healthy = SystemStatus(
+      const healthy = SystemStatus(
         healthStatus: 'healthy',
         errors: [],
       );
 
-      final degraded = SystemStatus(
+      const degraded = SystemStatus(
         healthStatus: 'degraded',
         errors: [],
       );
 
-      final withErrors = SystemStatus(
+      const withErrors = SystemStatus(
         healthStatus: 'healthy',
         errors: ['Some error'],
       );
@@ -108,11 +108,11 @@ void main() {
     });
 
     test('should check if system has errors', () {
-      final noErrors = SystemStatus(
+      const noErrors = SystemStatus(
         errors: [],
       );
 
-      final hasErrors = SystemStatus(
+      const hasErrors = SystemStatus(
         errors: ['Error 1', 'Error 2'],
       );
 
@@ -121,7 +121,7 @@ void main() {
     });
 
     test('should check if system is operational', () {
-      final operational = SystemStatus(
+      const operational = SystemStatus(
         running: true,
         healthStatus: 'healthy',
         errors: [],
@@ -136,11 +136,11 @@ void main() {
     });
 
     test('should parse uptime to seconds', () {
-      final status1 = SystemStatus(uptime: '2h30m15s');
-      final status2 = SystemStatus(uptime: '1h');
-      final status3 = SystemStatus(uptime: '45m');
-      final status4 = SystemStatus(uptime: '30s');
-      final status5 = SystemStatus(uptime: '1h5m30s');
+      const status1 = SystemStatus(uptime: '2h30m15s');
+      const status2 = SystemStatus(uptime: '1h');
+      const status3 = SystemStatus(uptime: '45m');
+      const status4 = SystemStatus(uptime: '30s');
+      const status5 = SystemStatus(uptime: '1h5m30s');
 
       expect(status1.uptimeSeconds, 2 * 3600 + 30 * 60 + 15);
       expect(status2.uptimeSeconds, 3600);
@@ -150,7 +150,7 @@ void main() {
     });
 
     test('should get uptime as Duration', () {
-      final status = SystemStatus(uptime: '2h30m15s');
+      const status = SystemStatus(uptime: '2h30m15s');
       final duration = status.uptimeDuration;
 
       expect(duration.inHours, 2);
@@ -159,14 +159,14 @@ void main() {
     });
 
     test('should handle invalid uptime format', () {
-      final status = SystemStatus(uptime: 'invalid');
+      const status = SystemStatus(uptime: 'invalid');
 
       expect(status.uptimeSeconds, 0);
       expect(status.uptimeDuration, Duration.zero);
     });
 
     test('should create copy with modified fields', () {
-      final original = SystemStatus(
+      const original = SystemStatus(
         running: true,
         uptime: '2h30m',
         pairsCount: 3,
@@ -216,7 +216,7 @@ void main() {
     });
 
     test('should handle equality correctly', () {
-      final status1 = SystemStatus(
+      const status1 = SystemStatus(
         running: true,
         uptime: '2h30m',
         pairsCount: 3,
@@ -224,7 +224,7 @@ void main() {
         errors: [],
       );
 
-      final status2 = SystemStatus(
+      const status2 = SystemStatus(
         running: true,
         uptime: '2h30m',
         pairsCount: 3,
@@ -239,9 +239,9 @@ void main() {
     });
 
     test('should handle different health statuses', () {
-      final healthy = SystemStatus(healthStatus: 'healthy');
-      final degraded = SystemStatus(healthStatus: 'degraded');
-      final unhealthy = SystemStatus(healthStatus: 'unhealthy');
+      const healthy = SystemStatus(healthStatus: 'healthy');
+      const degraded = SystemStatus(healthStatus: 'degraded');
+      const unhealthy = SystemStatus(healthStatus: 'unhealthy');
 
       expect(healthy.healthStatus, 'healthy');
       expect(degraded.healthStatus, 'degraded');
@@ -274,10 +274,10 @@ void main() {
     });
 
     test('should handle uptime edge cases', () {
-      final noTime = SystemStatus(uptime: '0s');
-      final onlyHours = SystemStatus(uptime: '5h');
-      final onlyMinutes = SystemStatus(uptime: '30m');
-      final complex = SystemStatus(uptime: '12h45m30s');
+      const noTime = SystemStatus(uptime: '0s');
+      const onlyHours = SystemStatus(uptime: '5h');
+      const onlyMinutes = SystemStatus(uptime: '30m');
+      const complex = SystemStatus(uptime: '12h45m30s');
 
       expect(noTime.uptimeSeconds, 0);
       expect(onlyHours.uptimeSeconds, 5 * 3600);

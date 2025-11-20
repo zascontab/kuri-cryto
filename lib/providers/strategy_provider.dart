@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/strategy.dart';
-import '../services/strategy_service.dart';
 import 'services_provider.dart';
 
 part 'strategy_provider.g.dart';
@@ -335,14 +334,14 @@ class StrategyStats extends _$StrategyStats {
 
     final totalPnl = strategies.fold<double>(
       0,
-      (sum, s) => sum + (s.performance?.totalPnl ?? 0),
+      (sum, s) => sum + (s.performance.totalPnl ?? 0),
     );
 
     final avgWinRate = strategies.isEmpty
         ? 0.0
         : strategies.fold<double>(
               0,
-              (sum, s) => sum + (s.performance?.winRate ?? 0),
+              (sum, s) => sum + (s.performance.winRate ?? 0),
             ) /
             strategies.length;
 

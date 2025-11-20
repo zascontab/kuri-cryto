@@ -6,14 +6,15 @@ part of 'services_provider.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$dioHash() => r'afb4bedcef88943128885adf2238001c47b7d2b5';
+String _$dioHash() => r'e1c6b2bf32f5332a8a77d06b82210c4f6ab516ca';
 
 /// Provider for Dio HTTP client
 ///
 /// Configured with:
-/// - Base URL
+/// - Base URL (API Gateway)
 /// - Connect timeout: 10s
 /// - Receive timeout: 30s
+/// - Send timeout: 30s
 /// - JSON content type
 /// - Logging interceptor (debug mode)
 ///
@@ -139,7 +140,7 @@ final riskServiceProvider = AutoDisposeProvider<RiskService>.internal(
 );
 
 typedef RiskServiceRef = AutoDisposeProviderRef<RiskService>;
-String _$websocketServiceHash() => r'c60c8cde9e9bfa1bc1926c24980b96cf7eebc04f';
+String _$websocketServiceHash() => r'1a73f837636b51854e8ef2afee014530a7419ee1';
 
 /// Provider for WebSocket Service
 ///
@@ -280,5 +281,82 @@ final alertServiceProvider = AutoDisposeProvider<AlertService>.internal(
 );
 
 typedef AlertServiceRef = AutoDisposeProviderRef<AlertService>;
+String _$aiBotServiceHash() => r'6a2aa91de7e08b68cb719febd331dc4783b13a77';
+
+/// Provider for AI Bot Service
+///
+/// Manages AI trading bot operations:
+/// - Bot control (start/stop/pause/resume)
+/// - Status monitoring
+/// - Configuration management
+/// - Position tracking
+/// - Market analysis with AI
+/// - Emergency stop
+///
+/// Copied from [aiBotService].
+@ProviderFor(aiBotService)
+final aiBotServiceProvider = AutoDisposeProvider<AiBotService>.internal(
+  aiBotService,
+  name: r'aiBotServiceProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$aiBotServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AiBotServiceRef = AutoDisposeProviderRef<AiBotService>;
+String _$comprehensiveAnalysisServiceHash() =>
+    r'bfb2ef700251c6796261e425d578991a7fd85af3';
+
+/// Provider for Comprehensive Analysis Service
+///
+/// Provides detailed market analysis with AI:
+/// - Current price and 24h statistics
+/// - Technical analysis (RSI, MACD, Bollinger, EMAs)
+/// - Multi-timeframe analysis (1m, 5m, 15m, 1h)
+/// - Recent movement analysis
+/// - Key support/resistance levels
+/// - Trading recommendations (BUY/SELL/WAIT)
+/// - Market scenarios and risk evaluation
+///
+/// Copied from [comprehensiveAnalysisService].
+@ProviderFor(comprehensiveAnalysisService)
+final comprehensiveAnalysisServiceProvider =
+    AutoDisposeProvider<ComprehensiveAnalysisService>.internal(
+  comprehensiveAnalysisService,
+  name: r'comprehensiveAnalysisServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$comprehensiveAnalysisServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef ComprehensiveAnalysisServiceRef
+    = AutoDisposeProviderRef<ComprehensiveAnalysisService>;
+String _$futuresServiceHash() => r'01afa1a3b0f5b16ab1cd3339ce71a87d617f0a9b';
+
+/// Provider for Futures Service
+///
+/// Handles futures trading operations on KuCoin:
+/// - Get open futures positions
+/// - Close positions (single/all/filtered)
+/// - Stop loss and take profit management
+/// - Mark and index price retrieval
+/// - Symbol conversion helpers (spot <-> futures)
+///
+/// Copied from [futuresService].
+@ProviderFor(futuresService)
+final futuresServiceProvider = AutoDisposeProvider<FuturesService>.internal(
+  futuresService,
+  name: r'futuresServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$futuresServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef FuturesServiceRef = AutoDisposeProviderRef<FuturesService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

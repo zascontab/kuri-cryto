@@ -41,7 +41,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: Color(0xFF111827)),
     ),
 
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: _lightSurface,
       elevation: 2,
       shape: RoundedRectangleBorder(
@@ -144,7 +144,7 @@ class AppTheme {
       iconTheme: IconThemeData(color: Color(0xFFF9FAFB)),
     ),
 
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       color: _darkSurface,
       elevation: 2,
       shape: RoundedRectangleBorder(

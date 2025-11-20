@@ -3,7 +3,6 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/system_status.dart' as models;
 import '../models/metrics.dart' as models;
 import '../models/health_status.dart' as models;
-import '../services/scalping_service.dart';
 import 'services_provider.dart';
 
 part 'system_provider.g.dart';

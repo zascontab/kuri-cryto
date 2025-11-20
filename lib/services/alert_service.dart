@@ -1,7 +1,6 @@
 import 'dart:developer' as developer;
 import 'api_client.dart';
 import 'api_exception.dart';
-import '../models/websocket_event.dart';
 import '../models/alert_config.dart';
 
 /// Alert Service
@@ -14,7 +13,7 @@ import '../models/alert_config.dart';
 /// - Get active alerts
 class AlertService {
   final ApiClient _apiClient;
-  static const String _basePath = '/api/v1/alerts';
+  static const String _basePath = '/alerts';
 
   AlertService(this._apiClient);
 

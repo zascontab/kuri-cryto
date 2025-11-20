@@ -10,9 +10,9 @@ part 'alert_provider.g.dart';
 /// Provides live updates of alerts as they occur.
 /// Uses WebSocket connection for real-time updates with <1s latency.
 ///
-/// Returns Stream<Alert> that emits whenever a new alert is triggered.
+/// Returns Stream<AlertEvent> that emits whenever a new alert is triggered.
 @riverpod
-Stream<Alert> alerts(AlertsRef ref) {
+Stream<AlertEvent> alerts(AlertsRef ref) {
   final wsService = ref.watch(websocketServiceProvider);
 
   // Ensure connection and subscription to alerts channel
@@ -321,7 +321,7 @@ Future<Map<String, List<Alert>>> alertsBySeverity(
   };
 
   for (final alert in activeAlerts) {
-    grouped[alert.severity]?.add(alert);
+    grouped[alert.severity.value]?.add(alert);
   }
 
   return grouped;

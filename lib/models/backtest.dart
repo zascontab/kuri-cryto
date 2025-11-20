@@ -1,6 +1,7 @@
 /// Backtesting Models
 ///
 /// Models for strategy backtesting and results
+library;
 
 /// Backtest configuration
 class BacktestConfig {

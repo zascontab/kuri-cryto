@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import '../../lib/models/trade.dart';
+import 'package:kuri_crypto/models/trade.dart';
 
 void main() {
   group('Trade Model', () {

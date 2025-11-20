@@ -94,4 +94,22 @@ class RiskLimitsModel {
       'consecutive_losses': consecutiveLosses,
     };
   }
+
+  /// Helper to check if approaching daily loss limit (>80% of max)
+  bool get isApproachingDailyLossLimit {
+    if (parameters.maxDailyLossUsd <= 0) return false;
+    return dailyPnl < 0 &&
+        dailyPnl.abs() >= (parameters.maxDailyLossUsd * 0.8);
+  }
+
+  /// Helper to check if at max consecutive losses
+  bool get isAtMaxConsecutiveLosses {
+    return consecutiveLosses >= parameters.maxConsecutiveLosses;
+  }
+
+  @override
+  String toString() {
+    return 'RiskLimitsModel(canTrade: $canTrade, currentExposure: $currentExposure, '
+        'dailyPnl: $dailyPnl, consecutiveLosses: $consecutiveLosses)';
+  }
 }

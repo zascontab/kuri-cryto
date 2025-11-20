@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import '../../lib/models/risk_state.dart';
+import 'package:kuri_crypto/models/risk_state.dart';
 
 void main() {
   group('RiskState Model', () {

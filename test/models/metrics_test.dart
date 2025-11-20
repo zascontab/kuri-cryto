@@ -1,10 +1,10 @@
 import 'package:test/test.dart';
-import '../../lib/models/metrics.dart';
+import 'package:kuri_crypto/models/metrics.dart';
 
 void main() {
   group('Metrics Model', () {
     test('should create Metrics with all fields', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         totalTrades: 145,
         winningTrades: 92,
         losingTrades: 53,
@@ -72,7 +72,7 @@ void main() {
     });
 
     test('should convert Metrics to JSON', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         totalTrades: 145,
         winRate: 62.5,
         totalPnl: 125.50,
@@ -92,11 +92,11 @@ void main() {
     });
 
     test('should check if overall performance is profitable', () {
-      final profitable = Metrics(
+      const profitable = Metrics(
         totalPnl: 125.50,
       );
 
-      final unprofitable = Metrics(
+      const unprofitable = Metrics(
         totalPnl: -50.0,
       );
 
@@ -105,11 +105,11 @@ void main() {
     });
 
     test('should check if daily performance is profitable', () {
-      final profitable = Metrics(
+      const profitable = Metrics(
         dailyPnl: 15.25,
       );
 
-      final unprofitable = Metrics(
+      const unprofitable = Metrics(
         dailyPnl: -5.0,
       );
 
@@ -118,17 +118,17 @@ void main() {
     });
 
     test('should check if performing well', () {
-      final performingWell = Metrics(
+      const performingWell = Metrics(
         winRate: 62.5,
         totalPnl: 125.50,
       );
 
-      final lowWinRate = Metrics(
+      const lowWinRate = Metrics(
         winRate: 40.0,
         totalPnl: 50.0,
       );
 
-      final negative = Metrics(
+      const negative = Metrics(
         winRate: 60.0,
         totalPnl: -20.0,
       );
@@ -139,11 +139,11 @@ void main() {
     });
 
     test('should check if execution is fast', () {
-      final fast = Metrics(
+      const fast = Metrics(
         avgLatencyMs: 45.0,
       );
 
-      final slow = Metrics(
+      const slow = Metrics(
         avgLatencyMs: 150.0,
       );
 
@@ -152,7 +152,7 @@ void main() {
     });
 
     test('should calculate win/loss ratio', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         avgWin: 2.50,
         avgLoss: -1.20,
       );
@@ -162,7 +162,7 @@ void main() {
     });
 
     test('should handle zero avg loss in win/loss ratio', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         avgWin: 2.50,
         avgLoss: 0.0,
       );
@@ -171,7 +171,7 @@ void main() {
     });
 
     test('should create copy with modified fields', () {
-      final original = Metrics(
+      const original = Metrics(
         totalTrades: 100,
         winRate: 60.0,
         totalPnl: 50.0,
@@ -206,13 +206,13 @@ void main() {
     });
 
     test('should handle equality correctly', () {
-      final metrics1 = Metrics(
+      const metrics1 = Metrics(
         totalTrades: 100,
         winRate: 60.0,
         totalPnl: 50.0,
       );
 
-      final metrics2 = Metrics(
+      const metrics2 = Metrics(
         totalTrades: 100,
         winRate: 60.0,
         totalPnl: 50.0,
@@ -225,7 +225,7 @@ void main() {
     });
 
     test('should calculate correct values from trade data', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         totalTrades: 100,
         winningTrades: 60,
         losingTrades: 40,
@@ -241,7 +241,7 @@ void main() {
     });
 
     test('should handle all period P&Ls', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         dailyPnl: 15.25,
         weeklyPnl: 45.75,
         monthlyPnl: 125.50,
@@ -255,7 +255,7 @@ void main() {
     });
 
     test('should handle performance ratios', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         profitFactor: 2.08,
         sharpeRatio: 1.85,
         maxDrawdown: -8.5,
@@ -267,7 +267,7 @@ void main() {
     });
 
     test('should handle slippage data', () {
-      final metrics = Metrics(
+      const metrics = Metrics(
         avgSlippagePct: 0.05,
       );
 
@@ -275,7 +275,7 @@ void main() {
     });
 
     test('should handle zero values', () {
-      final metrics = Metrics();
+      const metrics = Metrics();
 
       expect(metrics.totalTrades, 0);
       expect(metrics.winRate, 0.0);

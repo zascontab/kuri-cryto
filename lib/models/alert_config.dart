@@ -4,8 +4,8 @@
 /// - AlertConfig: Main configuration for alert system
 /// - AlertRule: Individual alert rule definitions
 /// - AlertType: Types of alerts that can be configured
-
-import 'package:flutter/foundation.dart';
+/// - Alert: Alert history entry from REST API
+library;
 
 /// Alert configuration for the trading system
 class AlertConfig {
@@ -329,5 +329,111 @@ enum AlertSeverity {
       case AlertSeverity.critical:
         return 'Critical';
     }
+  }
+}
+
+/// Alert history entry model
+///
+/// Represents a triggered alert from the backend
+class Alert {
+  /// Unique identifier for the alert
+  final String id;
+
+  /// Type of alert (daily_drawdown, price, volume, etc.)
+  final String type;
+
+  /// Severity level of the alert
+  final AlertSeverity severity;
+
+  /// Alert message
+  final String message;
+
+  /// When the alert was triggered
+  final DateTime timestamp;
+
+  /// Whether the alert has been acknowledged
+  final bool acknowledged;
+
+  /// Optional trigger information
+  final String? trigger;
+
+  /// Optional value that triggered the alert
+  final double? value;
+
+  const Alert({
+    required this.id,
+    required this.type,
+    required this.severity,
+    required this.message,
+    required this.timestamp,
+    required this.acknowledged,
+    this.trigger,
+    this.value,
+  });
+
+  /// Create from JSON
+  factory Alert.fromJson(Map<String, dynamic> json) {
+    return Alert(
+      id: json['id'] as String,
+      type: json['type'] as String,
+      severity: AlertSeverity.fromString(json['severity'] as String? ?? 'info'),
+      message: json['message'] as String,
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      acknowledged: json['acknowledged'] as bool? ?? false,
+      trigger: json['trigger'] as String?,
+      value: json['value'] != null ? (json['value'] as num).toDouble() : null,
+    );
+  }
+
+  /// Convert to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'type': type,
+      'severity': severity.value,
+      'message': message,
+      'timestamp': timestamp.toIso8601String(),
+      'acknowledged': acknowledged,
+      if (trigger != null) 'trigger': trigger,
+      if (value != null) 'value': value,
+    };
+  }
+
+  /// Create a copy with updated fields
+  Alert copyWith({
+    String? id,
+    String? type,
+    AlertSeverity? severity,
+    String? message,
+    DateTime? timestamp,
+    bool? acknowledged,
+    String? trigger,
+    double? value,
+  }) {
+    return Alert(
+      id: id ?? this.id,
+      type: type ?? this.type,
+      severity: severity ?? this.severity,
+      message: message ?? this.message,
+      timestamp: timestamp ?? this.timestamp,
+      acknowledged: acknowledged ?? this.acknowledged,
+      trigger: trigger ?? this.trigger,
+      value: value ?? this.value,
+    );
+  }
+
+  /// Helper to check if critical alert
+  bool get isCritical => severity == AlertSeverity.critical;
+
+  /// Helper to check if warning alert
+  bool get isWarning => severity == AlertSeverity.warning;
+
+  /// Helper to check if needs attention (not acknowledged and not info)
+  bool get needsAttention => !acknowledged && severity != AlertSeverity.info;
+
+  @override
+  String toString() {
+    return 'Alert(id: $id, type: $type, severity: ${severity.value}, '
+        'acknowledged: $acknowledged, message: $message)';
   }
 }

@@ -1,6 +1,7 @@
 /// Multi-timeframe Analysis Models
 ///
 /// Models for market analysis across multiple timeframes
+library;
 
 /// Timeframe enum
 enum Timeframe {
@@ -133,93 +134,171 @@ enum SignalType {
 
 /// Analysis for a specific timeframe
 class TimeframeAnalysis {
-  final Timeframe timeframe;
-  final IndicatorValues indicators;
-  final SignalType signal;
-  final double confidence;
-  final String? recommendation;
+  final double? rsi;
+  final MACDValues? macd;
+  final BollingerBands? bollinger;
+  final String? trend;
+  final String signal;
+  final double strength;
 
   TimeframeAnalysis({
-    required this.timeframe,
-    required this.indicators,
+    this.rsi,
+    this.macd,
+    this.bollinger,
+    this.trend,
     required this.signal,
-    required this.confidence,
-    this.recommendation,
+    required this.strength,
   });
 
   factory TimeframeAnalysis.fromJson(Map<String, dynamic> json) {
     return TimeframeAnalysis(
-      timeframe: Timeframe.fromString(json['timeframe'] ?? '5m'),
-      indicators: IndicatorValues.fromJson(json['indicators'] ?? {}),
-      signal: SignalType.fromString(json['signal'] ?? 'neutral'),
-      confidence: json['confidence']?.toDouble() ?? 0.0,
-      recommendation: json['recommendation'],
+      rsi: json['rsi']?.toDouble(),
+      macd: json['macd'] != null ? MACDValues.fromJson(json['macd']) : null,
+      bollinger: json['bollinger'] != null
+          ? BollingerBands.fromJson(json['bollinger'])
+          : null,
+      trend: json['trend'] as String?,
+      signal: json['signal'] as String? ?? 'neutral',
+      strength: json['strength']?.toDouble() ?? 0.0,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'timeframe': timeframe.value,
-      'indicators': indicators.toJson(),
-      'signal': signal.name,
-      'confidence': confidence,
-      'recommendation': recommendation,
+      if (rsi != null) 'rsi': rsi,
+      if (macd != null) 'macd': macd!.toJson(),
+      if (bollinger != null) 'bollinger': bollinger!.toJson(),
+      if (trend != null) 'trend': trend,
+      'signal': signal,
+      'strength': strength,
     };
   }
+
+  /// Helper to check if bullish
+  bool get isBullish => signal.toLowerCase() == 'long' || signal.toLowerCase() == 'buy';
+
+  /// Helper to check if bearish
+  bool get isBearish => signal.toLowerCase() == 'short' || signal.toLowerCase() == 'sell';
+
+  /// Helper to check if strong signal (>70%)
+  bool get isStrongSignal => strength > 0.7;
+}
+
+/// Consensus analysis across timeframes
+class AnalysisConsensus {
+  final String direction;
+  final double strength;
+  final double confidence;
+  final List<String> confirmingTimeframes;
+  final List<String> conflictingTimeframes;
+
+  AnalysisConsensus({
+    required this.direction,
+    required this.strength,
+    required this.confidence,
+    required this.confirmingTimeframes,
+    required this.conflictingTimeframes,
+  });
+
+  factory AnalysisConsensus.fromJson(Map<String, dynamic> json) {
+    return AnalysisConsensus(
+      direction: json['direction'] as String? ?? 'neutral',
+      strength: json['strength']?.toDouble() ?? 0.0,
+      confidence: json['confidence']?.toDouble() ?? 0.0,
+      confirmingTimeframes: (json['confirming_timeframes'] as List<dynamic>?)
+              ?.map((t) => t.toString())
+              .toList() ??
+          [],
+      conflictingTimeframes: (json['conflicting_timeframes'] as List<dynamic>?)
+              ?.map((t) => t.toString())
+              .toList() ??
+          [],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'direction': direction,
+      'strength': strength,
+      'confidence': confidence,
+      'confirming_timeframes': confirmingTimeframes,
+      'conflicting_timeframes': conflictingTimeframes,
+    };
+  }
+
+  /// Helper to check if bullish
+  bool get isBullish => direction.toLowerCase() == 'long' || direction.toLowerCase() == 'buy';
+
+  /// Helper to check if bearish
+  bool get isBearish => direction.toLowerCase() == 'short' || direction.toLowerCase() == 'sell';
+
+  /// Helper to check if strong consensus (>70%)
+  bool get isStrong => strength > 0.7;
+
+  /// Helper to check if high confidence (>80%)
+  bool get isHighConfidence => confidence > 0.8;
+
+  /// Helper to check if all timeframes agree
+  bool get hasFullAgreement => conflictingTimeframes.isEmpty;
 }
 
 /// Multi-timeframe analysis result
 class MultiTimeframeAnalysis {
   final String symbol;
-  final double currentPrice;
-  final List<TimeframeAnalysis> timeframes;
-  final SignalType consensusSignal;
-  final double consensusConfidence;
   final DateTime timestamp;
+  final Map<String, TimeframeAnalysis> timeframes;
+  final AnalysisConsensus consensus;
 
   MultiTimeframeAnalysis({
     required this.symbol,
-    required this.currentPrice,
-    required this.timeframes,
-    required this.consensusSignal,
-    required this.consensusConfidence,
     required this.timestamp,
+    required this.timeframes,
+    required this.consensus,
   });
 
   factory MultiTimeframeAnalysis.fromJson(Map<String, dynamic> json) {
-    final timeframesData = json['timeframes'] as List<dynamic>? ?? [];
+    final timeframesData = json['timeframes'] as Map<String, dynamic>? ?? {};
+
+    final timeframesMap = <String, TimeframeAnalysis>{};
+    timeframesData.forEach((key, value) {
+      timeframesMap[key] = TimeframeAnalysis.fromJson(value as Map<String, dynamic>);
+    });
 
     return MultiTimeframeAnalysis(
-      symbol: json['symbol'] ?? '',
-      currentPrice: json['current_price']?.toDouble() ?? 0.0,
-      timeframes: timeframesData
-          .map((t) => TimeframeAnalysis.fromJson(t as Map<String, dynamic>))
-          .toList(),
-      consensusSignal: SignalType.fromString(json['consensus_signal'] ?? 'neutral'),
-      consensusConfidence: json['consensus_confidence']?.toDouble() ?? 0.0,
+      symbol: json['symbol'] as String? ?? '',
       timestamp: json['timestamp'] != null
-          ? DateTime.parse(json['timestamp'])
+          ? DateTime.parse(json['timestamp'] as String)
           : DateTime.now(),
+      timeframes: timeframesMap,
+      consensus: json['consensus'] != null
+          ? AnalysisConsensus.fromJson(json['consensus'] as Map<String, dynamic>)
+          : AnalysisConsensus(
+              direction: 'neutral',
+              strength: 0.0,
+              confidence: 0.0,
+              confirmingTimeframes: [],
+              conflictingTimeframes: [],
+            ),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'symbol': symbol,
-      'current_price': currentPrice,
-      'timeframes': timeframes.map((t) => t.toJson()).toList(),
-      'consensus_signal': consensusSignal.name,
-      'consensus_confidence': consensusConfidence,
       'timestamp': timestamp.toIso8601String(),
+      'timeframes': timeframes.map((key, value) => MapEntry(key, value.toJson())),
+      'consensus': consensus.toJson(),
     };
   }
 
   /// Get analysis for a specific timeframe
-  TimeframeAnalysis? getTimeframe(Timeframe timeframe) {
-    try {
-      return timeframes.firstWhere((t) => t.timeframe == timeframe);
-    } catch (_) {
-      return null;
-    }
+  TimeframeAnalysis? getTimeframe(String timeframe) {
+    return timeframes[timeframe];
   }
+
+  /// Get all available timeframes
+  List<String> get availableTimeframes => timeframes.keys.toList();
+
+  /// Check if timeframe is available
+  bool hasTimeframe(String timeframe) => timeframes.containsKey(timeframe);
 }

@@ -1,6 +1,7 @@
-/// Example usage of WebSocketService
+/* /// Example usage of WebSocketService
 ///
 /// This file demonstrates how to use the WebSocketService in your Flutter app.
+library;
 
 import 'package:flutter/material.dart';
 import 'websocket_service.dart';
@@ -106,7 +107,7 @@ class _WebSocketExampleState extends State<WebSocketExample> {
     }
   }
 
-  void _showAlertDialog(Alert alert) {
+  void _showAlertDialog(AlertDialog alert) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -349,3 +350,4 @@ class SimpleWebSocketExample {
     await _wsService.disconnect();
   }
 }
+ */

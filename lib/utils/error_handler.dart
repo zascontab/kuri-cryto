@@ -671,7 +671,7 @@ Future<T> withRetry<T>(
   Duration delay = const Duration(seconds: 1),
   void Function(int attempt)? onRetry,
 }) async {
-  var lastError;
+  late Object lastError;
 
   for (var attempt = 0; attempt <= maxRetries; attempt++) {
     try {

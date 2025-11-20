@@ -1,9 +1,11 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:kuri_crypto/models/risk_limits.dart';
 import '../widgets/risk_sentinel_card.dart';
 import '../widgets/tiktok_modal.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../providers/risk_sentinel_provider.dart';
 import '../providers/risk_provider.dart';
 
@@ -26,7 +28,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   Future<void> _toggleKillSwitch(bool currentlyActive) async {
     if (_isProcessing) return;
 
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     // Show confirmation dialog
     final confirmed = await _showKillSwitchConfirmationDialog(
@@ -59,8 +61,9 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
                   ? l10n.killSwitchDeactivated
                   : l10n.killSwitchActivated,
             ),
-            backgroundColor:
-                currentlyActive ? const Color(0xFF4CAF50) : const Color(0xFFF44336),
+            backgroundColor: currentlyActive
+                ? const Color(0xFF4CAF50)
+                : const Color(0xFFF44336),
             duration: const Duration(seconds: 3),
             action: SnackBarAction(
               label: l10n.ok,
@@ -100,7 +103,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
     BuildContext context,
     bool currentlyActive,
   ) async {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     if (currentlyActive) {
       // Double confirmation for deactivation
@@ -112,7 +115,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   }
 
   Future<bool> _showActivationConfirmationDialog(BuildContext context) async {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     final result = await showTikTokModal<bool>(
       context: context,
@@ -183,7 +186,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   }
 
   Future<bool> _showDoubleConfirmationDialog(BuildContext context) async {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     // First confirmation
     final firstConfirmation = await showTikTokModal<bool>(
@@ -281,10 +284,11 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
 
   void _editRiskLimits(dynamic limits) {
     HapticFeedback.lightImpact();
-
+    final e = context.l10n;
     showTikTokModal(
       context: context,
       isDismissible: false,
+      actions: [TikTokModalButton(text: e.editRiskLimits)],
       content: _RiskLimitsContent(
         maxPositionSize: limits.parameters.maxPositionSizeUsd,
         maxTotalExposure: limits.parameters.maxTotalExposureUsd,
@@ -293,7 +297,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
         maxDailyLoss: limits.parameters.maxDailyLossUsd,
         maxConsecutiveLosses: limits.parameters.maxConsecutiveLosses,
         onSave: (newLimits) async {
-          final l10n = L10n.of(context);
+          final l10n = context.l10n;
 
           try {
             // Create RiskParameters object
@@ -339,7 +343,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   void _changeRiskMode() {
     HapticFeedback.lightImpact();
 
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     showTikTokModal(
       context: context,
       title: l10n.selectRiskMode,
@@ -388,7 +392,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
         Navigator.pop(context);
 
         HapticFeedback.mediumImpact();
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(l10n.riskModeChanged(mode: mode)),
@@ -437,7 +441,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     final riskStateAsync = ref.watch(riskSentinelProvider);
     final limitsAsync = ref.watch(riskLimitsProvider);
@@ -450,8 +454,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
             padding: const EdgeInsets.all(16),
             children: [
               // Kill Switch Active Banner
-              if (riskState.killSwitchActive)
-                _buildKillSwitchBanner(l10n),
+              if (riskState.killSwitchActive) _buildKillSwitchBanner(l10n),
 
               // Risk Sentinel Card
               RiskSentinelCard(
@@ -468,7 +471,8 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
                 riskMode: riskState.riskMode,
                 killSwitchActive: riskState.killSwitchActive,
                 isProcessing: _isProcessing,
-                onKillSwitch: () => _toggleKillSwitch(riskState.killSwitchActive),
+                onKillSwitch: () =>
+                    _toggleKillSwitch(riskState.killSwitchActive),
               ),
 
               const SizedBox(height: 20),
@@ -653,7 +657,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
                                     theme,
                                   ),
                                 ))
-                            .toList(),
+                            ,
                       ],
                     ),
                   ),
@@ -796,7 +800,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
           child: LinearProgressIndicator(
             value: percentage,
             minHeight: 8,
-            backgroundColor: theme.colorScheme.surfaceVariant,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(
               theme.colorScheme.primary,
             ),
@@ -893,7 +897,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
         'stopLossPercent': double.parse(_stopLossController.text),
         'takeProfitPercent': double.parse(_takeProfitController.text),
         'maxDailyLoss': double.parse(_maxDailyLossController.text),
-        'maxConsecutiveLosses': double.parse(_maxConsecutiveLossesController.text),
+        'maxConsecutiveLosses':
+            double.parse(_maxConsecutiveLossesController.text),
       };
 
       Navigator.pop(context);
@@ -903,7 +908,7 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return TikTokModal(
       title: l10n.editRiskLimits,
@@ -919,7 +924,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
                 prefixText: '\$',
                 border: const OutlineInputBorder(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.pleaseEnterValue;
@@ -939,7 +945,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
                 prefixText: '\$',
                 border: const OutlineInputBorder(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.pleaseEnterValue;
@@ -959,7 +966,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
                 suffixText: '%',
                 border: const OutlineInputBorder(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.pleaseEnterValue;
@@ -979,7 +987,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
                 suffixText: '%',
                 border: const OutlineInputBorder(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.pleaseEnterValue;
@@ -999,7 +1008,8 @@ class _RiskLimitsContentState extends State<_RiskLimitsContent> {
                 prefixText: '\$',
                 border: const OutlineInputBorder(),
               ),
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return l10n.pleaseEnterValue;

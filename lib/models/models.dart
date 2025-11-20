@@ -4,6 +4,7 @@
 /// ```dart
 /// import 'package:kuri_crypto/models/models.dart';
 /// ```
+library;
 
 export 'position.dart';
 export 'strategy.dart';

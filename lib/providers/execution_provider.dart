@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/execution_stats.dart';
-import '../services/execution_service.dart';
 import 'services_provider.dart';
 
 part 'execution_provider.g.dart';

@@ -14,9 +14,9 @@ import 'package:flutter/material.dart';
 class ApiEndpoints {
   ApiEndpoints._(); // Constructor privado para prevenir instanciación
 
-  // Base URLs
-  static const String baseUrl = 'http://localhost:8081/api/v1';
-  static const String wsBaseUrl = 'ws://localhost:8081/ws';
+  // Base URLs (via Gateway - deprecated, use ApiConfig instead)
+  static const String baseUrl = 'http://localhost:9090/api/scalping/api/v1';
+  static const String wsBaseUrl = 'ws://localhost:9090/ws';
 
   // Autenticación
   static const String authLogin = '/auth/login';

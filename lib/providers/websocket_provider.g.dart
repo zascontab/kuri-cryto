@@ -63,7 +63,7 @@ final metricsUpdatesStreamProvider =
 );
 
 typedef MetricsUpdatesStreamRef = AutoDisposeStreamProviderRef<Metrics>;
-String _$alertsStreamHash() => r'd6b08a90aaa9f168d774829f122b94af38585399';
+String _$alertsStreamHash() => r'e6bd76b45b67a5a4f9bfec39f861149d2e2e60c7';
 
 /// Provider for alerts stream
 ///
@@ -79,7 +79,7 @@ String _$alertsStreamHash() => r'd6b08a90aaa9f168d774829f122b94af38585399';
 ///
 /// Copied from [alertsStream].
 @ProviderFor(alertsStream)
-final alertsStreamProvider = AutoDisposeStreamProvider<Alert>.internal(
+final alertsStreamProvider = AutoDisposeStreamProvider<AlertEvent>.internal(
   alertsStream,
   name: r'alertsStreamProvider',
   debugGetCreateSourceHash:
@@ -88,7 +88,7 @@ final alertsStreamProvider = AutoDisposeStreamProvider<Alert>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef AlertsStreamRef = AutoDisposeStreamProviderRef<Alert>;
+typedef AlertsStreamRef = AutoDisposeStreamProviderRef<AlertEvent>;
 String _$tradeExecutionStreamHash() =>
     r'4bbcd9b6586a6e94e8aebe47a513bab4ab4bd38e';
 

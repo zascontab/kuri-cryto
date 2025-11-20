@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../providers/execution_provider.dart';
 import '../widgets/tiktok_modal.dart';
 
@@ -57,7 +57,7 @@ class _ExecutionStatsScreenState extends ConsumerState<ExecutionStatsScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(

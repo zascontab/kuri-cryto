@@ -44,6 +44,21 @@ class RiskState {
   /// Maximum allowed total exposure
   final double maxTotalExposure;
 
+  /// Daily profit and loss
+  final double dailyPnl;
+
+  /// Weekly profit and loss
+  final double weeklyPnl;
+
+  /// Monthly profit and loss
+  final double monthlyPnl;
+
+  /// Reason why kill switch was activated (null if not active)
+  final String? killSwitchReason;
+
+  /// Time when kill switch was activated (null if not active)
+  final DateTime? killSwitchTime;
+
   const RiskState({
     this.currentDrawdownDaily = 0.0,
     this.currentDrawdownWeekly = 0.0,
@@ -59,6 +74,11 @@ class RiskState {
     this.maxMonthlyDrawdown = 15.0,
     this.maxConsecutiveLosses = 3,
     this.maxTotalExposure = 100.0,
+    this.dailyPnl = 0.0,
+    this.weeklyPnl = 0.0,
+    this.monthlyPnl = 0.0,
+    this.killSwitchReason,
+    this.killSwitchTime,
   });
 
   /// Check if the system is in a high-risk state
@@ -178,6 +198,11 @@ class RiskState {
           json['max_total_exposure'],
           defaultValue: 100.0,
         ),
+        dailyPnl: _parseDouble(json['daily_pnl']),
+        weeklyPnl: _parseDouble(json['weekly_pnl']),
+        monthlyPnl: _parseDouble(json['monthly_pnl']),
+        killSwitchReason: json['kill_switch_reason']?.toString(),
+        killSwitchTime: _parseDateTime(json['kill_switch_time']),
       );
     } catch (e) {
       throw FormatException('Failed to parse RiskState from JSON: $e');
@@ -201,6 +226,11 @@ class RiskState {
       'max_monthly_drawdown': maxMonthlyDrawdown,
       'max_consecutive_losses': maxConsecutiveLosses,
       'max_total_exposure': maxTotalExposure,
+      'daily_pnl': dailyPnl,
+      'weekly_pnl': weeklyPnl,
+      'monthly_pnl': monthlyPnl,
+      'kill_switch_reason': killSwitchReason,
+      'kill_switch_time': killSwitchTime?.toIso8601String(),
     };
   }
 
@@ -220,6 +250,11 @@ class RiskState {
     double? maxMonthlyDrawdown,
     int? maxConsecutiveLosses,
     double? maxTotalExposure,
+    double? dailyPnl,
+    double? weeklyPnl,
+    double? monthlyPnl,
+    String? killSwitchReason,
+    DateTime? killSwitchTime,
   }) {
     return RiskState(
       currentDrawdownDaily: currentDrawdownDaily ?? this.currentDrawdownDaily,
@@ -236,6 +271,11 @@ class RiskState {
       maxMonthlyDrawdown: maxMonthlyDrawdown ?? this.maxMonthlyDrawdown,
       maxConsecutiveLosses: maxConsecutiveLosses ?? this.maxConsecutiveLosses,
       maxTotalExposure: maxTotalExposure ?? this.maxTotalExposure,
+      dailyPnl: dailyPnl ?? this.dailyPnl,
+      weeklyPnl: weeklyPnl ?? this.weeklyPnl,
+      monthlyPnl: monthlyPnl ?? this.monthlyPnl,
+      killSwitchReason: killSwitchReason ?? this.killSwitchReason,
+      killSwitchTime: killSwitchTime ?? this.killSwitchTime,
     );
   }
 
@@ -302,7 +342,11 @@ class RiskState {
         'exposure: $totalExposure, '
         'consecutiveLosses: $consecutiveLosses, '
         'mode: $riskMode, '
-        'killSwitch: $killSwitchActive'
+        'killSwitch: $killSwitchActive, '
+        'dailyPnl: $dailyPnl, '
+        'weeklyPnl: $weeklyPnl, '
+        'monthlyPnl: $monthlyPnl, '
+        'killSwitchReason: $killSwitchReason'
         ')';
   }
 

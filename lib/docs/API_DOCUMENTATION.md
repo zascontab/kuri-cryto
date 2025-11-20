@@ -1,9 +1,11 @@
 # Trading MCP Server - API Documentation
 
-**Version:** 1.0.0  
+**Version:** 1.1.0  
 **Last Updated:** 2025-11-16  
-**Base URL (REST):** `http://localhost:8081/api/v1`  
-**Base URL (MCP):** `stdio` or `http://localhost:3000` (depending on protocol)
+**Base URL (API Gateway):** `http://192.168.100.145:9090` ⭐ **RECOMMENDED**  
+**Base URL (REST - Direct):** `http://192.168.100.145:8081/api/v1`  
+**Base URL (MCP - Direct):** `http://192.168.100.145:10600`  
+**Base URL (MCP via Gateway):** `http://192.168.100.145:9090/api/mcp`
 
 ---
 
@@ -29,6 +31,40 @@ El Trading MCP Server expone dos tipos de APIs:
 
 Ambas APIs comparten la misma lógica de negocio pero tienen diferentes interfaces.
 
+### 🚀 API Gateway (Recommended)
+
+**Endpoint único para Flutter:** `http://192.168.100.145:9090`
+
+El API Gateway unifica todos los servicios en un solo puerto, simplificando la integración:
+
+- **Puerto único:** 9090 (evita conflictos con Docker en 8080)
+- **CORS habilitado:** Configurado para aplicaciones móviles
+- **Proxy inteligente:** Enruta automáticamente a los servicios correctos
+- **Logging centralizado:** Todos los requests en un solo lugar
+
+#### Rutas del Gateway
+
+| Ruta | Destino | Descripción |
+|------|---------|-------------|
+| `/health` | Gateway | Health check del gateway |
+| `/api/gateway/info` | Gateway | Información del gateway |
+| `/api/mcp/*` | MCP Server (10600) | Herramientas de trading MCP |
+| `/api/scalping/*` | Scalping API (8081) | API de scalping |
+| `/` | MCP Server (10600) | Root MCP endpoint |
+
+#### Ejemplo de Uso (Flutter)
+
+```dart
+// Configuración simple - un solo endpoint
+final String apiGatewayUrl = 'http://192.168.100.145:9090';
+
+// Scalping API
+final scalpingHealth = await dio.get('$apiGatewayUrl/api/scalping/api/v1/scalping/health');
+
+// MCP Tools
+final mcpTools = await dio.get('$apiGatewayUrl/api/mcp/tools');
+```
+
 ---
 
 ## Authentication
@@ -47,7 +83,10 @@ Ambas APIs comparten la misma lógica de negocio pero tienen diferentes interfac
 
 ## REST API Endpoints
 
-### Base URL: `/api/v1/scalping`
+### Base URL
+
+**Via Gateway (Recommended):** `http://192.168.100.145:9090/api/scalping/api/v1/scalping`  
+**Direct:** `http://192.168.100.145:8081/api/v1/scalping`
 
 ---
 

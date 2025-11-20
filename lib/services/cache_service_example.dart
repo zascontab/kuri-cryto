@@ -2,6 +2,7 @@
 ///
 /// This file demonstrates various ways to use the CacheService
 /// for offline functionality and improved performance.
+library;
 
 import 'cache_service.dart';
 import '../models/position.dart';
@@ -126,7 +127,7 @@ Future<void> example4Strategies() async {
 
   // Create strategies
   final strategies = [
-    Strategy(
+    const Strategy(
       name: 'Scalping',
       active: true,
       weight: 0.4,
@@ -138,7 +139,7 @@ Future<void> example4Strategies() async {
         totalPnl: 5000.0,
       ),
     ),
-    Strategy(
+    const Strategy(
       name: 'Trend Following',
       active: false,
       weight: 0.3,
@@ -168,7 +169,7 @@ Future<void> example5MetricsHistory() async {
   final cache = CacheService();
 
   // Save metrics (automatically timestamped)
-  final metrics = Metrics(
+  const metrics = Metrics(
     totalTrades: 150,
     winningTrades: 95,
     losingTrades: 55,
@@ -367,7 +368,7 @@ Future<void> example12SmartCaching() async {
   Future<List<Strategy>> fetchStrategiesFromAPI() async {
     await Future.delayed(const Duration(seconds: 1));
     return [
-      Strategy(
+      const Strategy(
         name: 'Scalping',
         active: true,
         weight: 0.5,

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/optimization.dart';
 import '../providers/optimization_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/tiktok_modal.dart';
 import 'optimization_results_screen.dart';
 import 'optimization_history_screen.dart';
@@ -38,7 +38,7 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     return Scaffold(
       appBar: AppBar(
@@ -109,7 +109,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                   const SizedBox(height: 16),
 
                   // Initial capital
-                  _buildInitialCapitalField(theme, l10n, config.initialCapital ?? 10000.0),
+                  _buildInitialCapitalField(
+                      theme, l10n, config.initialCapital ?? 10000.0),
                 ],
               ),
             ),
@@ -163,7 +164,7 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: currentStrategy,
+          initialValue: currentStrategy,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -176,7 +177,9 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
           }).toList(),
           onChanged: (value) {
             if (value != null) {
-              ref.read(optimizationConfigFormProvider.notifier).updateStrategyName(value);
+              ref
+                  .read(optimizationConfigFormProvider.notifier)
+                  .updateStrategyName(value);
               // Load default parameter ranges
               _loadDefaultRanges(value);
             }
@@ -200,7 +203,7 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
         ),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
-          value: currentSymbol,
+          initialValue: currentSymbol,
           decoration: const InputDecoration(
             border: OutlineInputBorder(),
             contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -213,7 +216,9 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
           }).toList(),
           onChanged: (value) {
             if (value != null) {
-              ref.read(optimizationConfigFormProvider.notifier).updateSymbol(value);
+              ref
+                  .read(optimizationConfigFormProvider.notifier)
+                  .updateSymbol(value);
             }
           },
         ),
@@ -287,13 +292,14 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
         decoration: InputDecoration(
           labelText: label,
           border: const OutlineInputBorder(),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(DateFormat('MMM dd, yyyy').format(currentDate)),
-            const Icon(Icons.calendar_today, size: 20),
+            const Icon(Icons.calendar_today, size: 12),
           ],
         ),
       ),
@@ -322,7 +328,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             border: const OutlineInputBorder(),
             prefixText: '\$ ',
             hintText: l10n.enterAmount,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           ),
           onChanged: (value) {
             final capital = double.tryParse(value);
@@ -357,10 +364,12 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextButton.icon(
-                  onPressed: () => _showAddParameterDialog(theme, l10n),
-                  icon: const Icon(Icons.add),
-                  label: Text(l10n.addParameter),
+                Expanded(
+                  child: TextButton.icon(
+                    onPressed: () => _showAddParameterDialog(theme, l10n),
+                    icon: const Icon(Icons.add),
+                    label: Text(l10n.addParameter),
+                  ),
                 ),
               ],
             ),
@@ -382,7 +391,7 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 final index = entry.key;
                 final range = entry.value;
                 return _buildParameterRangeItem(theme, l10n, index, range);
-              }).toList(),
+              }),
           ],
         ),
       ),
@@ -409,7 +418,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${l10n.min}: ${range.min}  ${l10n.max}: ${range.max}  ${l10n.step}: ${range.step}'),
+            Text(
+                '${l10n.min}: ${range.min}  ${l10n.max}: ${range.max}  ${l10n.step}: ${range.step}'),
             if (!isValid && error != null)
               Text(
                 error,
@@ -425,12 +435,15 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
           children: [
             IconButton(
               icon: const Icon(Icons.edit),
-              onPressed: () => _showEditParameterDialog(theme, l10n, index, range),
+              onPressed: () =>
+                  _showEditParameterDialog(theme, l10n, index, range),
             ),
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                ref.read(optimizationConfigFormProvider.notifier).removeParameterRange(index);
+                ref
+                    .read(optimizationConfigFormProvider.notifier)
+                    .removeParameterRange(index);
               },
             ),
           ],
@@ -481,7 +494,7 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 title: Text(title),
                 subtitle: Text(desc),
               );
-            }).toList(),
+            }),
             if (config.optimizationMethod != 'grid_search') ...[
               const SizedBox(height: 16),
               TextFormField(
@@ -490,7 +503,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 decoration: InputDecoration(
                   labelText: l10n.maxIterations,
                   border: const OutlineInputBorder(),
-                  contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  contentPadding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 ),
                 onChanged: (value) {
                   final iterations = int.tryParse(value);
@@ -540,13 +554,15 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 groupValue: config.objective,
                 onChanged: (newValue) {
                   if (newValue != null) {
-                    ref.read(optimizationConfigFormProvider.notifier).updateObjective(newValue);
+                    ref
+                        .read(optimizationConfigFormProvider.notifier)
+                        .updateObjective(newValue);
                   }
                 },
                 title: Text(title),
                 subtitle: Text(desc),
               );
-            }).toList(),
+            }),
           ],
         ),
       ),
@@ -572,7 +588,9 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
               children: [
                 Icon(
                   isValid ? Icons.check_circle : Icons.warning,
-                  color: isValid ? const Color(0xFF10B981) : theme.colorScheme.error,
+                  color: isValid
+                      ? const Color(0xFF10B981)
+                      : theme.colorScheme.error,
                 ),
                 const SizedBox(width: 8),
                 Text(
@@ -584,7 +602,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
               ],
             ),
             const SizedBox(height: 16),
-            _buildSummaryRow(l10n.estimatedCombinations, estimatedCombos.toString()),
+            _buildSummaryRow(
+                l10n.estimatedCombinations, estimatedCombos.toString()),
             if (!isValid)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
@@ -649,7 +668,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: minController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.minimumValue,
                 border: const OutlineInputBorder(),
@@ -667,7 +687,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: maxController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.maximumValue,
                 border: const OutlineInputBorder(),
@@ -685,7 +706,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: stepController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.stepSize,
                 border: const OutlineInputBorder(),
@@ -705,11 +727,11 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
       ),
       actions: [
         TikTokModalButton(
-          label: l10n.cancel,
+          text: l10n.cancel,
           onPressed: () => Navigator.of(context).pop(),
         ),
         TikTokModalButton(
-          label: l10n.add,
+          text: l10n.add,
           isPrimary: true,
           onPressed: () {
             if (formKey.currentState!.validate()) {
@@ -720,7 +742,9 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 step: double.parse(stepController.text),
               );
 
-              ref.read(optimizationConfigFormProvider.notifier).addParameterRange(range);
+              ref
+                  .read(optimizationConfigFormProvider.notifier)
+                  .addParameterRange(range);
               Navigator.of(context).pop();
             }
           },
@@ -736,9 +760,12 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
     ParameterRange currentRange,
   ) async {
     final nameController = TextEditingController(text: currentRange.name);
-    final minController = TextEditingController(text: currentRange.min.toString());
-    final maxController = TextEditingController(text: currentRange.max.toString());
-    final stepController = TextEditingController(text: currentRange.step.toString());
+    final minController =
+        TextEditingController(text: currentRange.min.toString());
+    final maxController =
+        TextEditingController(text: currentRange.max.toString());
+    final stepController =
+        TextEditingController(text: currentRange.step.toString());
     final formKey = GlobalKey<FormState>();
 
     await showTikTokModal(
@@ -765,7 +792,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: minController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.minimumValue,
                 border: const OutlineInputBorder(),
@@ -783,7 +811,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: maxController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.maximumValue,
                 border: const OutlineInputBorder(),
@@ -801,7 +830,8 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
             const SizedBox(height: 16),
             TextFormField(
               controller: stepController,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              keyboardType:
+                  const TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 labelText: l10n.stepSize,
                 border: const OutlineInputBorder(),
@@ -821,11 +851,11 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
       ),
       actions: [
         TikTokModalButton(
-          label: l10n.cancel,
+          text: l10n.cancel,
           onPressed: () => Navigator.of(context).pop(),
         ),
         TikTokModalButton(
-          label: l10n.save,
+          text: l10n.save,
           isPrimary: true,
           onPressed: () {
             if (formKey.currentState!.validate()) {
@@ -836,7 +866,9 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
                 step: double.parse(stepController.text),
               );
 
-              ref.read(optimizationConfigFormProvider.notifier).updateParameterRange(index, range);
+              ref
+                  .read(optimizationConfigFormProvider.notifier)
+                  .updateParameterRange(index, range);
               Navigator.of(context).pop();
             }
           },
@@ -847,9 +879,11 @@ class _OptimizationScreenState extends ConsumerState<OptimizationScreen>
 
   Future<void> _loadDefaultRanges(String strategyName) async {
     try {
-      final ranges = await ref
-          .read(defaultParameterRangesProvider(strategyName).future);
-      ref.read(optimizationConfigFormProvider.notifier).loadDefaultRanges(ranges);
+      final ranges =
+          await ref.read(defaultParameterRangesProvider(strategyName).future);
+      ref
+          .read(optimizationConfigFormProvider.notifier)
+          .loadDefaultRanges(ranges);
     } catch (e) {
       // Ignore errors - user can add parameters manually
     }

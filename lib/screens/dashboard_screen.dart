@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/metric_card.dart';
 import '../widgets/tiktok_modal.dart';
 import '../providers/system_provider.dart';
@@ -32,7 +32,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
   void _toggleEngine(bool isRunning) {
     HapticFeedback.mediumImpact();
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     showTikTokModal(
       context: context,
@@ -75,7 +75,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
 
       if (mounted) {
         HapticFeedback.heavyImpact();
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
@@ -90,13 +90,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
       }
     } catch (e) {
       if (mounted) {
-        final l10n = L10n.of(context);
+        final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Error: ${e.toString()}'),
             backgroundColor: const Color(0xFFF44336),
             action: SnackBarAction(
-              label: l10n.retry,
+              label: l10n.refresh,
               textColor: Colors.white,
               onPressed: () => _performEngineToggle(isRunning),
             ),
@@ -127,7 +127,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
 
     final systemStatusAsync = ref.watch(systemStatusProvider);
     final metricsAsync = ref.watch(metricsProvider);
@@ -363,7 +363,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                           ElevatedButton.icon(
                             onPressed: _onRefresh,
                             icon: const Icon(Icons.refresh),
-                            label: Text(l10n.retry),
+                            label: Text(l10n.refresh),
                           ),
                         ],
                       ),
@@ -430,7 +430,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                   ElevatedButton.icon(
                     onPressed: _onRefresh,
                     icon: const Icon(Icons.refresh),
-                    label: Text(l10n.retry),
+                    label: Text(l10n.refresh),
                   ),
                 ],
               ),

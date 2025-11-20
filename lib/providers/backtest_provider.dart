@@ -1,6 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/backtest.dart';
-import '../services/backtest_service.dart';
 import 'services_provider.dart';
 
 part 'backtest_provider.g.dart';

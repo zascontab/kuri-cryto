@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 /// Card widget for displaying Risk Sentinel state
 class RiskSentinelCard extends StatelessWidget {
@@ -168,9 +167,9 @@ class RiskSentinelCard extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(4),
               child: LinearProgressIndicator(
-                value: totalExposure / maxExposure,
+                value: maxExposure > 0 ? (totalExposure / maxExposure).clamp(0.0, 1.0) : 0.0,
                 minHeight: 10,
-                backgroundColor: colorScheme.surfaceVariant,
+                backgroundColor: colorScheme.surfaceContainerHighest,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   _getDrawdownColor(totalExposure, maxExposure),
                 ),
@@ -195,7 +194,7 @@ class RiskSentinelCard extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: consecutiveLosses >= maxConsecutiveLosses - 1
                         ? const Color(0xFFF44336).withValues(alpha: 0.2)
-                        : colorScheme.surfaceVariant,
+                        : colorScheme.surfaceContainerHighest,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
@@ -267,7 +266,7 @@ class RiskSentinelCard extends StatelessWidget {
     double max,
     ThemeData theme,
   ) {
-    final percentage = (current / max).clamp(0.0, 1.0);
+    final percentage = max > 0 ? (current / max).clamp(0.0, 1.0) : 0.0;
     final color = _getDrawdownColor(current, max);
 
     return Column(
@@ -297,7 +296,7 @@ class RiskSentinelCard extends StatelessWidget {
           child: LinearProgressIndicator(
             value: percentage,
             minHeight: 8,
-            backgroundColor: theme.colorScheme.surfaceVariant,
+            backgroundColor: theme.colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(color),
           ),
         ),

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import '../models/optimization.dart';
 import '../providers/optimization_provider.dart';
-import '../l10n/l10n.dart';
+import '../l10n/l10n_export.dart';
 import '../widgets/tiktok_modal.dart';
 import 'optimization_results_screen.dart';
 
@@ -17,7 +17,7 @@ class OptimizationHistoryScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final l10n = L10n.of(context);
+    final l10n = context.l10n;
     final historyAsync = ref.watch(optimizationHistoryProvider());
 
     return historyAsync.when(
@@ -98,7 +98,8 @@ class OptimizationHistoryScreen extends ConsumerWidget {
         itemCount: history.length,
         itemBuilder: (context, index) {
           final optimization = history[index];
-          return _buildOptimizationCard(context, theme, l10n, optimization, ref);
+          return _buildOptimizationCard(
+              context, theme, l10n, optimization, ref);
         },
       ),
     );
@@ -153,7 +154,9 @@ class OptimizationHistoryScreen extends ConsumerWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          optimization.strategyName.replaceAll('_', ' ').toUpperCase(),
+                          optimization.strategyName
+                              .replaceAll('_', ' ')
+                              .toUpperCase(),
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                           ),
@@ -169,7 +172,8 @@ class OptimizationHistoryScreen extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
                       color: statusColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -198,7 +202,9 @@ class OptimizationHistoryScreen extends ConsumerWidget {
                     child: _buildInfoChip(
                       theme,
                       Icons.tune,
-                      optimization.optimizationMethod.replaceAll('_', ' ').toUpperCase(),
+                      optimization.optimizationMethod
+                          .replaceAll('_', ' ')
+                          .toUpperCase(),
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -225,7 +231,8 @@ class OptimizationHistoryScreen extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        DateFormat('MMM dd, yyyy HH:mm').format(optimization.startedAt),
+                        DateFormat('MMM dd, yyyy HH:mm')
+                            .format(optimization.startedAt),
                         style: const TextStyle(fontWeight: FontWeight.w500),
                       ),
                     ],
@@ -290,7 +297,7 @@ class OptimizationHistoryScreen extends ConsumerWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surfaceVariant,
+        color: theme.colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -337,11 +344,11 @@ class OptimizationHistoryScreen extends ConsumerWidget {
       message: l10n.deleteOptimizationConfirmation,
       actions: [
         TikTokModalButton(
-          label: l10n.cancel,
+          text: l10n.cancel,
           onPressed: () => Navigator.of(context).pop(false),
         ),
         TikTokModalButton(
-          label: l10n.delete,
+          text: l10n.delete,
           isPrimary: true,
           backgroundColor: Colors.red,
           onPressed: () => Navigator.of(context).pop(true),
@@ -352,7 +359,9 @@ class OptimizationHistoryScreen extends ConsumerWidget {
     if (confirmed != true) return;
 
     try {
-      await ref.read(optimizationHistoryProvider().notifier).delete(optimizationId);
+      await ref
+          .read(optimizationHistoryProvider().notifier)
+          .delete(optimizationId);
 
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
