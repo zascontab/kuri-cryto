@@ -1180,5 +1180,997 @@
   "@critical": {
     "description": "Etiqueta de nivel crítico",
     "type": "String"
+  },
+  "acknowledge": "Reconocer",
+  "@acknowledge": {
+    "type": "String"
+  },
+  "activate": "Activar",
+  "@activate": {
+    "type": "String"
+  },
+  "activateKillSwitch": "Activar Kill Switch",
+  "@activateKillSwitch": {
+    "type": "String"
+  },
+  "activeAlerts": "Alertas Activas",
+  "@activeAlerts": {
+    "type": "String"
+  },
+  "add": "Añadir",
+  "@add": {
+    "type": "String"
+  },
+  "addAlertRule": "Añadir Regla de Alerta",
+  "@addAlertRule": {
+    "type": "String"
+  },
+  "addNewPair": "Añadir Nuevo Par",
+  "@addNewPair": {
+    "type": "String"
+  },
+  "addPair": "Añadir Par",
+  "@addPair": {
+    "type": "String"
+  },
+  "addParameter": "Añadir Parámetro",
+  "@addParameter": {
+    "type": "String"
+  },
+  "addRule": "Añadir Regla",
+  "@addRule": {
+    "type": "String"
+  },
+  "alertAcknowledged": "Alerta Reconocida",
+  "@alertAcknowledged": {
+    "type": "String"
+  },
+  "alertConfiguration": "Configuración de Alertas",
+  "@alertConfiguration": {
+    "type": "String"
+  },
+  "alertConfigurationSaved": "Configuración de Alertas Guardada",
+  "@alertConfigurationSaved": {
+    "type": "String"
+  },
+  "alertDismissed": "Alerta Descartada",
+  "@alertDismissed": {
+    "type": "String"
+  },
+  "alertHistoryWillAppearHere": "El historial de alertas aparecerá aquí",
+  "@alertHistoryWillAppearHere": {
+    "type": "String"
+  },
+  "alertRules": "Reglas de Alertas",
+  "@alertRules": {
+    "type": "String"
+  },
+  "alertType": "Tipo de Alerta",
+  "@alertType": {
+    "type": "String"
+  },
+  "all": "Todos",
+  "@all": {
+    "type": "String"
+  },
+  "allClear": "Todo Despejado",
+  "@allClear": {
+    "type": "String"
+  },
+  "allPositionsWillClose": "Todas las posiciones se cerrarán",
+  "@allPositionsWillClose": {
+    "type": "String"
+  },
+  "allResults": "Todos los Resultados",
+  "@allResults": {
+    "type": "String"
+  },
+  "allStrategies": "Todas las Estrategias",
+  "@allStrategies": {
+    "type": "String"
+  },
+  "allSymbols": "Todos los Símbolos",
+  "@allSymbols": {
+    "type": "String"
+  },
+  "allTradingWillStop": "Todo el trading se detendrá",
+  "@allTradingWillStop": {
+    "type": "String"
+  },
+  "apply": "Aplicar",
+  "@apply": {
+    "type": "String"
+  },
+  "applyParameters": "Aplicar Parámetros",
+  "@applyParameters": {
+    "type": "String"
+  },
+  "applyParametersConfirmation": "¿Estás seguro de que quieres aplicar estos parámetros?",
+  "@applyParametersConfirmation": {
+    "type": "String"
+  },
+  "applyTheseParameters": "Aplicar Estos Parámetros",
+  "@applyTheseParameters": {
+    "type": "String"
+  },
+  "areYouSure": "¿Estás seguro?",
+  "@areYouSure": {
+    "type": "String"
+  },
+  "average": "Promedio",
+  "@average": {
+    "type": "String"
+  },
+  "avgExecutionTime": "Tiempo de Ejecución Promedio",
+  "@avgExecutionTime": {
+    "type": "String"
+  },
+  "avgSlippage": "Slippage Promedio",
+  "@avgSlippage": {
+    "type": "String"
+  },
+  "avgWaitTime": "Tiempo de Espera Promedio",
+  "@avgWaitTime": {
+    "type": "String"
+  },
+  "backToForm": "Volver al Formulario",
+  "@backToForm": {
+    "type": "String"
+  },
+  "backtestConfiguration": "Configuración de Backtest",
+  "@backtestConfiguration": {
+    "type": "String"
+  },
+  "backtestFailed": "Backtest Falló",
+  "@backtestFailed": {
+    "type": "String"
+  },
+  "backtestRunning": "Backtest en Ejecución",
+  "@backtestRunning": {
+    "type": "String"
+  },
+  "backtestStarted": "Backtest Iniciado",
+  "@backtestStarted": {
+    "type": "String"
+  },
+  "basisPoints": "Puntos Base",
+  "@basisPoints": {
+    "type": "String"
+  },
+  "bayesianOptimization": "Optimización Bayesiana",
+  "@bayesianOptimization": {
+    "type": "String"
+  },
+  "bayesianOptimizationDesc": "Búsqueda inteligente usando métodos bayesianos",
+  "@bayesianOptimizationDesc": {
+    "type": "String"
+  },
+  "bestParameters": "Mejores Parámetros",
+  "@bestParameters": {
+    "type": "String"
+  },
+  "bestScore": "Mejor Puntuación",
+  "@bestScore": {
+    "type": "String"
+  },
+  "cancelOptimization": "Cancelar Optimización",
+  "@cancelOptimization": {
+    "type": "String"
+  },
+  "cancelOptimizationConfirmation": "¿Estás seguro de que quieres cancelar esta optimización?",
+  "@cancelOptimizationConfirmation": {
+    "type": "String"
+  },
+  "cancelled": "Cancelado",
+  "@cancelled": {
+    "type": "String"
+  },
+  "cannotRemovePair": "No se puede eliminar el par",
+  "@cannotRemovePair": {
+    "type": "String"
+  },
+  "cannotRemovePairWithPositions": "No se puede eliminar un par con posiciones abiertas",
+  "@cannotRemovePairWithPositions": {
+    "type": "String"
+  },
+  "combinations": "combinaciones",
+  "@combinations": {
+    "type": "String"
+  },
+  "completed": "Completado",
+  "@completed": {
+    "type": "String"
+  },
+  "confidence": "Confianza",
+  "@confidence": {
+    "type": "String"
+  },
+  "configureAlertConditions": "Configurar Condiciones de Alertas",
+  "@configureAlertConditions": {
+    "type": "String"
+  },
+  "confirmDeactivation": "Confirmar Desactivación",
+  "@confirmDeactivation": {
+    "type": "String"
+  },
+  "confirmDeleteRule": "Eliminar Regla",
+  "@confirmDeleteRule": {
+    "type": "String"
+  },
+  "confirmResumeTrading": "Reanudar Trading",
+  "@confirmResumeTrading": {
+    "type": "String"
+  },
+  "consensusSignal": "Señal de Consenso",
+  "@consensusSignal": {
+    "type": "String"
+  },
+  "continue_": "Continuar",
+  "@continue_": {
+    "type": "String"
+  },
+  "cooldownMinutes": "Tiempo de Espera (minutos)",
+  "@cooldownMinutes": {
+    "type": "String"
+  },
+  "dateRange": "Rango de Fechas",
+  "@dateRange": {
+    "type": "String"
+  },
+  "deactivateKillSwitch": "Desactivar Kill Switch",
+  "@deactivateKillSwitch": {
+    "type": "String"
+  },
+  "delete": "Eliminar",
+  "@delete": {
+    "type": "String"
+  },
+  "deleteOptimization": "Eliminar Optimización",
+  "@deleteOptimization": {
+    "type": "String"
+  },
+  "deleteOptimizationConfirmation": "¿Estás seguro de que quieres eliminar esta optimización?",
+  "@deleteOptimizationConfirmation": {
+    "type": "String"
+  },
+  "deleteRule": "Eliminar Regla",
+  "@deleteRule": {
+    "type": "String"
+  },
+  "dismiss": "Descartar",
+  "@dismiss": {
+    "type": "String"
+  },
+  "drawdownChart": "Gráfico de Reducciones",
+  "@drawdownChart": {
+    "type": "String"
+  },
+  "duration": "Duración",
+  "@duration": {
+    "type": "String"
+  },
+  "edit": "Editar",
+  "@edit": {
+    "type": "String"
+  },
+  "editAlertRule": "Editar Regla de Alerta",
+  "@editAlertRule": {
+    "type": "String"
+  },
+  "editParameter": "Editar Parámetro",
+  "@editParameter": {
+    "type": "String"
+  },
+  "enableAlerts": "Habilitar Alertas",
+  "@enableAlerts": {
+    "type": "String"
+  },
+  "endDate": "Fecha Final",
+  "@endDate": {
+    "type": "String"
+  },
+  "enterAmount": "Ingresa Monto",
+  "@enterAmount": {
+    "type": "String"
+  },
+  "entryPrice": "Precio de Entrada",
+  "@entryPrice": {
+    "type": "String"
+  },
+  "entryTime": "Hora de Entrada",
+  "@entryTime": {
+    "type": "String"
+  },
+  "equityCurve": "Curva de Capital",
+  "@equityCurve": {
+    "type": "String"
+  },
+  "errorLoadingAlerts": "Error al cargar alertas",
+  "@errorLoadingAlerts": {
+    "type": "String"
+  },
+  "errorLoadingConfiguration": "Error al cargar la configuración",
+  "@errorLoadingConfiguration": {
+    "type": "String"
+  },
+  "errorOccurred": "Ocurrió un error",
+  "@errorOccurred": {
+    "type": "String"
+  },
+  "errorRate": "Tasa de Error",
+  "@errorRate": {
+    "type": "String"
+  },
+  "estimatedCombinations": "Combinaciones Estimadas",
+  "@estimatedCombinations": {
+    "type": "String"
+  },
+  "estimatedTimeRemaining": "Tiempo Estimado Restante",
+  "@estimatedTimeRemaining": {
+    "type": "String"
+  },
+  "exchange": "Intercambio",
+  "@exchange": {
+    "type": "String"
+  },
+  "executionPerformance": "Rendimiento de Ejecución",
+  "@executionPerformance": {
+    "type": "String"
+  },
+  "executionQueue": "Cola de Ejecución",
+  "@executionQueue": {
+    "type": "String"
+  },
+  "executionsTracked": "Ejecuciones Rastreadas",
+  "@executionsTracked": {
+    "type": "String"
+  },
+  "exitPrice": "Precio de Salida",
+  "@exitPrice": {
+    "type": "String"
+  },
+  "exitTime": "Hora de Salida",
+  "@exitTime": {
+    "type": "String"
+  },
+  "exposure": "Exposición",
+  "@exposure": {
+    "type": "String"
+  },
+  "failed": "Fallido",
+  "@failed": {
+    "type": "String"
+  },
+  "failedExecutions": "Ejecuciones Fallidas",
+  "@failedExecutions": {
+    "type": "String"
+  },
+  "fillRate": "Tasa de Ejecución",
+  "@fillRate": {
+    "type": "String"
+  },
+  "filled": "Ejecutado",
+  "@filled": {
+    "type": "String"
+  },
+  "filterByStatus": "Filtrar por Estado",
+  "@filterByStatus": {
+    "type": "String"
+  },
+  "filterByStrategy": "Filtrar por Estrategia",
+  "@filterByStrategy": {
+    "type": "String"
+  },
+  "filterBySymbol": "Filtrar por Símbolo",
+  "@filterBySymbol": {
+    "type": "String"
+  },
+  "goBack": "Volver",
+  "@goBack": {
+    "type": "String"
+  },
+  "gridSearch": "Búsqueda de Cuadrícula",
+  "@gridSearch": {
+    "type": "String"
+  },
+  "gridSearchDesc": "Búsqueda exhaustiva a través de la cuadrícula de parámetros",
+  "@gridSearchDesc": {
+    "type": "String"
+  },
+  "inAppNotifications": "Notificaciones en la Aplicación",
+  "@inAppNotifications": {
+    "type": "String"
+  },
+  "inactive": "Inactivo",
+  "@inactive": {
+    "type": "String"
+  },
+  "initialCapital": "Capital Inicial",
+  "@initialCapital": {
+    "type": "String"
+  },
+  "killSwitchActive": "Kill Switch Activo",
+  "@killSwitchActive": {
+    "type": "String"
+  },
+  "killSwitchWarning": "Advertencia de Kill Switch",
+  "@killSwitchWarning": {
+    "type": "String"
+  },
+  "lastPrice": "Último Precio",
+  "@lastPrice": {
+    "type": "String"
+  },
+  "latency": "Latencia",
+  "@latency": {
+    "type": "String"
+  },
+  "latencyChart": "Gráfico de Latencia",
+  "@latencyChart": {
+    "type": "String"
+  },
+  "latencyStatistics": "Estadísticas de Latencia",
+  "@latencyStatistics": {
+    "type": "String"
+  },
+  "loadingResults": "Cargando resultados...",
+  "@loadingResults": {
+    "type": "String"
+  },
+  "manageAlertRules": "Administrar Reglas de Alertas",
+  "@manageAlertRules": {
+    "type": "String"
+  },
+  "max": "Máximo",
+  "@max": {
+    "type": "String"
+  },
+  "maxConsecutiveLosses": "Pérdidas Consecutivas Máximas",
+  "@maxConsecutiveLosses": {
+    "type": "String"
+  },
+  "maxDrawdown": "Reducciones Máximas",
+  "@maxDrawdown": {
+    "type": "String"
+  },
+  "maxIterations": "Iteraciones Máximas",
+  "@maxIterations": {
+    "type": "String"
+  },
+  "maximum": "Máximo",
+  "@maximum": {
+    "type": "String"
+  },
+  "maximumValue": "Valor Máximo",
+  "@maximumValue": {
+    "type": "String"
+  },
+  "median": "Mediana",
+  "@median": {
+    "type": "String"
+  },
+  "min": "Mínimo",
+  "@min": {
+    "type": "String"
+  },
+  "minimum": "Mínimo",
+  "@minimum": {
+    "type": "String"
+  },
+  "minimumValue": "Valor Mínimo",
+  "@minimumValue": {
+    "type": "String"
+  },
+  "newBacktest": "Nuevo Backtest",
+  "@newBacktest": {
+    "type": "String"
+  },
+  "newOptimization": "Nueva Optimización",
+  "@newOptimization": {
+    "type": "String"
+  },
+  "no": "No",
+  "@no": {
+    "type": "String"
+  },
+  "noActiveAlerts": "Sin Alertas Activas",
+  "@noActiveAlerts": {
+    "type": "String"
+  },
+  "noAlertRulesYet": "Sin reglas de alertas aún",
+  "@noAlertRulesYet": {
+    "type": "String"
+  },
+  "noAlertsYet": "Sin alertas aún",
+  "@noAlertsYet": {
+    "type": "String"
+  },
+  "noBacktestsYet": "Sin backtests aún",
+  "@noBacktestsYet": {
+    "type": "String"
+  },
+  "noExecutionsYet": "Sin ejecuciones aún",
+  "@noExecutionsYet": {
+    "type": "String"
+  },
+  "noOptimizationsYet": "Sin optimizaciones aún",
+  "@noOptimizationsYet": {
+    "type": "String"
+  },
+  "noPairsFound": "No se encontraron pares",
+  "@noPairsFound": {
+    "type": "String"
+  },
+  "noParametersConfigured": "Sin parámetros configurados",
+  "@noParametersConfigured": {
+    "type": "String"
+  },
+  "noTradingPairs": "Sin Pares de Trading",
+  "@noTradingPairs": {
+    "type": "String"
+  },
+  "notAvailable": "No Disponible",
+  "@notAvailable": {
+    "type": "String"
+  },
+  "notificationSettings": "Configuración de Notificaciones",
+  "@notificationSettings": {
+    "type": "String"
+  },
+  "objective": "Objetivo",
+  "@objective": {
+    "type": "String"
+  },
+  "objectiveToOptimize": "Objetivo a Optimizar",
+  "@objectiveToOptimize": {
+    "type": "String"
+  },
+  "ofLabel": "de",
+  "@ofLabel": {
+    "type": "String"
+  },
+  "ok": "Aceptar",
+  "@ok": {
+    "type": "String"
+  },
+  "optimizationCancelled": "Optimización Cancelada",
+  "@optimizationCancelled": {
+    "type": "String"
+  },
+  "optimizationCancelledSuccessfully": "Optimización cancelada exitosamente",
+  "@optimizationCancelledSuccessfully": {
+    "type": "String"
+  },
+  "optimizationConfiguration": "Configuración de Optimización",
+  "@optimizationConfiguration": {
+    "type": "String"
+  },
+  "optimizationDeletedSuccessfully": "Optimización eliminada exitosamente",
+  "@optimizationDeletedSuccessfully": {
+    "type": "String"
+  },
+  "optimizationFailed": "Optimización Falló",
+  "@optimizationFailed": {
+    "type": "String"
+  },
+  "optimizationMethod": "Método de Optimización",
+  "@optimizationMethod": {
+    "type": "String"
+  },
+  "optimizationResults": "Resultados de Optimización",
+  "@optimizationResults": {
+    "type": "String"
+  },
+  "optimizationRunning": "Optimización en Ejecución",
+  "@optimizationRunning": {
+    "type": "String"
+  },
+  "optimizationStarted": "Optimización Iniciada",
+  "@optimizationStarted": {
+    "type": "String"
+  },
+  "optimizationSummary": "Resumen de Optimización",
+  "@optimizationSummary": {
+    "type": "String"
+  },
+  "orderId": "ID de Orden",
+  "@orderId": {
+    "type": "String"
+  },
+  "orderType": "Tipo de Orden",
+  "@orderType": {
+    "type": "String"
+  },
+  "pairAddedSuccess": "Par {symbol} añadido exitosamente",
+  "@pairAddedSuccess": {
+    "type": "String"
+  },
+  "pairRemovedSuccess": "Par {symbol} eliminado exitosamente",
+  "@pairRemovedSuccess": {
+    "type": "String"
+  },
+  "parameterName": "Nombre del Parámetro",
+  "@parameterName": {
+    "type": "String"
+  },
+  "parameterRanges": "Rangos de Parámetros",
+  "@parameterRanges": {
+    "type": "String"
+  },
+  "parameters": "Parámetros",
+  "@parameters": {
+    "type": "String"
+  },
+  "parametersAppliedSuccessfully": "Parámetros aplicados exitosamente",
+  "@parametersAppliedSuccessfully": {
+    "type": "String"
+  },
+  "partial": "Parcial",
+  "@partial": {
+    "type": "String"
+  },
+  "percentile95": "Percentil 95",
+  "@percentile95": {
+    "type": "String"
+  },
+  "percentile99": "Percentil 99",
+  "@percentile99": {
+    "type": "String"
+  },
+  "performance": "Rendimiento",
+  "@performance": {
+    "type": "String"
+  },
+  "period30d": "30 Días",
+  "@period30d": {
+    "type": "String"
+  },
+  "period7d": "7 Días",
+  "@period7d": {
+    "type": "String"
+  },
+  "period90d": "90 Días",
+  "@period90d": {
+    "type": "String"
+  },
+  "periodAll": "Todo el Tiempo",
+  "@periodAll": {
+    "type": "String"
+  },
+  "pleaseEnterRuleName": "Por favor ingresa el nombre de la regla",
+  "@pleaseEnterRuleName": {
+    "type": "String"
+  },
+  "pleaseEnterTelegramChatId": "Por favor ingresa el ID de Chat de Telegram",
+  "@pleaseEnterTelegramChatId": {
+    "type": "String"
+  },
+  "pleaseEnterTelegramToken": "Por favor ingresa el Token del Bot de Telegram",
+  "@pleaseEnterTelegramToken": {
+    "type": "String"
+  },
+  "pleaseEnterValidNumber": "Por favor ingresa un número válido",
+  "@pleaseEnterValidNumber": {
+    "type": "String"
+  },
+  "pleaseFixConfigurationErrors": "Por favor corrige los errores de configuración",
+  "@pleaseFixConfigurationErrors": {
+    "type": "String"
+  },
+  "pleaseSelectExchange": "Por favor selecciona un intercambio",
+  "@pleaseSelectExchange": {
+    "type": "String"
+  },
+  "pnl": "P&L",
+  "@pnl": {
+    "type": "String"
+  },
+  "pnlChart": "Gráfico de P&L",
+  "@pnlChart": {
+    "type": "String"
+  },
+  "preventDuplicateAlerts": "Prevenir Alertas Duplicadas",
+  "@preventDuplicateAlerts": {
+    "type": "String"
+  },
+  "price": "Precio",
+  "@price": {
+    "type": "String"
+  },
+  "profitFactor": "Factor de Ganancia",
+  "@profitFactor": {
+    "type": "String"
+  },
+  "pushNotifications": "Notificaciones Push",
+  "@pushNotifications": {
+    "type": "String"
+  },
+  "queue": "Cola",
+  "@queue": {
+    "type": "String"
+  },
+  "queueEmpty": "Cola Vacía",
+  "@queueEmpty": {
+    "type": "String"
+  },
+  "queueLength": "Longitud de Cola",
+  "@queueLength": {
+    "type": "String"
+  },
+  "queueStatus": "Estado de la Cola",
+  "@queueStatus": {
+    "type": "String"
+  },
+  "randomSearch": "Búsqueda Aleatoria",
+  "@randomSearch": {
+    "type": "String"
+  },
+  "randomSearchDesc": "Búsqueda aleatoria a través del espacio de parámetros",
+  "@randomSearchDesc": {
+    "type": "String"
+  },
+  "rank": "Rango",
+  "@rank": {
+    "type": "String"
+  },
+  "refreshStats": "Actualizar Estadísticas",
+  "@refreshStats": {
+    "type": "String"
+  },
+  "rejected": "Rechazado",
+  "@rejected": {
+    "type": "String"
+  },
+  "remove": "Eliminar",
+  "@remove": {
+    "type": "String"
+  },
+  "removePair": "Eliminar Par",
+  "@removePair": {
+    "type": "String"
+  },
+  "removePairConfirmation": "¿Estás seguro de que quieres eliminar este par?",
+  "@removePairConfirmation": {
+    "type": "String"
+  },
+  "requiresManualReactivation": "Requiere Reactivación Manual",
+  "@requiresManualReactivation": {
+    "type": "String"
+  },
+  "results": "Resultados",
+  "@results": {
+    "type": "String"
+  },
+  "resume": "Reanudar",
+  "@resume": {
+    "type": "String"
+  },
+  "retry": "Reintentar",
+  "@retry": {
+    "type": "String"
+  },
+  "ruleAdded": "Regla Añadida",
+  "@ruleAdded": {
+    "type": "String"
+  },
+  "ruleDeleted": "Regla Eliminada",
+  "@ruleDeleted": {
+    "type": "String"
+  },
+  "ruleName": "Nombre de la Regla",
+  "@ruleName": {
+    "type": "String"
+  },
+  "ruleUpdated": "Regla Actualizada",
+  "@ruleUpdated": {
+    "type": "String"
+  },
+  "runBacktest": "Ejecutar Backtest",
+  "@runBacktest": {
+    "type": "String"
+  },
+  "runOptimization": "Ejecutar Optimización",
+  "@runOptimization": {
+    "type": "String"
+  },
+  "score": "Puntuación",
+  "@score": {
+    "type": "String"
+  },
+  "scoreDistribution": "Distribución de Puntuación",
+  "@scoreDistribution": {
+    "type": "String"
+  },
+  "searchPairs": "Buscar Pares",
+  "@searchPairs": {
+    "type": "String"
+  },
+  "selectSymbolToAnalyze": "Seleccionar Símbolo para Analizar",
+  "@selectSymbolToAnalyze": {
+    "type": "String"
+  },
+  "selectedPair": "Par Seleccionado",
+  "@selectedPair": {
+    "type": "String"
+  },
+  "sendTestAlert": "Enviar Alerta de Prueba",
+  "@sendTestAlert": {
+    "type": "String"
+  },
+  "severity": "Severidad",
+  "@severity": {
+    "type": "String"
+  },
+  "sharpeRatio": "Razón de Sharpe",
+  "@sharpeRatio": {
+    "type": "String"
+  },
+  "sharpeRatioDesc": "Métrica de retorno ajustado al riesgo",
+  "@sharpeRatioDesc": {
+    "type": "String"
+  },
+  "showing": "Mostrando",
+  "@showing": {
+    "type": "String"
+  },
+  "side": "Lado",
+  "@side": {
+    "type": "String"
+  },
+  "signal": "Señal",
+  "@signal": {
+    "type": "String"
+  },
+  "size": "Tamaño",
+  "@size": {
+    "type": "String"
+  },
+  "slippageBySymbol": "Slippage por Símbolo",
+  "@slippageBySymbol": {
+    "type": "String"
+  },
+  "sortBy": "Ordenar Por",
+  "@sortBy": {
+    "type": "String"
+  },
+  "startDate": "Fecha de Inicio",
+  "@startDate": {
+    "type": "String"
+  },
+  "started": "Iniciado",
+  "@started": {
+    "type": "String"
+  },
+  "status": "Estado",
+  "@status": {
+    "type": "String"
+  },
+  "step": "Paso",
+  "@step": {
+    "type": "String"
+  },
+  "stepSize": "Tamaño de Paso",
+  "@stepSize": {
+    "type": "String"
+  },
+  "strategy": "Estrategia",
+  "@strategy": {
+    "type": "String"
+  },
+  "successfulExecutions": "Ejecuciones Exitosas",
+  "@successfulExecutions": {
+    "type": "String"
+  },
+  "symbol": "Símbolo",
+  "@symbol": {
+    "type": "String"
+  },
+  "tapAddPairToStart": "Toca '+ Añadir Par' para empezar",
+  "@tapAddPairToStart": {
+    "type": "String"
+  },
+  "tapAddToCreateRule": "Toca '+ Añadir' para crear una regla",
+  "@tapAddToCreateRule": {
+    "type": "String"
+  },
+  "technicalIndicators": "Indicadores Técnicos",
+  "@technicalIndicators": {
+    "type": "String"
+  },
+  "telegramBotToken": "Token del Bot de Telegram",
+  "@telegramBotToken": {
+    "type": "String"
+  },
+  "telegramChatId": "ID de Chat de Telegram",
+  "@telegramChatId": {
+    "type": "String"
+  },
+  "telegramConfiguration": "Configuración de Telegram",
+  "@telegramConfiguration": {
+    "type": "String"
+  },
+  "telegramSetupInstructions": "Instrucciones de Configuración de Telegram",
+  "@telegramSetupInstructions": {
+    "type": "String"
+  },
+  "testAlertSent": "Alerta de Prueba Enviada",
+  "@testAlertSent": {
+    "type": "String"
+  },
+  "testAlertSystem": "Sistema de Alertas de Prueba",
+  "@testAlertSystem": {
+    "type": "String"
+  },
+  "thisWillResumeTrading": "Esto reanudará el trading. ¿Continuar?",
+  "@thisWillResumeTrading": {
+    "type": "String"
+  },
+  "threshold": "Umbral",
+  "@threshold": {
+    "type": "String"
+  },
+  "time": "Tiempo",
+  "@time": {
+    "type": "String"
+  },
+  "timeInQueue": "Tiempo en Cola",
+  "@timeInQueue": {
+    "type": "String"
+  },
+  "toggleAlertSystem": "Alternar Sistema de Alertas",
+  "@toggleAlertSystem": {
+    "type": "String"
+  },
+  "totalCombinations": "Combinaciones Totales",
+  "@totalCombinations": {
+    "type": "String"
+  },
+  "totalPnlDesc": "Ganancia y Pérdida Total",
+  "@totalPnlDesc": {
+    "type": "String"
+  },
+  "tradeHistory": "Historial de Operaciones",
+  "@tradeHistory": {
+    "type": "String"
+  },
+  "trades": "Operaciones",
+  "@trades": {
+    "type": "String"
+  },
+  "tradingDisabled": "Trading Deshabilitado",
+  "@tradingDisabled": {
+    "type": "String"
+  },
+  "tradingSignal": "Señal de Trading",
+  "@tradingSignal": {
+    "type": "String"
+  },
+  "trigger": "Desencadenante",
+  "@trigger": {
+    "type": "String"
+  },
+  "type": "Tipo",
+  "@type": {
+    "type": "String"
+  },
+  "value": "Valor",
+  "@value": {
+    "type": "String"
+  },
+  "volume24h": "Volumen 24h",
+  "@volume24h": {
+    "type": "String"
+  },
+  "winRateChart": "Gráfico de Tasa de Acierto",
+  "@winRateChart": {
+    "type": "String"
+  },
+  "winRateDesc": "Porcentaje de operaciones ganadoras",
+  "@winRateDesc": {
+    "type": "String"
+  },
+  "yes": "Sí",
+  "@yes": {
+    "type": "String"
   }
 }
