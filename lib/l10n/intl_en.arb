@@ -1,0 +1,2176 @@
+{
+  "@@locale": "en",
+  "@@last_modified": "2025-01-16",
+  "scalpingEngine": "Scalping Engine",
+  "@scalpingEngine": {
+    "type": "String"
+  },
+  "running": "Running",
+  "@running": {
+    "type": "String"
+  },
+  "stopped": "Stopped",
+  "@stopped": {
+    "type": "String"
+  },
+  "healthy": "Healthy",
+  "@healthy": {
+    "type": "String"
+  },
+  "degraded": "Degraded",
+  "@degraded": {
+    "type": "String"
+  },
+  "down": "Down",
+  "@down": {
+    "type": "String"
+  },
+  "uptime": "Uptime",
+  "@uptime": {
+    "type": "String"
+  },
+  "activePositions": "Active Positions",
+  "@activePositions": {
+    "type": "String"
+  },
+  "totalTrades": "Total Trades",
+  "@totalTrades": {
+    "type": "String"
+  },
+  "startEngine": "Start Engine",
+  "@startEngine": {
+    "type": "String"
+  },
+  "stopEngine": "Stop Engine",
+  "@stopEngine": {
+    "type": "String"
+  },
+  "startEngineConfirmation": "Are you sure you want to start the trading engine?",
+  "@startEngineConfirmation": {
+    "type": "String"
+  },
+  "stopEngineConfirmation": "Are you sure you want to stop the trading engine? All positions will be closed.",
+  "@stopEngineConfirmation": {
+    "type": "String"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "type": "String"
+  },
+  "start": "Start",
+  "@start": {
+    "type": "String"
+  },
+  "stop": "Stop",
+  "@stop": {
+    "type": "String"
+  },
+  "tradingMetrics": "Trading Metrics",
+  "@tradingMetrics": {
+    "type": "String"
+  },
+  "totalPnl": "Total P&L",
+  "@totalPnl": {
+    "type": "String"
+  },
+  "dailyPnl": "Daily P&L",
+  "@dailyPnl": {
+    "type": "String"
+  },
+  "winRate": "Win Rate",
+  "@winRate": {
+    "type": "String"
+  },
+  "avgLatency": "Avg Latency",
+  "@avgLatency": {
+    "type": "String"
+  },
+  "ms": "ms",
+  "@ms": {
+    "description": "milliseconds abbreviation",
+    "type": "String"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "type": "String"
+  },
+  "errorLoadingData": "Error loading data",
+  "@errorLoadingData": {
+    "type": "String"
+  },
+  "stopEngineMessage": "This will stop the scalping engine. Open positions will remain active. Continue?",
+  "@stopEngineMessage": {
+    "type": "String"
+  },
+  "startEngineMessage": "This will start the scalping engine and begin trading. Continue?",
+  "@startEngineMessage": {
+    "type": "String"
+  },
+  "engineStartedSuccess": "Engine started successfully",
+  "@engineStartedSuccess": {
+    "type": "String"
+  },
+  "engineStoppedSuccess": "Engine stopped successfully",
+  "@engineStoppedSuccess": {
+    "type": "String"
+  },
+  "keyMetrics": "Key Metrics",
+  "@keyMetrics": {
+    "type": "String"
+  },
+  "today": "today",
+  "@today": {
+    "type": "String"
+  },
+  "aboveTarget": "Above target",
+  "@aboveTarget": {
+    "type": "String"
+  },
+  "belowTarget": "Below target",
+  "@belowTarget": {
+    "type": "String"
+  },
+  "openTrades": "Open trades",
+  "@openTrades": {
+    "type": "String"
+  },
+  "excellent": "Excellent",
+  "@excellent": {
+    "type": "String"
+  },
+  "good": "Good",
+  "@good": {
+    "type": "String"
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "type": "String"
+  },
+  "refreshData": "Refresh Data",
+  "@refreshData": {
+    "type": "String"
+  },
+  "lastUpdatedNow": "Last updated just now",
+  "@lastUpdatedNow": {
+    "type": "String"
+  },
+  "viewAnalytics": "View Analytics",
+  "@viewAnalytics": {
+    "type": "String"
+  },
+  "detailedCharts": "Detailed performance charts",
+  "@detailedCharts": {
+    "type": "String"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "type": "String"
+  },
+  "language": "Language",
+  "@language": {
+    "type": "String"
+  },
+  "selectLanguage": "Select Language",
+  "@selectLanguage": {
+    "type": "String"
+  },
+  "english": "English",
+  "@english": {
+    "type": "String"
+  },
+  "spanish": "Spanish",
+  "@spanish": {
+    "type": "String"
+  },
+  "openPositions": "Open Positions",
+  "@openPositions": {
+    "type": "String"
+  },
+  "history": "History",
+  "@history": {
+    "type": "String"
+  },
+  "closingPosition": "Closing position {positionId}...",
+  "@closingPosition": {
+    "type": "String",
+    "placeholders": {
+      "positionId": {
+        "type": "String"
+      }
+    }
+  },
+  "movingStopLossBreakeven": "Moving stop loss to breakeven...",
+  "@movingStopLossBreakeven": {
+    "type": "String"
+  },
+  "enablingTrailingStop": "Enabling trailing stop...",
+  "@enablingTrailingStop": {
+    "type": "String"
+  },
+  "noOpenPositions": "No Open Positions",
+  "@noOpenPositions": {
+    "type": "String"
+  },
+  "startEngineToTrade": "Start the engine to begin trading",
+  "@startEngineToTrade": {
+    "type": "String"
+  },
+  "closedPositionsHere": "Your closed positions will appear here",
+  "@closedPositionsHere": {
+    "type": "String"
+  },
+  "slTpUpdatedSuccess": "SL/TP updated successfully",
+  "@slTpUpdatedSuccess": {
+    "type": "String"
+  },
+  "editStopLossTakeProfit": "Edit Stop Loss & Take Profit",
+  "@editStopLossTakeProfit": {
+    "type": "String"
+  },
+  "stopLoss": "Stop Loss",
+  "@stopLoss": {
+    "type": "String"
+  },
+  "priceCloseIfLosing": "Price to close position if losing",
+  "@priceCloseIfLosing": {
+    "type": "String"
+  },
+  "pleaseEnterStopLoss": "Please enter stop loss price",
+  "@pleaseEnterStopLoss": {
+    "type": "String"
+  },
+  "pleaseEnterValidPrice": "Please enter a valid price",
+  "@pleaseEnterValidPrice": {
+    "type": "String"
+  },
+  "takeProfit": "Take Profit",
+  "@takeProfit": {
+    "type": "String"
+  },
+  "priceCloseIfWinning": "Price to close position if winning",
+  "@priceCloseIfWinning": {
+    "type": "String"
+  },
+  "pleaseEnterTakeProfit": "Please enter take profit price",
+  "@pleaseEnterTakeProfit": {
+    "type": "String"
+  },
+  "save": "Save",
+  "@save": {
+    "type": "String"
+  },
+  "killSwitchActivated": "Kill Switch ACTIVATED - All trading stopped",
+  "@killSwitchActivated": {
+    "type": "String"
+  },
+  "killSwitchDeactivated": "Kill Switch deactivated - Trading resumed",
+  "@killSwitchDeactivated": {
+    "type": "String"
+  },
+  "selectRiskMode": "Select Risk Mode",
+  "@selectRiskMode": {
+    "type": "String"
+  },
+  "conservative": "Conservative",
+  "@conservative": {
+    "type": "String"
+  },
+  "lowerRiskSmallerPositions": "Lower risk, smaller positions",
+  "@lowerRiskSmallerPositions": {
+    "type": "String"
+  },
+  "normal": "Normal",
+  "@normal": {
+    "type": "String"
+  },
+  "balancedRiskReward": "Balanced risk and reward",
+  "@balancedRiskReward": {
+    "type": "String"
+  },
+  "aggressive": "Aggressive",
+  "@aggressive": {
+    "type": "String"
+  },
+  "higherRiskLargerPositions": "Higher risk, larger positions",
+  "@higherRiskLargerPositions": {
+    "type": "String"
+  },
+  "riskModeChanged": "Risk mode changed to {mode}",
+  "@riskModeChanged": {
+    "type": "String",
+    "placeholders": {
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "riskLimitsUpdated": "Risk limits updated successfully",
+  "@riskLimitsUpdated": {
+    "type": "String"
+  },
+  "riskLimits": "Risk Limits",
+  "@riskLimits": {
+    "type": "String"
+  },
+  "editLimits": "Edit limits",
+  "@editLimits": {
+    "type": "String"
+  },
+  "maxPositionSize": "Max Position Size",
+  "@maxPositionSize": {
+    "type": "String"
+  },
+  "maxTotalExposure": "Max Total Exposure",
+  "@maxTotalExposure": {
+    "type": "String"
+  },
+  "stopLossPercent": "Stop Loss %",
+  "@stopLossPercent": {
+    "type": "String"
+  },
+  "takeProfitPercent": "Take Profit %",
+  "@takeProfitPercent": {
+    "type": "String"
+  },
+  "maxDailyLoss": "Max Daily Loss",
+  "@maxDailyLoss": {
+    "type": "String"
+  },
+  "riskMode": "Risk Mode",
+  "@riskMode": {
+    "type": "String"
+  },
+  "tapToChangeMode": "Tap to change mode",
+  "@tapToChangeMode": {
+    "type": "String"
+  },
+  "exposureBySymbol": "Exposure by Symbol",
+  "@exposureBySymbol": {
+    "type": "String"
+  },
+  "editRiskLimits": "Edit Risk Limits",
+  "@editRiskLimits": {
+    "type": "String"
+  },
+  "pleaseEnterValue": "Please enter a value",
+  "@pleaseEnterValue": {
+    "type": "String"
+  },
+  "pleaseEnterValidAmount": "Please enter a valid amount",
+  "@pleaseEnterValidAmount": {
+    "type": "String"
+  },
+  "pleaseEnterValidPercentage": "Please enter a valid percentage",
+  "@pleaseEnterValidPercentage": {
+    "type": "String"
+  },
+  "strategiesOverview": "Strategies Overview",
+  "@strategiesOverview": {
+    "type": "String"
+  },
+  "active": "Active",
+  "@active": {
+    "type": "String"
+  },
+  "avgWinRate": "Avg Win Rate",
+  "@avgWinRate": {
+    "type": "String"
+  },
+  "availableStrategies": "Available Strategies",
+  "@availableStrategies": {
+    "type": "String"
+  },
+  "strategyActivated": "Strategy \"{name}\" activated",
+  "@strategyActivated": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "strategyDeactivated": "Strategy \"{name}\" deactivated",
+  "@strategyDeactivated": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "performanceMetrics": "Performance Metrics",
+  "@performanceMetrics": {
+    "type": "String"
+  },
+  "weight": "Weight",
+  "@weight": {
+    "type": "String"
+  },
+  "avgWin": "Avg Win",
+  "@avgWin": {
+    "type": "String"
+  },
+  "avgLoss": "Avg Loss",
+  "@avgLoss": {
+    "type": "String"
+  },
+  "configuration": "Configuration",
+  "@configuration": {
+    "type": "String"
+  },
+  "strategyConfigUpdated": "Strategy configuration updated",
+  "@strategyConfigUpdated": {
+    "type": "String"
+  },
+  "configureStrategy": "Configure {name}",
+  "@configureStrategy": {
+    "type": "String",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "tradingDashboard": "Trading Dashboard",
+  "@tradingDashboard": {
+    "type": "String"
+  },
+  "positions": "Positions",
+  "@positions": {
+    "type": "String"
+  },
+  "strategies": "Strategies",
+  "@strategies": {
+    "type": "String"
+  },
+  "riskMonitor": "Risk Monitor",
+  "@riskMonitor": {
+    "type": "String"
+  },
+  "more": "More",
+  "@more": {
+    "type": "String"
+  },
+  "tradingMCP": "Trading MCP",
+  "@tradingMCP": {
+    "type": "String"
+  },
+  "home": "Home",
+  "@home": {
+    "type": "String"
+  },
+  "risk": "Risk",
+  "@risk": {
+    "type": "String"
+  },
+  "executionStats": "Execution Stats",
+  "@executionStats": {
+    "type": "String"
+  },
+  "viewLatencyPerformance": "View latency and performance",
+  "@viewLatencyPerformance": {
+    "type": "String"
+  },
+  "tradingPairs": "Trading Pairs",
+  "@tradingPairs": {
+    "type": "String"
+  },
+  "manageTradingPairs": "Manage trading pairs",
+  "@manageTradingPairs": {
+    "type": "String"
+  },
+  "alerts": "Alerts",
+  "@alerts": {
+    "type": "String"
+  },
+  "configureNotifications": "Configure notifications",
+  "@configureNotifications": {
+    "type": "String"
+  },
+  "appPreferences": "App preferences",
+  "@appPreferences": {
+    "type": "String"
+  },
+  "about": "About",
+  "@about": {
+    "type": "String"
+  },
+  "appInformation": "App information",
+  "@appInformation": {
+    "type": "String"
+  },
+  "appVersion": "1.0.0",
+  "@appVersion": {
+    "type": "String"
+  },
+  "appDescription": "Advanced cryptocurrency trading automation platform",
+  "@appDescription": {
+    "type": "String"
+  },
+  "backendVersion": "Backend: Trading MCP Server v1.0.0",
+  "@backendVersion": {
+    "type": "String"
+  },
+  "aiBotTitle": "AI Bot Control",
+  "@aiBotTitle": {
+    "description": "Title for AI Bot control panel",
+    "type": "String"
+  },
+  "aiBotStatus": "Bot Status",
+  "@aiBotStatus": {
+    "description": "Label for AI Bot status",
+    "type": "String"
+  },
+  "aiBotRunning": "Running",
+  "@aiBotRunning": {
+    "description": "AI Bot status: running",
+    "type": "String"
+  },
+  "aiBotPaused": "Paused",
+  "@aiBotPaused": {
+    "description": "AI Bot status: paused",
+    "type": "String"
+  },
+  "aiBotStopped": "Stopped",
+  "@aiBotStopped": {
+    "description": "AI Bot status: stopped",
+    "type": "String"
+  },
+  "aiBotStart": "Start Bot",
+  "@aiBotStart": {
+    "description": "Button to start AI Bot",
+    "type": "String"
+  },
+  "aiBotStop": "Stop Bot",
+  "@aiBotStop": {
+    "description": "Button to stop AI Bot",
+    "type": "String"
+  },
+  "aiBotPause": "Pause Bot",
+  "@aiBotPause": {
+    "description": "Button to pause AI Bot",
+    "type": "String"
+  },
+  "aiBotResume": "Resume Bot",
+  "@aiBotResume": {
+    "description": "Button to resume AI Bot",
+    "type": "String"
+  },
+  "aiBotEmergencyStop": "Emergency Stop",
+  "@aiBotEmergencyStop": {
+    "description": "Button for emergency stop of AI Bot",
+    "type": "String"
+  },
+  "aiBotAnalysisCount": "Analyses",
+  "@aiBotAnalysisCount": {
+    "description": "Number of analyses performed by AI Bot",
+    "type": "String"
+  },
+  "aiBotExecutionCount": "Executions",
+  "@aiBotExecutionCount": {
+    "description": "Number of executions performed by AI Bot",
+    "type": "String"
+  },
+  "aiBotErrorCount": "Errors",
+  "@aiBotErrorCount": {
+    "description": "Number of errors encountered by AI Bot",
+    "type": "String"
+  },
+  "aiBotOpenPositions": "Open Positions",
+  "@aiBotOpenPositions": {
+    "description": "Number of open positions for AI Bot",
+    "type": "String"
+  },
+  "aiBotDailyLoss": "Daily Loss",
+  "@aiBotDailyLoss": {
+    "description": "Daily loss for AI Bot",
+    "type": "String"
+  },
+  "aiBotDailyTrades": "Daily Trades",
+  "@aiBotDailyTrades": {
+    "description": "Number of daily trades for AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmStart": "Are you sure you want to start the AI Bot?",
+  "@aiBotConfirmStart": {
+    "description": "Confirmation message before starting AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmStop": "Are you sure you want to stop the AI Bot?",
+  "@aiBotConfirmStop": {
+    "description": "Confirmation message before stopping AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmEmergency": "Emergency stop will immediately halt all AI Bot operations. Continue?",
+  "@aiBotConfirmEmergency": {
+    "description": "Confirmation message before emergency stop",
+    "type": "String"
+  },
+  "aiBotStartedSuccess": "AI Bot started successfully",
+  "@aiBotStartedSuccess": {
+    "description": "Success message when AI Bot starts",
+    "type": "String"
+  },
+  "aiBotStoppedSuccess": "AI Bot stopped successfully",
+  "@aiBotStoppedSuccess": {
+    "description": "Success message when AI Bot stops",
+    "type": "String"
+  },
+  "aiBotConfig": "Bot Configuration",
+  "@aiBotConfig": {
+    "description": "AI Bot configuration section",
+    "type": "String"
+  },
+  "aiBotConfigTitle": "Configure AI Bot",
+  "@aiBotConfigTitle": {
+    "description": "Title for AI Bot configuration screen",
+    "type": "String"
+  },
+  "aiBotConfigSave": "Save Configuration",
+  "@aiBotConfigSave": {
+    "description": "Button to save AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotDryRun": "Dry Run Mode",
+  "@aiBotDryRun": {
+    "description": "AI Bot dry run mode (simulation)",
+    "type": "String"
+  },
+  "aiBotLiveMode": "Live Trading Mode",
+  "@aiBotLiveMode": {
+    "description": "AI Bot live trading mode",
+    "type": "String"
+  },
+  "aiBotAutoExecute": "Auto Execute",
+  "@aiBotAutoExecute": {
+    "description": "AI Bot auto execution toggle",
+    "type": "String"
+  },
+  "aiBotConfidenceThreshold": "Confidence Threshold",
+  "@aiBotConfidenceThreshold": {
+    "description": "Minimum confidence threshold for AI Bot",
+    "type": "String"
+  },
+  "aiBotTradeSize": "Trade Size",
+  "@aiBotTradeSize": {
+    "description": "Trade size for AI Bot",
+    "type": "String"
+  },
+  "aiBotLeverage": "Leverage",
+  "@aiBotLeverage": {
+    "description": "Leverage for AI Bot",
+    "type": "String"
+  },
+  "aiBotMaxDailyLoss": "Max Daily Loss",
+  "@aiBotMaxDailyLoss": {
+    "description": "Maximum daily loss limit for AI Bot",
+    "type": "String"
+  },
+  "aiBotMaxDailyTrades": "Max Daily Trades",
+  "@aiBotMaxDailyTrades": {
+    "description": "Maximum daily trades limit for AI Bot",
+    "type": "String"
+  },
+  "aiBotTradingPair": "Trading Pair",
+  "@aiBotTradingPair": {
+    "description": "Trading pair for AI Bot",
+    "type": "String"
+  },
+  "aiBotPresetConservative": "Conservative",
+  "@aiBotPresetConservative": {
+    "description": "Conservative preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotPresetIntermediate": "Intermediate",
+  "@aiBotPresetIntermediate": {
+    "description": "Intermediate preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotPresetAggressive": "Aggressive",
+  "@aiBotPresetAggressive": {
+    "description": "Aggressive preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotWarningLiveMode": "Warning: Live trading mode will execute real trades with real funds",
+  "@aiBotWarningLiveMode": {
+    "description": "Warning message for live trading mode",
+    "type": "String"
+  },
+  "aiBotConfigUpdated": "AI Bot configuration updated successfully",
+  "@aiBotConfigUpdated": {
+    "description": "Success message when AI Bot config is updated",
+    "type": "String"
+  },
+  "analysisTitle": "Market Analysis",
+  "@analysisTitle": {
+    "description": "Title for comprehensive analysis screen",
+    "type": "String"
+  },
+  "analysisRefresh": "Refresh Analysis",
+  "@analysisRefresh": {
+    "description": "Button to refresh market analysis",
+    "type": "String"
+  },
+  "analysisLoading": "Analyzing market data...",
+  "@analysisLoading": {
+    "description": "Loading message for market analysis",
+    "type": "String"
+  },
+  "analysisTechnical": "Technical Analysis",
+  "@analysisTechnical": {
+    "description": "Technical analysis section",
+    "type": "String"
+  },
+  "analysisMultiTimeframe": "Multi-Timeframe Analysis",
+  "@analysisMultiTimeframe": {
+    "description": "Multi-timeframe analysis section",
+    "type": "String"
+  },
+  "analysisRecommendation": "Trading Recommendation",
+  "@analysisRecommendation": {
+    "description": "Trading recommendation section",
+    "type": "String"
+  },
+  "analysisScenarios": "Scenarios",
+  "@analysisScenarios": {
+    "description": "Trading scenarios section",
+    "type": "String"
+  },
+  "analysisRisk": "Risk Analysis",
+  "@analysisRisk": {
+    "description": "Risk analysis section",
+    "type": "String"
+  },
+  "analysisOversold": "Oversold",
+  "@analysisOversold": {
+    "description": "Market condition: oversold",
+    "type": "String"
+  },
+  "analysisOverbought": "Overbought",
+  "@analysisOverbought": {
+    "description": "Market condition: overbought",
+    "type": "String"
+  },
+  "analysisNeutral": "Neutral",
+  "@analysisNeutral": {
+    "description": "Market condition: neutral",
+    "type": "String"
+  },
+  "analysisBullish": "Bullish",
+  "@analysisBullish": {
+    "description": "Market sentiment: bullish",
+    "type": "String"
+  },
+  "analysisBearish": "Bearish",
+  "@analysisBearish": {
+    "description": "Market sentiment: bearish",
+    "type": "String"
+  },
+  "analysisLowRisk": "Low Risk",
+  "@analysisLowRisk": {
+    "description": "Risk level: low",
+    "type": "String"
+  },
+  "analysisMediumRisk": "Medium Risk",
+  "@analysisMediumRisk": {
+    "description": "Risk level: medium",
+    "type": "String"
+  },
+  "analysisHighRisk": "High Risk",
+  "@analysisHighRisk": {
+    "description": "Risk level: high",
+    "type": "String"
+  },
+  "analysisConfidence": "Confidence",
+  "@analysisConfidence": {
+    "description": "Analysis confidence level",
+    "type": "String"
+  },
+  "analysisEntry": "Entry Price",
+  "@analysisEntry": {
+    "description": "Recommended entry price",
+    "type": "String"
+  },
+  "analysisStopLoss": "Stop Loss",
+  "@analysisStopLoss": {
+    "description": "Recommended stop loss price",
+    "type": "String"
+  },
+  "analysisTakeProfit": "Take Profit",
+  "@analysisTakeProfit": {
+    "description": "Recommended take profit price",
+    "type": "String"
+  },
+  "futuresPositions": "Futures Positions",
+  "@futuresPositions": {
+    "description": "Title for futures positions",
+    "type": "String"
+  },
+  "futuresClose": "Close Position",
+  "@futuresClose": {
+    "description": "Button to close a futures position",
+    "type": "String"
+  },
+  "futuresCloseAll": "Close All Positions",
+  "@futuresCloseAll": {
+    "description": "Button to close all futures positions",
+    "type": "String"
+  },
+  "futuresCloseConfirm": "Are you sure you want to close this position?",
+  "@futuresCloseConfirm": {
+    "description": "Confirmation message before closing futures position",
+    "type": "String"
+  },
+  "futuresClosedSuccess": "Position closed successfully",
+  "@futuresClosedSuccess": {
+    "description": "Success message when futures position is closed",
+    "type": "String"
+  },
+  "futuresSize": "Position Size",
+  "@futuresSize": {
+    "description": "Size of futures position",
+    "type": "String"
+  },
+  "futuresLeverage": "Leverage",
+  "@futuresLeverage": {
+    "description": "Leverage for futures position",
+    "type": "String"
+  },
+  "futuresMargin": "Margin",
+  "@futuresMargin": {
+    "description": "Margin for futures position",
+    "type": "String"
+  },
+  "futuresLiquidation": "Liquidation Price",
+  "@futuresLiquidation": {
+    "description": "Liquidation price for futures position",
+    "type": "String"
+  },
+  "futuresUnrealizedPnl": "Unrealized P&L",
+  "@futuresUnrealizedPnl": {
+    "description": "Unrealized profit and loss",
+    "type": "String"
+  },
+  "futuresRealizedPnl": "Realized P&L",
+  "@futuresRealizedPnl": {
+    "description": "Realized profit and loss",
+    "type": "String"
+  },
+  "futuresTotalPnl": "Total P&L",
+  "@futuresTotalPnl": {
+    "description": "Total profit and loss",
+    "type": "String"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Generic confirm button",
+    "type": "String"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error label",
+    "type": "String"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Generic success label",
+    "type": "String"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Generic refresh button",
+    "type": "String"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Generic back button",
+    "type": "String"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Generic close button",
+    "type": "String"
+  },
+  "multiTimeframeAnalysis": "Multi-Timeframe Analysis",
+  "@multiTimeframeAnalysis": {
+    "description": "Title for multi-timeframe analysis",
+    "type": "String"
+  },
+  "technicalAnalysisMultipleTimeframes": "Technical analysis across multiple timeframes",
+  "@technicalAnalysisMultipleTimeframes": {
+    "description": "Description for multi-timeframe analysis",
+    "type": "String"
+  },
+  "backtesting": "Backtesting",
+  "@backtesting": {
+    "description": "Title for backtesting feature",
+    "type": "String"
+  },
+  "testStrategiesWithHistoricalData": "Test strategies with historical data",
+  "@testStrategiesWithHistoricalData": {
+    "description": "Description for backtesting",
+    "type": "String"
+  },
+  "parameterOptimization": "Parameter Optimization",
+  "@parameterOptimization": {
+    "description": "Title for parameter optimization",
+    "type": "String"
+  },
+  "optimizeStrategyParameters": "Optimize strategy parameters",
+  "@optimizeStrategyParameters": {
+    "description": "Description for parameter optimization",
+    "type": "String"
+  },
+  "performanceCharts": "Performance Charts",
+  "@performanceCharts": {
+    "description": "Title for performance charts",
+    "type": "String"
+  },
+  "emergencyStopActivated": "Emergency Stop Activated",
+  "@emergencyStopActivated": {
+    "description": "Message when emergency stop is activated",
+    "type": "String"
+  },
+  "botResumedSuccess": "Bot resumed successfully",
+  "@botResumedSuccess": {
+    "description": "Success message when bot is resumed",
+    "type": "String"
+  },
+  "mode": "Mode",
+  "@mode": {
+    "description": "Label for mode setting",
+    "type": "String"
+  },
+  "botMetrics": "Bot Metrics",
+  "@botMetrics": {
+    "description": "Section title for bot metrics",
+    "type": "String"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for total count",
+    "type": "String"
+  },
+  "executed": "Executed",
+  "@executed": {
+    "description": "Label for executed items",
+    "type": "String"
+  },
+  "percentUsed": "% used",
+  "@percentUsed": {
+    "description": "Label for percentage used",
+    "type": "String"
+  },
+  "dailyLimits": "Daily Limits",
+  "@dailyLimits": {
+    "description": "Section title for daily limits",
+    "type": "String"
+  },
+  "consecutive": "consecutive",
+  "@consecutive": {
+    "description": "Label for consecutive count",
+    "type": "String"
+  },
+  "tradingMode": "Trading Mode",
+  "@tradingMode": {
+    "description": "Section title for trading mode",
+    "type": "String"
+  },
+  "simulationMode": "Simulation mode - no real trades",
+  "@simulationMode": {
+    "description": "Description for simulation/dry run mode",
+    "type": "String"
+  },
+  "autoExecuteDescription": "Automatically execute AI recommendations",
+  "@autoExecuteDescription": {
+    "description": "Description for auto execute toggle",
+    "type": "String"
+  },
+  "tradingParameters": "Trading Parameters",
+  "@tradingParameters": {
+    "description": "Section title for trading parameters",
+    "type": "String"
+  },
+  "minimumConfidenceDescription": "Minimum confidence required for trades",
+  "@minimumConfidenceDescription": {
+    "description": "Description for confidence threshold",
+    "type": "String"
+  },
+  "leverageDescription": "Trading leverage multiplier",
+  "@leverageDescription": {
+    "description": "Description for leverage setting",
+    "type": "String"
+  },
+  "required": "Required",
+  "@required": {
+    "description": "Validation message for required field",
+    "type": "String"
+  },
+  "mustBePositive": "Must be positive",
+  "@mustBePositive": {
+    "description": "Validation message for positive number",
+    "type": "String"
+  },
+  "safetyLimits": "Safety Limits",
+  "@safetyLimits": {
+    "description": "Section title for safety limits",
+    "type": "String"
+  },
+  "configurationPresets": "Configuration Presets",
+  "@configurationPresets": {
+    "description": "Section title for configuration presets",
+    "type": "String"
+  },
+  "high24h": "High 24h",
+  "@high24h": {
+    "description": "Label for 24-hour high price",
+    "type": "String"
+  },
+  "low24h": "Low 24h",
+  "@low24h": {
+    "description": "Label for 24-hour low price",
+    "type": "String"
+  },
+  "volume": "Volume",
+  "@volume": {
+    "description": "Label for trading volume",
+    "type": "String"
+  },
+  "trend": "Trend",
+  "@trend": {
+    "description": "Label for market trend",
+    "type": "String"
+  },
+  "aligned": "ALIGNED",
+  "@aligned": {
+    "description": "Label when timeframes are aligned",
+    "type": "String"
+  },
+  "notAligned": "NOT ALIGNED",
+  "@notAligned": {
+    "description": "Label when timeframes are not aligned",
+    "type": "String"
+  },
+  "reasoning": "Reasoning:",
+  "@reasoning": {
+    "description": "Label for reasoning section",
+    "type": "String"
+  },
+  "target": "Target",
+  "@target": {
+    "description": "Label for target price",
+    "type": "String"
+  },
+  "riskScore": "Risk Score:",
+  "@riskScore": {
+    "description": "Label for risk score",
+    "type": "String"
+  },
+  "volatility": "Volatility:",
+  "@volatility": {
+    "description": "Label for volatility",
+    "type": "String"
+  },
+  "riskFactors": "Risk Factors:",
+  "@riskFactors": {
+    "description": "Label for risk factors section",
+    "type": "String"
+  },
+  "appTitle": "Kuri Crypto",
+  "@appTitle": {
+    "description": "Application title",
+    "type": "String"
+  },
+  "startTrading": "Start Trading",
+  "@startTrading": {
+    "description": "Button to start trading",
+    "type": "String"
+  },
+  "activeStrategies": "Active Strategies",
+  "@activeStrategies": {
+    "description": "Title for active strategies section",
+    "type": "String"
+  },
+  "recentAlerts": "Recent Alerts",
+  "@recentAlerts": {
+    "description": "Title for recent alerts section",
+    "type": "String"
+  },
+  "entry": "Entry",
+  "@entry": {
+    "description": "Label for entry price/point",
+    "type": "String"
+  },
+  "current": "Current",
+  "@current": {
+    "description": "Label for current price/value",
+    "type": "String"
+  },
+  "long": "LONG",
+  "@long": {
+    "description": "Long position label",
+    "type": "String"
+  },
+  "short": "SHORT",
+  "@short": {
+    "description": "Short position label",
+    "type": "String"
+  },
+  "rsiScalping": "RSI Scalping",
+  "@rsiScalping": {
+    "description": "RSI Scalping strategy name",
+    "type": "String"
+  },
+  "macdScalping": "MACD Scalping",
+  "@macdScalping": {
+    "description": "MACD Scalping strategy name",
+    "type": "String"
+  },
+  "bollingerScalping": "Bollinger Scalping",
+  "@bollingerScalping": {
+    "description": "Bollinger Bands Scalping strategy name",
+    "type": "String"
+  },
+  "volumeScalping": "Volume Scalping",
+  "@volumeScalping": {
+    "description": "Volume Scalping strategy name",
+    "type": "String"
+  },
+  "paused": "Paused",
+  "@paused": {
+    "description": "Paused status label",
+    "type": "String"
+  },
+  "warning": "Warning",
+  "@warning": {
+    "description": "Warning label",
+    "type": "String"
+  },
+  "info": "Info",
+  "@info": {
+    "description": "Info label",
+    "type": "String"
+  },
+  "change24h": "24h Change",
+  "@change24h": {
+    "description": "24-hour price change label",
+    "type": "String"
+  },
+  "riskLevel": "Risk Level",
+  "@riskLevel": {
+    "description": "Risk level label",
+    "type": "String"
+  },
+  "low": "Low",
+  "@low": {
+    "description": "Low level/value label",
+    "type": "String"
+  },
+  "medium": "Medium",
+  "@medium": {
+    "description": "Medium level/value label",
+    "type": "String"
+  },
+  "high": "High",
+  "@high": {
+    "description": "High level/value label",
+    "type": "String"
+  },
+  "critical": "Critical",
+  "@critical": {
+    "description": "Critical level label",
+    "type": "String"
+  },
+  "acknowledge": "Acknowledge",
+  "@acknowledge": {
+    "type": "String"
+  },
+  "activate": "Activate",
+  "@activate": {
+    "type": "String"
+  },
+  "activateKillSwitch": "Activate Kill Switch",
+  "@activateKillSwitch": {
+    "type": "String"
+  },
+  "activeAlerts": "Active Alerts",
+  "@activeAlerts": {
+    "type": "String"
+  },
+  "add": "Add",
+  "@add": {
+    "type": "String"
+  },
+  "addAlertRule": "Add Alert Rule",
+  "@addAlertRule": {
+    "type": "String"
+  },
+  "addNewPair": "Add New Pair",
+  "@addNewPair": {
+    "type": "String"
+  },
+  "addPair": "Add Pair",
+  "@addPair": {
+    "type": "String"
+  },
+  "addParameter": "Add Parameter",
+  "@addParameter": {
+    "type": "String"
+  },
+  "addRule": "Add Rule",
+  "@addRule": {
+    "type": "String"
+  },
+  "alertAcknowledged": "Alert Acknowledged",
+  "@alertAcknowledged": {
+    "type": "String"
+  },
+  "alertConfiguration": "Alert Configuration",
+  "@alertConfiguration": {
+    "type": "String"
+  },
+  "alertConfigurationSaved": "Alert Configuration Saved",
+  "@alertConfigurationSaved": {
+    "type": "String"
+  },
+  "alertDismissed": "Alert Dismissed",
+  "@alertDismissed": {
+    "type": "String"
+  },
+  "alertHistoryWillAppearHere": "Alert history will appear here",
+  "@alertHistoryWillAppearHere": {
+    "type": "String"
+  },
+  "alertRules": "Alert Rules",
+  "@alertRules": {
+    "type": "String"
+  },
+  "alertType": "Alert Type",
+  "@alertType": {
+    "type": "String"
+  },
+  "all": "All",
+  "@all": {
+    "type": "String"
+  },
+  "allClear": "All Clear",
+  "@allClear": {
+    "type": "String"
+  },
+  "allPositionsWillClose": "All positions will be closed",
+  "@allPositionsWillClose": {
+    "type": "String"
+  },
+  "allResults": "All Results",
+  "@allResults": {
+    "type": "String"
+  },
+  "allStrategies": "All Strategies",
+  "@allStrategies": {
+    "type": "String"
+  },
+  "allSymbols": "All Symbols",
+  "@allSymbols": {
+    "type": "String"
+  },
+  "allTradingWillStop": "All trading will stop",
+  "@allTradingWillStop": {
+    "type": "String"
+  },
+  "apply": "Apply",
+  "@apply": {
+    "type": "String"
+  },
+  "applyParameters": "Apply Parameters",
+  "@applyParameters": {
+    "type": "String"
+  },
+  "applyParametersConfirmation": "Are you sure you want to apply these parameters?",
+  "@applyParametersConfirmation": {
+    "type": "String"
+  },
+  "applyTheseParameters": "Apply These Parameters",
+  "@applyTheseParameters": {
+    "type": "String"
+  },
+  "areYouSure": "Are you sure?",
+  "@areYouSure": {
+    "type": "String"
+  },
+  "average": "Average",
+  "@average": {
+    "type": "String"
+  },
+  "avgExecutionTime": "Avg Execution Time",
+  "@avgExecutionTime": {
+    "type": "String"
+  },
+  "avgSlippage": "Avg Slippage",
+  "@avgSlippage": {
+    "type": "String"
+  },
+  "avgWaitTime": "Avg Wait Time",
+  "@avgWaitTime": {
+    "type": "String"
+  },
+  "backToForm": "Back to Form",
+  "@backToForm": {
+    "type": "String"
+  },
+  "backtestConfiguration": "Backtest Configuration",
+  "@backtestConfiguration": {
+    "type": "String"
+  },
+  "backtestFailed": "Backtest Failed",
+  "@backtestFailed": {
+    "type": "String"
+  },
+  "backtestRunning": "Backtest Running",
+  "@backtestRunning": {
+    "type": "String"
+  },
+  "backtestStarted": "Backtest Started",
+  "@backtestStarted": {
+    "type": "String"
+  },
+  "basisPoints": "Basis Points",
+  "@basisPoints": {
+    "type": "String"
+  },
+  "bayesianOptimization": "Bayesian Optimization",
+  "@bayesianOptimization": {
+    "type": "String"
+  },
+  "bayesianOptimizationDesc": "Intelligent search using Bayesian methods",
+  "@bayesianOptimizationDesc": {
+    "type": "String"
+  },
+  "bestParameters": "Best Parameters",
+  "@bestParameters": {
+    "type": "String"
+  },
+  "bestScore": "Best Score",
+  "@bestScore": {
+    "type": "String"
+  },
+  "cancelOptimization": "Cancel Optimization",
+  "@cancelOptimization": {
+    "type": "String"
+  },
+  "cancelOptimizationConfirmation": "Are you sure you want to cancel this optimization?",
+  "@cancelOptimizationConfirmation": {
+    "type": "String"
+  },
+  "cancelled": "Cancelled",
+  "@cancelled": {
+    "type": "String"
+  },
+  "cannotRemovePair": "Cannot remove pair",
+  "@cannotRemovePair": {
+    "type": "String"
+  },
+  "cannotRemovePairWithPositions": "Cannot remove pair with open positions",
+  "@cannotRemovePairWithPositions": {
+    "type": "String"
+  },
+  "combinations": "combinations",
+  "@combinations": {
+    "type": "String"
+  },
+  "completed": "Completed",
+  "@completed": {
+    "type": "String"
+  },
+  "confidence": "Confidence",
+  "@confidence": {
+    "type": "String"
+  },
+  "configureAlertConditions": "Configure Alert Conditions",
+  "@configureAlertConditions": {
+    "type": "String"
+  },
+  "confirmDeactivation": "Confirm Deactivation",
+  "@confirmDeactivation": {
+    "type": "String"
+  },
+  "confirmDeleteRule": "Delete Rule",
+  "@confirmDeleteRule": {
+    "type": "String"
+  },
+  "confirmResumeTrading": "Resume Trading",
+  "@confirmResumeTrading": {
+    "type": "String"
+  },
+  "consensusSignal": "Consensus Signal",
+  "@consensusSignal": {
+    "type": "String"
+  },
+  "continue_": "Continue",
+  "@continue_": {
+    "type": "String"
+  },
+  "cooldownMinutes": "Cooldown (minutes)",
+  "@cooldownMinutes": {
+    "type": "String"
+  },
+  "dateRange": "Date Range",
+  "@dateRange": {
+    "type": "String"
+  },
+  "deactivateKillSwitch": "Deactivate Kill Switch",
+  "@deactivateKillSwitch": {
+    "type": "String"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "type": "String"
+  },
+  "deleteOptimization": "Delete Optimization",
+  "@deleteOptimization": {
+    "type": "String"
+  },
+  "deleteOptimizationConfirmation": "Are you sure you want to delete this optimization?",
+  "@deleteOptimizationConfirmation": {
+    "type": "String"
+  },
+  "deleteRule": "Delete Rule",
+  "@deleteRule": {
+    "type": "String"
+  },
+  "dismiss": "Dismiss",
+  "@dismiss": {
+    "type": "String"
+  },
+  "drawdownChart": "Drawdown Chart",
+  "@drawdownChart": {
+    "type": "String"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "type": "String"
+  },
+  "edit": "Edit",
+  "@edit": {
+    "type": "String"
+  },
+  "editAlertRule": "Edit Alert Rule",
+  "@editAlertRule": {
+    "type": "String"
+  },
+  "editParameter": "Edit Parameter",
+  "@editParameter": {
+    "type": "String"
+  },
+  "enableAlerts": "Enable Alerts",
+  "@enableAlerts": {
+    "type": "String"
+  },
+  "endDate": "End Date",
+  "@endDate": {
+    "type": "String"
+  },
+  "enterAmount": "Enter Amount",
+  "@enterAmount": {
+    "type": "String"
+  },
+  "entryPrice": "Entry Price",
+  "@entryPrice": {
+    "type": "String"
+  },
+  "entryTime": "Entry Time",
+  "@entryTime": {
+    "type": "String"
+  },
+  "equityCurve": "Equity Curve",
+  "@equityCurve": {
+    "type": "String"
+  },
+  "errorLoadingAlerts": "Error loading alerts",
+  "@errorLoadingAlerts": {
+    "type": "String"
+  },
+  "errorLoadingConfiguration": "Error loading configuration",
+  "@errorLoadingConfiguration": {
+    "type": "String"
+  },
+  "errorOccurred": "An error occurred",
+  "@errorOccurred": {
+    "type": "String"
+  },
+  "errorRate": "Error Rate",
+  "@errorRate": {
+    "type": "String"
+  },
+  "estimatedCombinations": "Estimated Combinations",
+  "@estimatedCombinations": {
+    "type": "String"
+  },
+  "estimatedTimeRemaining": "Estimated Time Remaining",
+  "@estimatedTimeRemaining": {
+    "type": "String"
+  },
+  "exchange": "Exchange",
+  "@exchange": {
+    "type": "String"
+  },
+  "executionPerformance": "Execution Performance",
+  "@executionPerformance": {
+    "type": "String"
+  },
+  "executionQueue": "Execution Queue",
+  "@executionQueue": {
+    "type": "String"
+  },
+  "executionsTracked": "Executions Tracked",
+  "@executionsTracked": {
+    "type": "String"
+  },
+  "exitPrice": "Exit Price",
+  "@exitPrice": {
+    "type": "String"
+  },
+  "exitTime": "Exit Time",
+  "@exitTime": {
+    "type": "String"
+  },
+  "exposure": "Exposure",
+  "@exposure": {
+    "type": "String"
+  },
+  "failed": "Failed",
+  "@failed": {
+    "type": "String"
+  },
+  "failedExecutions": "Failed Executions",
+  "@failedExecutions": {
+    "type": "String"
+  },
+  "fillRate": "Fill Rate",
+  "@fillRate": {
+    "type": "String"
+  },
+  "filled": "Filled",
+  "@filled": {
+    "type": "String"
+  },
+  "filterByStatus": "Filter by Status",
+  "@filterByStatus": {
+    "type": "String"
+  },
+  "filterByStrategy": "Filter by Strategy",
+  "@filterByStrategy": {
+    "type": "String"
+  },
+  "filterBySymbol": "Filter by Symbol",
+  "@filterBySymbol": {
+    "type": "String"
+  },
+  "goBack": "Go Back",
+  "@goBack": {
+    "type": "String"
+  },
+  "gridSearch": "Grid Search",
+  "@gridSearch": {
+    "type": "String"
+  },
+  "gridSearchDesc": "Exhaustive search through parameter grid",
+  "@gridSearchDesc": {
+    "type": "String"
+  },
+  "inAppNotifications": "In-App Notifications",
+  "@inAppNotifications": {
+    "type": "String"
+  },
+  "inactive": "Inactive",
+  "@inactive": {
+    "type": "String"
+  },
+  "initialCapital": "Initial Capital",
+  "@initialCapital": {
+    "type": "String"
+  },
+  "killSwitchActive": "Kill Switch Active",
+  "@killSwitchActive": {
+    "type": "String"
+  },
+  "killSwitchWarning": "Kill Switch Warning",
+  "@killSwitchWarning": {
+    "type": "String"
+  },
+  "lastPrice": "Last Price",
+  "@lastPrice": {
+    "type": "String"
+  },
+  "latency": "Latency",
+  "@latency": {
+    "type": "String"
+  },
+  "latencyChart": "Latency Chart",
+  "@latencyChart": {
+    "type": "String"
+  },
+  "latencyStatistics": "Latency Statistics",
+  "@latencyStatistics": {
+    "type": "String"
+  },
+  "loadingResults": "Loading results...",
+  "@loadingResults": {
+    "type": "String"
+  },
+  "manageAlertRules": "Manage Alert Rules",
+  "@manageAlertRules": {
+    "type": "String"
+  },
+  "max": "Max",
+  "@max": {
+    "type": "String"
+  },
+  "maxConsecutiveLosses": "Max Consecutive Losses",
+  "@maxConsecutiveLosses": {
+    "type": "String"
+  },
+  "maxDrawdown": "Max Drawdown",
+  "@maxDrawdown": {
+    "type": "String"
+  },
+  "maxIterations": "Max Iterations",
+  "@maxIterations": {
+    "type": "String"
+  },
+  "maximum": "Maximum",
+  "@maximum": {
+    "type": "String"
+  },
+  "maximumValue": "Maximum Value",
+  "@maximumValue": {
+    "type": "String"
+  },
+  "median": "Median",
+  "@median": {
+    "type": "String"
+  },
+  "min": "Min",
+  "@min": {
+    "type": "String"
+  },
+  "minimum": "Minimum",
+  "@minimum": {
+    "type": "String"
+  },
+  "minimumValue": "Minimum Value",
+  "@minimumValue": {
+    "type": "String"
+  },
+  "newBacktest": "New Backtest",
+  "@newBacktest": {
+    "type": "String"
+  },
+  "newOptimization": "New Optimization",
+  "@newOptimization": {
+    "type": "String"
+  },
+  "no": "No",
+  "@no": {
+    "type": "String"
+  },
+  "noActiveAlerts": "No Active Alerts",
+  "@noActiveAlerts": {
+    "type": "String"
+  },
+  "noAlertRulesYet": "No alert rules yet",
+  "@noAlertRulesYet": {
+    "type": "String"
+  },
+  "noAlertsYet": "No alerts yet",
+  "@noAlertsYet": {
+    "type": "String"
+  },
+  "noBacktestsYet": "No backtests yet",
+  "@noBacktestsYet": {
+    "type": "String"
+  },
+  "noExecutionsYet": "No executions yet",
+  "@noExecutionsYet": {
+    "type": "String"
+  },
+  "noOptimizationsYet": "No optimizations yet",
+  "@noOptimizationsYet": {
+    "type": "String"
+  },
+  "noPairsFound": "No pairs found",
+  "@noPairsFound": {
+    "type": "String"
+  },
+  "noParametersConfigured": "No parameters configured",
+  "@noParametersConfigured": {
+    "type": "String"
+  },
+  "noTradingPairs": "No Trading Pairs",
+  "@noTradingPairs": {
+    "type": "String"
+  },
+  "notAvailable": "Not Available",
+  "@notAvailable": {
+    "type": "String"
+  },
+  "notificationSettings": "Notification Settings",
+  "@notificationSettings": {
+    "type": "String"
+  },
+  "objective": "Objective",
+  "@objective": {
+    "type": "String"
+  },
+  "objectiveToOptimize": "Objective to Optimize",
+  "@objectiveToOptimize": {
+    "type": "String"
+  },
+  "ofLabel": "of",
+  "@ofLabel": {
+    "type": "String"
+  },
+  "ok": "OK",
+  "@ok": {
+    "type": "String"
+  },
+  "optimizationCancelled": "Optimization Cancelled",
+  "@optimizationCancelled": {
+    "type": "String"
+  },
+  "optimizationCancelledSuccessfully": "Optimization cancelled successfully",
+  "@optimizationCancelledSuccessfully": {
+    "type": "String"
+  },
+  "optimizationConfiguration": "Optimization Configuration",
+  "@optimizationConfiguration": {
+    "type": "String"
+  },
+  "optimizationDeletedSuccessfully": "Optimization deleted successfully",
+  "@optimizationDeletedSuccessfully": {
+    "type": "String"
+  },
+  "optimizationFailed": "Optimization Failed",
+  "@optimizationFailed": {
+    "type": "String"
+  },
+  "optimizationMethod": "Optimization Method",
+  "@optimizationMethod": {
+    "type": "String"
+  },
+  "optimizationResults": "Optimization Results",
+  "@optimizationResults": {
+    "type": "String"
+  },
+  "optimizationRunning": "Optimization Running",
+  "@optimizationRunning": {
+    "type": "String"
+  },
+  "optimizationStarted": "Optimization Started",
+  "@optimizationStarted": {
+    "type": "String"
+  },
+  "optimizationSummary": "Optimization Summary",
+  "@optimizationSummary": {
+    "type": "String"
+  },
+  "orderId": "Order ID",
+  "@orderId": {
+    "type": "String"
+  },
+  "orderType": "Order Type",
+  "@orderType": {
+    "type": "String"
+  },
+  "pairAddedSuccess": "Pair {symbol} added successfully",
+  "@pairAddedSuccess": {
+    "type": "String"
+  },
+  "pairRemovedSuccess": "Pair {symbol} removed successfully",
+  "@pairRemovedSuccess": {
+    "type": "String"
+  },
+  "parameterName": "Parameter Name",
+  "@parameterName": {
+    "type": "String"
+  },
+  "parameterRanges": "Parameter Ranges",
+  "@parameterRanges": {
+    "type": "String"
+  },
+  "parameters": "Parameters",
+  "@parameters": {
+    "type": "String"
+  },
+  "parametersAppliedSuccessfully": "Parameters applied successfully",
+  "@parametersAppliedSuccessfully": {
+    "type": "String"
+  },
+  "partial": "Partial",
+  "@partial": {
+    "type": "String"
+  },
+  "percentile95": "95th Percentile",
+  "@percentile95": {
+    "type": "String"
+  },
+  "percentile99": "99th Percentile",
+  "@percentile99": {
+    "type": "String"
+  },
+  "performance": "Performance",
+  "@performance": {
+    "type": "String"
+  },
+  "period30d": "30 Days",
+  "@period30d": {
+    "type": "String"
+  },
+  "period7d": "7 Days",
+  "@period7d": {
+    "type": "String"
+  },
+  "period90d": "90 Days",
+  "@period90d": {
+    "type": "String"
+  },
+  "periodAll": "All Time",
+  "@periodAll": {
+    "type": "String"
+  },
+  "pleaseEnterRuleName": "Please enter rule name",
+  "@pleaseEnterRuleName": {
+    "type": "String"
+  },
+  "pleaseEnterTelegramChatId": "Please enter Telegram Chat ID",
+  "@pleaseEnterTelegramChatId": {
+    "type": "String"
+  },
+  "pleaseEnterTelegramToken": "Please enter Telegram Bot Token",
+  "@pleaseEnterTelegramToken": {
+    "type": "String"
+  },
+  "pleaseEnterValidNumber": "Please enter a valid number",
+  "@pleaseEnterValidNumber": {
+    "type": "String"
+  },
+  "pleaseFixConfigurationErrors": "Please fix configuration errors",
+  "@pleaseFixConfigurationErrors": {
+    "type": "String"
+  },
+  "pleaseSelectExchange": "Please select an exchange",
+  "@pleaseSelectExchange": {
+    "type": "String"
+  },
+  "pnl": "P&L",
+  "@pnl": {
+    "type": "String"
+  },
+  "pnlChart": "P&L Chart",
+  "@pnlChart": {
+    "type": "String"
+  },
+  "preventDuplicateAlerts": "Prevent Duplicate Alerts",
+  "@preventDuplicateAlerts": {
+    "type": "String"
+  },
+  "price": "Price",
+  "@price": {
+    "type": "String"
+  },
+  "profitFactor": "Profit Factor",
+  "@profitFactor": {
+    "type": "String"
+  },
+  "pushNotifications": "Push Notifications",
+  "@pushNotifications": {
+    "type": "String"
+  },
+  "queue": "Queue",
+  "@queue": {
+    "type": "String"
+  },
+  "queueEmpty": "Queue Empty",
+  "@queueEmpty": {
+    "type": "String"
+  },
+  "queueLength": "Queue Length",
+  "@queueLength": {
+    "type": "String"
+  },
+  "queueStatus": "Queue Status",
+  "@queueStatus": {
+    "type": "String"
+  },
+  "randomSearch": "Random Search",
+  "@randomSearch": {
+    "type": "String"
+  },
+  "randomSearchDesc": "Random search through parameter space",
+  "@randomSearchDesc": {
+    "type": "String"
+  },
+  "rank": "Rank",
+  "@rank": {
+    "type": "String"
+  },
+  "refreshStats": "Refresh Stats",
+  "@refreshStats": {
+    "type": "String"
+  },
+  "rejected": "Rejected",
+  "@rejected": {
+    "type": "String"
+  },
+  "remove": "Remove",
+  "@remove": {
+    "type": "String"
+  },
+  "removePair": "Remove Pair",
+  "@removePair": {
+    "type": "String"
+  },
+  "removePairConfirmation": "Are you sure you want to remove this pair?",
+  "@removePairConfirmation": {
+    "type": "String"
+  },
+  "requiresManualReactivation": "Requires Manual Reactivation",
+  "@requiresManualReactivation": {
+    "type": "String"
+  },
+  "results": "Results",
+  "@results": {
+    "type": "String"
+  },
+  "resume": "Resume",
+  "@resume": {
+    "type": "String"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "type": "String"
+  },
+  "ruleAdded": "Rule Added",
+  "@ruleAdded": {
+    "type": "String"
+  },
+  "ruleDeleted": "Rule Deleted",
+  "@ruleDeleted": {
+    "type": "String"
+  },
+  "ruleName": "Rule Name",
+  "@ruleName": {
+    "type": "String"
+  },
+  "ruleUpdated": "Rule Updated",
+  "@ruleUpdated": {
+    "type": "String"
+  },
+  "runBacktest": "Run Backtest",
+  "@runBacktest": {
+    "type": "String"
+  },
+  "runOptimization": "Run Optimization",
+  "@runOptimization": {
+    "type": "String"
+  },
+  "score": "Score",
+  "@score": {
+    "type": "String"
+  },
+  "scoreDistribution": "Score Distribution",
+  "@scoreDistribution": {
+    "type": "String"
+  },
+  "searchPairs": "Search Pairs",
+  "@searchPairs": {
+    "type": "String"
+  },
+  "selectSymbolToAnalyze": "Select Symbol to Analyze",
+  "@selectSymbolToAnalyze": {
+    "type": "String"
+  },
+  "selectedPair": "Selected Pair",
+  "@selectedPair": {
+    "type": "String"
+  },
+  "sendTestAlert": "Send Test Alert",
+  "@sendTestAlert": {
+    "type": "String"
+  },
+  "severity": "Severity",
+  "@severity": {
+    "type": "String"
+  },
+  "sharpeRatio": "Sharpe Ratio",
+  "@sharpeRatio": {
+    "type": "String"
+  },
+  "sharpeRatioDesc": "Risk-adjusted return metric",
+  "@sharpeRatioDesc": {
+    "type": "String"
+  },
+  "showing": "Showing",
+  "@showing": {
+    "type": "String"
+  },
+  "side": "Side",
+  "@side": {
+    "type": "String"
+  },
+  "signal": "Signal",
+  "@signal": {
+    "type": "String"
+  },
+  "size": "Size",
+  "@size": {
+    "type": "String"
+  },
+  "slippageBySymbol": "Slippage by Symbol",
+  "@slippageBySymbol": {
+    "type": "String"
+  },
+  "sortBy": "Sort By",
+  "@sortBy": {
+    "type": "String"
+  },
+  "startDate": "Start Date",
+  "@startDate": {
+    "type": "String"
+  },
+  "started": "Started",
+  "@started": {
+    "type": "String"
+  },
+  "status": "Status",
+  "@status": {
+    "type": "String"
+  },
+  "step": "Step",
+  "@step": {
+    "type": "String"
+  },
+  "stepSize": "Step Size",
+  "@stepSize": {
+    "type": "String"
+  },
+  "strategy": "Strategy",
+  "@strategy": {
+    "type": "String"
+  },
+  "successfulExecutions": "Successful Executions",
+  "@successfulExecutions": {
+    "type": "String"
+  },
+  "symbol": "Symbol",
+  "@symbol": {
+    "type": "String"
+  },
+  "tapAddPairToStart": "Tap '+ Add Pair' to start",
+  "@tapAddPairToStart": {
+    "type": "String"
+  },
+  "tapAddToCreateRule": "Tap '+ Add' to create a rule",
+  "@tapAddToCreateRule": {
+    "type": "String"
+  },
+  "technicalIndicators": "Technical Indicators",
+  "@technicalIndicators": {
+    "type": "String"
+  },
+  "telegramBotToken": "Telegram Bot Token",
+  "@telegramBotToken": {
+    "type": "String"
+  },
+  "telegramChatId": "Telegram Chat ID",
+  "@telegramChatId": {
+    "type": "String"
+  },
+  "telegramConfiguration": "Telegram Configuration",
+  "@telegramConfiguration": {
+    "type": "String"
+  },
+  "telegramSetupInstructions": "Telegram Setup Instructions",
+  "@telegramSetupInstructions": {
+    "type": "String"
+  },
+  "testAlertSent": "Test Alert Sent",
+  "@testAlertSent": {
+    "type": "String"
+  },
+  "testAlertSystem": "Test Alert System",
+  "@testAlertSystem": {
+    "type": "String"
+  },
+  "thisWillResumeTrading": "This will resume trading. Continue?",
+  "@thisWillResumeTrading": {
+    "type": "String"
+  },
+  "threshold": "Threshold",
+  "@threshold": {
+    "type": "String"
+  },
+  "time": "Time",
+  "@time": {
+    "type": "String"
+  },
+  "timeInQueue": "Time in Queue",
+  "@timeInQueue": {
+    "type": "String"
+  },
+  "toggleAlertSystem": "Toggle Alert System",
+  "@toggleAlertSystem": {
+    "type": "String"
+  },
+  "totalCombinations": "Total Combinations",
+  "@totalCombinations": {
+    "type": "String"
+  },
+  "totalPnlDesc": "Total Profit & Loss",
+  "@totalPnlDesc": {
+    "type": "String"
+  },
+  "tradeHistory": "Trade History",
+  "@tradeHistory": {
+    "type": "String"
+  },
+  "trades": "Trades",
+  "@trades": {
+    "type": "String"
+  },
+  "tradingDisabled": "Trading Disabled",
+  "@tradingDisabled": {
+    "type": "String"
+  },
+  "tradingSignal": "Trading Signal",
+  "@tradingSignal": {
+    "type": "String"
+  },
+  "trigger": "Trigger",
+  "@trigger": {
+    "type": "String"
+  },
+  "type": "Type",
+  "@type": {
+    "type": "String"
+  },
+  "value": "Value",
+  "@value": {
+    "type": "String"
+  },
+  "volume24h": "24h Volume",
+  "@volume24h": {
+    "type": "String"
+  },
+  "winRateChart": "Win Rate Chart",
+  "@winRateChart": {
+    "type": "String"
+  },
+  "winRateDesc": "Percentage of winning trades",
+  "@winRateDesc": {
+    "type": "String"
+  },
+  "yes": "Yes",
+  "@yes": {
+    "type": "String"
+  }
+}
