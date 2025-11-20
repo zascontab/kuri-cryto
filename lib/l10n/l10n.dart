@@ -566,6 +566,121 @@ abstract class L10n {
   String get cooldownMinutes;
   String get preventDuplicateAlerts;
   String get testAlertSent;
+
+  // AI Bot Screen
+  String get aiBotTitle;
+  String get aiBotStatus;
+  String get aiBotRunning;
+  String get aiBotPaused;
+  String get aiBotStopped;
+  String get aiBotEmergencyStop;
+  String get aiBotAnalysisCount;
+  String get aiBotExecutionCount;
+  String get aiBotErrorCount;
+  String get aiBotOpenPositions;
+  String get aiBotDailyLoss;
+  String get aiBotDailyTrades;
+  String get aiBotStart;
+  String get aiBotStop;
+  String get aiBotPause;
+  String get aiBotResume;
+  String get aiBotConfirmStart;
+  String get aiBotConfirmStop;
+  String get aiBotConfirmEmergency;
+  String get aiBotStartedSuccess;
+  String get aiBotStoppedSuccess;
+  String get aiBotConfig;
+  String get aiBotConfigTitle;
+  String get aiBotConfigSave;
+  String get aiBotDryRun;
+  String get aiBotLiveMode;
+  String get aiBotAutoExecute;
+  String get aiBotConfidenceThreshold;
+  String get aiBotTradeSize;
+  String get aiBotLeverage;
+  String get aiBotMaxDailyLoss;
+  String get aiBotMaxDailyTrades;
+  String get aiBotTradingPair;
+  String get aiBotPresetConservative;
+  String get aiBotPresetIntermediate;
+  String get aiBotPresetAggressive;
+  String get aiBotWarningLiveMode;
+  String get aiBotConfigUpdated;
+
+  // Analysis Screen
+  String get analysisTitle;
+  String get analysisRefresh;
+  String get analysisLoading;
+  String get analysisTechnical;
+  String get analysisMultiTimeframe;
+  String get analysisRecommendation;
+  String get analysisScenarios;
+  String get analysisRisk;
+  String get analysisOversold;
+  String get analysisOverbought;
+  String get analysisNeutral;
+  String get analysisBullish;
+  String get analysisBearish;
+  String get analysisLowRisk;
+  String get analysisMediumRisk;
+  String get analysisHighRisk;
+  String get analysisConfidence;
+  String get analysisEntry;
+  String get analysisStopLoss;
+  String get analysisTakeProfit;
+
+  // Futures
+  String get futuresPositions;
+  String get futuresClose;
+  String get futuresCloseAll;
+  String get futuresCloseConfirm;
+  String get futuresClosedSuccess;
+  String get futuresSize;
+  String get futuresLeverage;
+  String get futuresMargin;
+  String get futuresLiquidation;
+  String get futuresUnrealizedPnl;
+  String get futuresRealizedPnl;
+  String get futuresTotalPnl;
+
+  // General
+  String get confirm;
+  String get success;
+  String get refresh;
+  String get back;
+  String get close;
+
+  // Additional
+  String get emergencyStopActivated;
+  String get botResumedSuccess;
+  String get mode;
+  String get botMetrics;
+  String get total;
+  String get executed;
+  String get percentUsed;
+  String get dailyLimits;
+  String get consecutive;
+  String get tradingMode;
+  String get simulationMode;
+  String get autoExecuteDescription;
+  String get tradingParameters;
+  String get minimumConfidenceDescription;
+  String get leverageDescription;
+  String get required;
+  String get mustBePositive;
+  String get safetyLimits;
+  String get configurationPresets;
+  String get high24h;
+  String get low24h;
+  String get volume;
+  String get trend;
+  String get aligned;
+  String get notAligned;
+  String get reasoning;
+  String get target;
+  String get riskScore;
+  String get volatility;
+  String get riskFactors;
 }
 
 class _L10nDelegate extends LocalizationsDelegate<L10n> {

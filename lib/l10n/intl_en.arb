@@ -510,5 +510,570 @@
   "backendVersion": "Backend: Trading MCP Server v1.0.0",
   "@backendVersion": {
     "type": "String"
+  },
+  "aiBotTitle": "AI Bot Control",
+  "@aiBotTitle": {
+    "description": "Title for AI Bot control panel",
+    "type": "String"
+  },
+  "aiBotStatus": "Bot Status",
+  "@aiBotStatus": {
+    "description": "Label for AI Bot status",
+    "type": "String"
+  },
+  "aiBotRunning": "Running",
+  "@aiBotRunning": {
+    "description": "AI Bot status: running",
+    "type": "String"
+  },
+  "aiBotPaused": "Paused",
+  "@aiBotPaused": {
+    "description": "AI Bot status: paused",
+    "type": "String"
+  },
+  "aiBotStopped": "Stopped",
+  "@aiBotStopped": {
+    "description": "AI Bot status: stopped",
+    "type": "String"
+  },
+  "aiBotStart": "Start Bot",
+  "@aiBotStart": {
+    "description": "Button to start AI Bot",
+    "type": "String"
+  },
+  "aiBotStop": "Stop Bot",
+  "@aiBotStop": {
+    "description": "Button to stop AI Bot",
+    "type": "String"
+  },
+  "aiBotPause": "Pause Bot",
+  "@aiBotPause": {
+    "description": "Button to pause AI Bot",
+    "type": "String"
+  },
+  "aiBotResume": "Resume Bot",
+  "@aiBotResume": {
+    "description": "Button to resume AI Bot",
+    "type": "String"
+  },
+  "aiBotEmergencyStop": "Emergency Stop",
+  "@aiBotEmergencyStop": {
+    "description": "Button for emergency stop of AI Bot",
+    "type": "String"
+  },
+  "aiBotAnalysisCount": "Analyses",
+  "@aiBotAnalysisCount": {
+    "description": "Number of analyses performed by AI Bot",
+    "type": "String"
+  },
+  "aiBotExecutionCount": "Executions",
+  "@aiBotExecutionCount": {
+    "description": "Number of executions performed by AI Bot",
+    "type": "String"
+  },
+  "aiBotErrorCount": "Errors",
+  "@aiBotErrorCount": {
+    "description": "Number of errors encountered by AI Bot",
+    "type": "String"
+  },
+  "aiBotOpenPositions": "Open Positions",
+  "@aiBotOpenPositions": {
+    "description": "Number of open positions for AI Bot",
+    "type": "String"
+  },
+  "aiBotDailyLoss": "Daily Loss",
+  "@aiBotDailyLoss": {
+    "description": "Daily loss for AI Bot",
+    "type": "String"
+  },
+  "aiBotDailyTrades": "Daily Trades",
+  "@aiBotDailyTrades": {
+    "description": "Number of daily trades for AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmStart": "Are you sure you want to start the AI Bot?",
+  "@aiBotConfirmStart": {
+    "description": "Confirmation message before starting AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmStop": "Are you sure you want to stop the AI Bot?",
+  "@aiBotConfirmStop": {
+    "description": "Confirmation message before stopping AI Bot",
+    "type": "String"
+  },
+  "aiBotConfirmEmergency": "Emergency stop will immediately halt all AI Bot operations. Continue?",
+  "@aiBotConfirmEmergency": {
+    "description": "Confirmation message before emergency stop",
+    "type": "String"
+  },
+  "aiBotStartedSuccess": "AI Bot started successfully",
+  "@aiBotStartedSuccess": {
+    "description": "Success message when AI Bot starts",
+    "type": "String"
+  },
+  "aiBotStoppedSuccess": "AI Bot stopped successfully",
+  "@aiBotStoppedSuccess": {
+    "description": "Success message when AI Bot stops",
+    "type": "String"
+  },
+  "aiBotConfig": "Bot Configuration",
+  "@aiBotConfig": {
+    "description": "AI Bot configuration section",
+    "type": "String"
+  },
+  "aiBotConfigTitle": "Configure AI Bot",
+  "@aiBotConfigTitle": {
+    "description": "Title for AI Bot configuration screen",
+    "type": "String"
+  },
+  "aiBotConfigSave": "Save Configuration",
+  "@aiBotConfigSave": {
+    "description": "Button to save AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotDryRun": "Dry Run Mode",
+  "@aiBotDryRun": {
+    "description": "AI Bot dry run mode (simulation)",
+    "type": "String"
+  },
+  "aiBotLiveMode": "Live Trading Mode",
+  "@aiBotLiveMode": {
+    "description": "AI Bot live trading mode",
+    "type": "String"
+  },
+  "aiBotAutoExecute": "Auto Execute",
+  "@aiBotAutoExecute": {
+    "description": "AI Bot auto execution toggle",
+    "type": "String"
+  },
+  "aiBotConfidenceThreshold": "Confidence Threshold",
+  "@aiBotConfidenceThreshold": {
+    "description": "Minimum confidence threshold for AI Bot",
+    "type": "String"
+  },
+  "aiBotTradeSize": "Trade Size",
+  "@aiBotTradeSize": {
+    "description": "Trade size for AI Bot",
+    "type": "String"
+  },
+  "aiBotLeverage": "Leverage",
+  "@aiBotLeverage": {
+    "description": "Leverage for AI Bot",
+    "type": "String"
+  },
+  "aiBotMaxDailyLoss": "Max Daily Loss",
+  "@aiBotMaxDailyLoss": {
+    "description": "Maximum daily loss limit for AI Bot",
+    "type": "String"
+  },
+  "aiBotMaxDailyTrades": "Max Daily Trades",
+  "@aiBotMaxDailyTrades": {
+    "description": "Maximum daily trades limit for AI Bot",
+    "type": "String"
+  },
+  "aiBotTradingPair": "Trading Pair",
+  "@aiBotTradingPair": {
+    "description": "Trading pair for AI Bot",
+    "type": "String"
+  },
+  "aiBotPresetConservative": "Conservative",
+  "@aiBotPresetConservative": {
+    "description": "Conservative preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotPresetIntermediate": "Intermediate",
+  "@aiBotPresetIntermediate": {
+    "description": "Intermediate preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotPresetAggressive": "Aggressive",
+  "@aiBotPresetAggressive": {
+    "description": "Aggressive preset for AI Bot configuration",
+    "type": "String"
+  },
+  "aiBotWarningLiveMode": "Warning: Live trading mode will execute real trades with real funds",
+  "@aiBotWarningLiveMode": {
+    "description": "Warning message for live trading mode",
+    "type": "String"
+  },
+  "aiBotConfigUpdated": "AI Bot configuration updated successfully",
+  "@aiBotConfigUpdated": {
+    "description": "Success message when AI Bot config is updated",
+    "type": "String"
+  },
+  "analysisTitle": "Market Analysis",
+  "@analysisTitle": {
+    "description": "Title for comprehensive analysis screen",
+    "type": "String"
+  },
+  "analysisRefresh": "Refresh Analysis",
+  "@analysisRefresh": {
+    "description": "Button to refresh market analysis",
+    "type": "String"
+  },
+  "analysisLoading": "Analyzing market data...",
+  "@analysisLoading": {
+    "description": "Loading message for market analysis",
+    "type": "String"
+  },
+  "analysisTechnical": "Technical Analysis",
+  "@analysisTechnical": {
+    "description": "Technical analysis section",
+    "type": "String"
+  },
+  "analysisMultiTimeframe": "Multi-Timeframe Analysis",
+  "@analysisMultiTimeframe": {
+    "description": "Multi-timeframe analysis section",
+    "type": "String"
+  },
+  "analysisRecommendation": "Trading Recommendation",
+  "@analysisRecommendation": {
+    "description": "Trading recommendation section",
+    "type": "String"
+  },
+  "analysisScenarios": "Scenarios",
+  "@analysisScenarios": {
+    "description": "Trading scenarios section",
+    "type": "String"
+  },
+  "analysisRisk": "Risk Analysis",
+  "@analysisRisk": {
+    "description": "Risk analysis section",
+    "type": "String"
+  },
+  "analysisOversold": "Oversold",
+  "@analysisOversold": {
+    "description": "Market condition: oversold",
+    "type": "String"
+  },
+  "analysisOverbought": "Overbought",
+  "@analysisOverbought": {
+    "description": "Market condition: overbought",
+    "type": "String"
+  },
+  "analysisNeutral": "Neutral",
+  "@analysisNeutral": {
+    "description": "Market condition: neutral",
+    "type": "String"
+  },
+  "analysisBullish": "Bullish",
+  "@analysisBullish": {
+    "description": "Market sentiment: bullish",
+    "type": "String"
+  },
+  "analysisBearish": "Bearish",
+  "@analysisBearish": {
+    "description": "Market sentiment: bearish",
+    "type": "String"
+  },
+  "analysisLowRisk": "Low Risk",
+  "@analysisLowRisk": {
+    "description": "Risk level: low",
+    "type": "String"
+  },
+  "analysisMediumRisk": "Medium Risk",
+  "@analysisMediumRisk": {
+    "description": "Risk level: medium",
+    "type": "String"
+  },
+  "analysisHighRisk": "High Risk",
+  "@analysisHighRisk": {
+    "description": "Risk level: high",
+    "type": "String"
+  },
+  "analysisConfidence": "Confidence",
+  "@analysisConfidence": {
+    "description": "Analysis confidence level",
+    "type": "String"
+  },
+  "analysisEntry": "Entry Price",
+  "@analysisEntry": {
+    "description": "Recommended entry price",
+    "type": "String"
+  },
+  "analysisStopLoss": "Stop Loss",
+  "@analysisStopLoss": {
+    "description": "Recommended stop loss price",
+    "type": "String"
+  },
+  "analysisTakeProfit": "Take Profit",
+  "@analysisTakeProfit": {
+    "description": "Recommended take profit price",
+    "type": "String"
+  },
+  "futuresPositions": "Futures Positions",
+  "@futuresPositions": {
+    "description": "Title for futures positions",
+    "type": "String"
+  },
+  "futuresClose": "Close Position",
+  "@futuresClose": {
+    "description": "Button to close a futures position",
+    "type": "String"
+  },
+  "futuresCloseAll": "Close All Positions",
+  "@futuresCloseAll": {
+    "description": "Button to close all futures positions",
+    "type": "String"
+  },
+  "futuresCloseConfirm": "Are you sure you want to close this position?",
+  "@futuresCloseConfirm": {
+    "description": "Confirmation message before closing futures position",
+    "type": "String"
+  },
+  "futuresClosedSuccess": "Position closed successfully",
+  "@futuresClosedSuccess": {
+    "description": "Success message when futures position is closed",
+    "type": "String"
+  },
+  "futuresSize": "Position Size",
+  "@futuresSize": {
+    "description": "Size of futures position",
+    "type": "String"
+  },
+  "futuresLeverage": "Leverage",
+  "@futuresLeverage": {
+    "description": "Leverage for futures position",
+    "type": "String"
+  },
+  "futuresMargin": "Margin",
+  "@futuresMargin": {
+    "description": "Margin for futures position",
+    "type": "String"
+  },
+  "futuresLiquidation": "Liquidation Price",
+  "@futuresLiquidation": {
+    "description": "Liquidation price for futures position",
+    "type": "String"
+  },
+  "futuresUnrealizedPnl": "Unrealized P&L",
+  "@futuresUnrealizedPnl": {
+    "description": "Unrealized profit and loss",
+    "type": "String"
+  },
+  "futuresRealizedPnl": "Realized P&L",
+  "@futuresRealizedPnl": {
+    "description": "Realized profit and loss",
+    "type": "String"
+  },
+  "futuresTotalPnl": "Total P&L",
+  "@futuresTotalPnl": {
+    "description": "Total profit and loss",
+    "type": "String"
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Generic confirm button",
+    "type": "String"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error label",
+    "type": "String"
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Generic success label",
+    "type": "String"
+  },
+  "refresh": "Refresh",
+  "@refresh": {
+    "description": "Generic refresh button",
+    "type": "String"
+  },
+  "back": "Back",
+  "@back": {
+    "description": "Generic back button",
+    "type": "String"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Generic close button",
+    "type": "String"
+  },
+  "multiTimeframeAnalysis": "Multi-Timeframe Analysis",
+  "@multiTimeframeAnalysis": {
+    "description": "Title for multi-timeframe analysis",
+    "type": "String"
+  },
+  "technicalAnalysisMultipleTimeframes": "Technical analysis across multiple timeframes",
+  "@technicalAnalysisMultipleTimeframes": {
+    "description": "Description for multi-timeframe analysis",
+    "type": "String"
+  },
+  "backtesting": "Backtesting",
+  "@backtesting": {
+    "description": "Title for backtesting feature",
+    "type": "String"
+  },
+  "testStrategiesWithHistoricalData": "Test strategies with historical data",
+  "@testStrategiesWithHistoricalData": {
+    "description": "Description for backtesting",
+    "type": "String"
+  },
+  "parameterOptimization": "Parameter Optimization",
+  "@parameterOptimization": {
+    "description": "Title for parameter optimization",
+    "type": "String"
+  },
+  "optimizeStrategyParameters": "Optimize strategy parameters",
+  "@optimizeStrategyParameters": {
+    "description": "Description for parameter optimization",
+    "type": "String"
+  },
+  "performanceCharts": "Performance Charts",
+  "@performanceCharts": {
+    "description": "Title for performance charts",
+    "type": "String"
+  },
+  "emergencyStopActivated": "Emergency Stop Activated",
+  "@emergencyStopActivated": {
+    "description": "Message when emergency stop is activated",
+    "type": "String"
+  },
+  "botResumedSuccess": "Bot resumed successfully",
+  "@botResumedSuccess": {
+    "description": "Success message when bot is resumed",
+    "type": "String"
+  },
+  "mode": "Mode",
+  "@mode": {
+    "description": "Label for mode setting",
+    "type": "String"
+  },
+  "botMetrics": "Bot Metrics",
+  "@botMetrics": {
+    "description": "Section title for bot metrics",
+    "type": "String"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for total count",
+    "type": "String"
+  },
+  "executed": "Executed",
+  "@executed": {
+    "description": "Label for executed items",
+    "type": "String"
+  },
+  "percentUsed": "% used",
+  "@percentUsed": {
+    "description": "Label for percentage used",
+    "type": "String"
+  },
+  "dailyLimits": "Daily Limits",
+  "@dailyLimits": {
+    "description": "Section title for daily limits",
+    "type": "String"
+  },
+  "consecutive": "consecutive",
+  "@consecutive": {
+    "description": "Label for consecutive count",
+    "type": "String"
+  },
+  "tradingMode": "Trading Mode",
+  "@tradingMode": {
+    "description": "Section title for trading mode",
+    "type": "String"
+  },
+  "simulationMode": "Simulation mode - no real trades",
+  "@simulationMode": {
+    "description": "Description for simulation/dry run mode",
+    "type": "String"
+  },
+  "autoExecuteDescription": "Automatically execute AI recommendations",
+  "@autoExecuteDescription": {
+    "description": "Description for auto execute toggle",
+    "type": "String"
+  },
+  "tradingParameters": "Trading Parameters",
+  "@tradingParameters": {
+    "description": "Section title for trading parameters",
+    "type": "String"
+  },
+  "minimumConfidenceDescription": "Minimum confidence required for trades",
+  "@minimumConfidenceDescription": {
+    "description": "Description for confidence threshold",
+    "type": "String"
+  },
+  "leverageDescription": "Trading leverage multiplier",
+  "@leverageDescription": {
+    "description": "Description for leverage setting",
+    "type": "String"
+  },
+  "required": "Required",
+  "@required": {
+    "description": "Validation message for required field",
+    "type": "String"
+  },
+  "mustBePositive": "Must be positive",
+  "@mustBePositive": {
+    "description": "Validation message for positive number",
+    "type": "String"
+  },
+  "safetyLimits": "Safety Limits",
+  "@safetyLimits": {
+    "description": "Section title for safety limits",
+    "type": "String"
+  },
+  "configurationPresets": "Configuration Presets",
+  "@configurationPresets": {
+    "description": "Section title for configuration presets",
+    "type": "String"
+  },
+  "high24h": "High 24h",
+  "@high24h": {
+    "description": "Label for 24-hour high price",
+    "type": "String"
+  },
+  "low24h": "Low 24h",
+  "@low24h": {
+    "description": "Label for 24-hour low price",
+    "type": "String"
+  },
+  "volume": "Volume",
+  "@volume": {
+    "description": "Label for trading volume",
+    "type": "String"
+  },
+  "trend": "Trend",
+  "@trend": {
+    "description": "Label for market trend",
+    "type": "String"
+  },
+  "aligned": "ALIGNED",
+  "@aligned": {
+    "description": "Label when timeframes are aligned",
+    "type": "String"
+  },
+  "notAligned": "NOT ALIGNED",
+  "@notAligned": {
+    "description": "Label when timeframes are not aligned",
+    "type": "String"
+  },
+  "reasoning": "Reasoning:",
+  "@reasoning": {
+    "description": "Label for reasoning section",
+    "type": "String"
+  },
+  "target": "Target",
+  "@target": {
+    "description": "Label for target price",
+    "type": "String"
+  },
+  "riskScore": "Risk Score:",
+  "@riskScore": {
+    "description": "Label for risk score",
+    "type": "String"
+  },
+  "volatility": "Volatility:",
+  "@volatility": {
+    "description": "Label for volatility",
+    "type": "String"
+  },
+  "riskFactors": "Risk Factors:",
+  "@riskFactors": {
+    "description": "Label for risk factors section",
+    "type": "String"
   }
 }

@@ -1243,4 +1243,562 @@ class L10nEs extends L10n {
 
   @override
   String get testAlertSent => 'Alerta de prueba enviada exitosamente';
+
+  // AI Bot Screen
+  @override
+  String get aiBotTitle => 'Control de Bot IA';
+
+  @override
+  String get aiBotStatus => 'Estado del Bot';
+
+  @override
+  String get aiBotRunning => 'En Ejecución';
+
+  @override
+  String get aiBotPaused => 'Pausado';
+
+  @override
+  String get aiBotStopped => 'Detenido';
+
+  @override
+  String get aiBotStart => 'Iniciar Bot';
+
+  @override
+  String get aiBotStop => 'Detener Bot';
+
+  @override
+  String get aiBotPause => 'Pausar Bot';
+
+  @override
+  String get aiBotResume => 'Reanudar Bot';
+
+  @override
+  String get aiBotEmergencyStop => 'Detención de Emergencia';
+
+  @override
+  String get aiBotAnalysisCount => 'Análisis';
+
+  @override
+  String get aiBotExecutionCount => 'Ejecuciones';
+
+  @override
+  String get aiBotErrorCount => 'Errores';
+
+  @override
+  String get aiBotOpenPositions => 'Posiciones Abiertas';
+
+  @override
+  String get aiBotDailyLoss => 'Pérdida Diaria';
+
+  @override
+  String get aiBotDailyTrades => 'Operaciones Diarias';
+
+  @override
+  String get aiBotConfirmStart =>
+      '¿Estás seguro de que quieres iniciar el Bot IA?';
+
+  @override
+  String get aiBotConfirmStop =>
+      '¿Estás seguro de que quieres detener el Bot IA?';
+
+  @override
+  String get aiBotConfirmEmergency =>
+      'La detención de emergencia detendrá inmediatamente todas las operaciones del Bot IA. ¿Continuar?';
+
+  @override
+  String get aiBotStartedSuccess => 'Bot IA iniciado exitosamente';
+
+  @override
+  String get aiBotStoppedSuccess => 'Bot IA detenido exitosamente';
+
+  @override
+  String get aiBotConfig => 'Configuración del Bot';
+
+  @override
+  String get aiBotConfigTitle => 'Configuración del Bot IA';
+
+  @override
+  String get aiBotConfigSave => 'Guardar Configuración';
+
+  @override
+  String get aiBotDryRun => 'Modo de Simulación';
+
+  @override
+  String get aiBotAutoExecute => 'Auto Ejecutar';
+
+  @override
+  String get aiBotConfidenceThreshold => 'Umbral de Confianza';
+
+  @override
+  String get aiBotLeverage => 'Apalancamiento';
+
+  @override
+  String get aiBotMaxDailyLoss => 'Pérdida Diaria Máxima';
+
+  @override
+  String get aiBotMaxDailyTrades => 'Operaciones Diarias Máximas';
+
+  @override
+  String get aiBotTradingPair => 'Par de Trading';
+
+  @override
+  String get aiBotPresetConservative => 'Conservador';
+
+  @override
+  String get aiBotPresetIntermediate => 'Intermedio';
+
+  @override
+  String get aiBotPresetAggressive => 'Agresivo';
+
+  @override
+  String get aiBotConfigUpdated =>
+      'Configuración del Bot IA actualizada exitosamente';
+
+  @override
+  String get aiBotWarningLiveMode =>
+      'Advertencia: El modo de trading en vivo ejecutará operaciones reales con fondos reales';
+
+  @override
+  String get aiBotEnabled => 'Bot IA Habilitado';
+
+  @override
+  String get aiBotDisabled => 'Bot IA Deshabilitado';
+
+  @override
+  String get aiBotLiveMode => 'Modo de Trading en Vivo';
+
+  @override
+  String get aiBotTestMode => 'Modo de Prueba';
+
+  @override
+  String get aiBotModelType => 'Tipo de Modelo';
+
+  @override
+  String get aiBotRiskTolerance => 'Tolerancia al Riesgo';
+
+  @override
+  String get aiBotMaxPositions => 'Posiciones Máximas';
+
+  @override
+  String get aiBotStopLoss => 'Stop Loss (%)';
+
+  @override
+  String get aiBotTakeProfit => 'Take Profit (%)';
+
+  @override
+  String get aiBotTradeSize => 'Tamaño de Operación';
+
+  @override
+  String get aiBotMinConfidence => 'Confianza Mínima (%)';
+
+  @override
+  String get aiBotCooldownPeriod => 'Período de Enfriamiento (min)';
+
+  @override
+  String get aiBotBacktestPeriod => 'Período de Backtest (días)';
+
+  @override
+  String get aiBotPerformanceThreshold => 'Umbral de Rendimiento (%)';
+
+  @override
+  String get aiBotAutoRebalance => 'Auto-Rebalanceo';
+
+  @override
+  String get aiBotIncludeNews => 'Incluir Análisis de Noticias';
+
+  @override
+  String get aiBotSentimentAnalysis => 'Análisis de Sentimiento';
+
+  @override
+  String get aiBotMarketRegime => 'Detección de Régimen de Mercado';
+
+  @override
+  String get aiBotVolatilityFilter => 'Filtro de Volatilidad';
+
+  @override
+  String get aiBotEnableNotifications => 'Habilitar Notificaciones';
+
+  @override
+  String get aiBotMaxDrawdown => 'Drawdown Máximo (%)';
+
+  @override
+  String get aiBotProfitTarget => 'Objetivo de Beneficio (%)';
+
+  @override
+  String get aiBotTimeframe => 'Marco Temporal';
+
+  @override
+  String get aiBotIndicators => 'Indicadores Técnicos';
+
+  @override
+  String get aiBotOptimizeParameters => 'Optimizar Parámetros';
+
+  @override
+  String get aiBotPaperTrade => 'Trading en Papel (Simulado)';
+
+  @override
+  String get aiBotStatus_active => 'Activo - Trading en curso';
+
+  @override
+  String get aiBotStatus_inactive => 'Inactivo - Sin trading';
+
+  @override
+  String get aiBotStatus_error => 'Error - Requiere atención';
+
+  @override
+  String get aiBotMode => 'Modo';
+
+  @override
+  String get aiBotPerformance => 'Rendimiento';
+
+  @override
+  String get aiBotTotalTrades => 'Total de Operaciones';
+
+  @override
+  String get aiBotWinRate => 'Tasa de Acierto';
+
+  @override
+  String get aiBotConfigSaved => 'Configuración del Bot IA guardada exitosamente';
+
+  @override
+  String get aiBotConfigError => 'Error al guardar la configuración del Bot IA';
+
+  // Analysis Screen
+  @override
+  String get analysisTitle => 'Análisis Técnico';
+
+  @override
+  String get analysisRefresh => 'Actualizar Análisis';
+
+  @override
+  String get analysisBullish => 'Alcista';
+
+  @override
+  String get analysisNeutral => 'Neutral';
+
+  @override
+  String get analysisBearish => 'Bajista';
+
+  @override
+  String get analysisLoading => 'Analizando datos del mercado...';
+
+  @override
+  String get analysisTechnical => 'Análisis Técnico';
+
+  @override
+  String get analysisMultiTimeframe => 'Análisis Multi-Temporalidad';
+
+  @override
+  String get analysisRecommendation => 'Recomendación de Trading';
+
+  @override
+  String get analysisScenarios => 'Escenarios';
+
+  @override
+  String get analysisRisk => 'Análisis de Riesgo';
+
+  @override
+  String get analysisOversold => 'Sobrevendido';
+
+  @override
+  String get analysisOverbought => 'Sobrecomprado';
+
+  @override
+  String get analysisLowRisk => 'Riesgo Bajo';
+
+  @override
+  String get analysisMediumRisk => 'Riesgo Medio';
+
+  @override
+  String get analysisHighRisk => 'Riesgo Alto';
+
+  @override
+  String get analysisConfidence => 'Confianza';
+
+  @override
+  String get analysisEntry => 'Precio de Entrada';
+
+  @override
+  String get analysisStopLoss => 'Stop Loss';
+
+  @override
+  String get analysisTakeProfit => 'Take Profit';
+
+  @override
+  String get analysisVeryBullish => 'Muy Alcista';
+
+  @override
+  String get analysisVeryBearish => 'Muy Bajista';
+
+  @override
+  String get analysisStrongBuy => 'Compra Fuerte';
+
+  @override
+  String get analysisBuy => 'Compra';
+
+  @override
+  String get analysisHold => 'Mantener';
+
+  @override
+  String get analysisSell => 'Venta';
+
+  @override
+  String get analysisStrongSell => 'Venta Fuerte';
+
+  @override
+  String get analysisNoData => 'Sin Datos de Análisis';
+
+  @override
+  String get analysisTimeframe => 'Marco Temporal';
+
+  @override
+  String get analysisIndicator => 'Indicador';
+
+  @override
+  String get analysisValue => 'Valor';
+
+  @override
+  String get analysisRSI => 'RSI';
+
+  @override
+  String get analysisMACD => 'MACD';
+
+  @override
+  String get analysisEMA => 'EMA';
+
+  @override
+  String get analysisSMA => 'SMA';
+
+  @override
+  String get analysisBollingerBands => 'Bandas de Bollinger';
+
+  @override
+  String get analysisStochastic => 'Estocástico';
+
+  @override
+  String get analysisATR => 'ATR';
+
+  // Futures
+  @override
+  String get futuresPositions => 'Posiciones de Futuros';
+
+  @override
+  String get futuresMargin => 'Margen';
+
+  @override
+  String get futuresLeverage => 'Apalancamiento';
+
+  @override
+  String get futuresUnrealizedPnl => 'P&L No Realizado';
+
+  @override
+  String get futuresRealizedPnl => 'P&L Realizado';
+
+  @override
+  String get futuresClose => 'Cerrar Futuro';
+
+  @override
+  String get futuresCloseAll => 'Cerrar Todos los Futuros';
+
+  @override
+  String get futuresMarginRatio => 'Ratio de Margen';
+
+  @override
+  String get futuresLiquidationPrice => 'Precio de Liquidación';
+
+  @override
+  String get futuresFundingRate => 'Tasa de Financiamiento';
+
+  @override
+  String get futuresMarkPrice => 'Precio de Marca';
+
+  @override
+  String get futuresIndexPrice => 'Precio Índice';
+
+  @override
+  String get futuresCloseConfirm =>
+      '¿Estás seguro de que quieres cerrar esta posición?';
+
+  @override
+  String get futuresClosedSuccess => 'Posición cerrada exitosamente';
+
+  @override
+  String get futuresSize => 'Tamaño de Posición';
+
+  @override
+  String get futuresLiquidation => 'Precio de Liquidación';
+
+  @override
+  String get futuresTotalPnl => 'P&L Total';
+
+  // General
+  @override
+  String get confirm => 'Confirmar';
+
+  @override
+  String get success => 'Éxito';
+
+  @override
+  String get refresh => 'Actualizar';
+
+  @override
+  String get back => 'Atrás';
+
+  @override
+  String get close => 'Cerrar';
+
+  // Additional
+  @override
+  String get emergencyStopActivated =>
+      'Detención de emergencia activada - Todo el trading se ha detenido';
+
+  @override
+  String get botMetrics => 'Métricas del Bot';
+
+  @override
+  String get tradingMode => 'Modo de Trading';
+
+  @override
+  String get botResumedSuccess => 'Bot reanudado exitosamente';
+
+  @override
+  String get mode => 'Modo';
+
+  @override
+  String get total => 'Total';
+
+  @override
+  String get executed => 'Ejecutado';
+
+  @override
+  String get percentUsed => '% usado';
+
+  @override
+  String get dailyLimits => 'Límites Diarios';
+
+  @override
+  String get consecutive => 'consecutivas';
+
+  @override
+  String get simulationMode => 'Modo de simulación - sin operaciones reales';
+
+  @override
+  String get autoExecuteDescription => 'Ejecutar automáticamente recomendaciones de IA';
+
+  @override
+  String get tradingParameters => 'Parámetros de Trading';
+
+  @override
+  String get minimumConfidenceDescription => 'Confianza mínima requerida para operaciones';
+
+  @override
+  String get leverageDescription => 'Multiplicador de apalancamiento de trading';
+
+  @override
+  String get required => 'Requerido';
+
+  @override
+  String get mustBePositive => 'Debe ser positivo';
+
+  @override
+  String get safetyLimits => 'Límites de Seguridad';
+
+  @override
+  String get configurationPresets => 'Configuraciones Predefinidas';
+
+  @override
+  String get high24h => 'Máximo 24h';
+
+  @override
+  String get low24h => 'Mínimo 24h';
+
+  @override
+  String get change24h => 'Cambio 24h';
+
+  @override
+  String get riskScore => 'Puntuación de Riesgo';
+
+  @override
+  String get riskLevel => 'Nivel de Riesgo';
+
+  @override
+  String get low => 'Bajo';
+
+  @override
+  String get medium => 'Medio';
+
+  @override
+  String get high => 'Alto';
+
+  @override
+  String get critical => 'Crítico';
+
+  @override
+  String get autoClose => 'Cierre Automático';
+
+  @override
+  String get manualClose => 'Cierre Manual';
+
+  @override
+  String get partialClose => 'Cierre Parcial';
+
+  @override
+  String get slippage => 'Deslizamiento';
+
+  @override
+  String get commission => 'Comisión';
+
+  @override
+  String get netPnl => 'P&L Neto';
+
+  @override
+  String get roi => 'ROI';
+
+  @override
+  String get holdingTime => 'Tiempo de Retención';
+
+  @override
+  String get marketOrder => 'Orden de Mercado';
+
+  @override
+  String get limitOrder => 'Orden Limitada';
+
+  @override
+  String get stopOrder => 'Orden Stop';
+
+  @override
+  String get takeProfitOrder => 'Orden Take Profit';
+
+  @override
+  String get stopLossOrder => 'Orden Stop Loss';
+
+  @override
+  String get trailingStopOrder => 'Orden Trailing Stop';
+
+  @override
+  String get pendingOrders => 'Órdenes Pendientes';
+
+  @override
+  String get volume => 'Volumen';
+
+  @override
+  String get trend => 'Tendencia';
+
+  @override
+  String get aligned => 'ALINEADO';
+
+  @override
+  String get notAligned => 'NO ALINEADO';
+
+  @override
+  String get reasoning => 'Razonamiento:';
+
+  @override
+  String get target => 'Objetivo';
+
+  @override
+  String get volatility => 'Volatilidad:';
+
+  @override
+  String get riskFactors => 'Factores de Riesgo:';
 }

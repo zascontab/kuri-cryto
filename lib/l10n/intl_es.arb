@@ -510,5 +510,570 @@
   "backendVersion": "Backend: Trading MCP Server v1.0.0",
   "@backendVersion": {
     "type": "String"
+  },
+  "aiBotTitle": "Control de Bot IA",
+  "@aiBotTitle": {
+    "description": "Título del panel de control del Bot IA",
+    "type": "String"
+  },
+  "aiBotStatus": "Estado del Bot",
+  "@aiBotStatus": {
+    "description": "Etiqueta para el estado del Bot IA",
+    "type": "String"
+  },
+  "aiBotRunning": "En ejecución",
+  "@aiBotRunning": {
+    "description": "Estado del Bot IA: en ejecución",
+    "type": "String"
+  },
+  "aiBotPaused": "Pausado",
+  "@aiBotPaused": {
+    "description": "Estado del Bot IA: pausado",
+    "type": "String"
+  },
+  "aiBotStopped": "Detenido",
+  "@aiBotStopped": {
+    "description": "Estado del Bot IA: detenido",
+    "type": "String"
+  },
+  "aiBotStart": "Iniciar Bot",
+  "@aiBotStart": {
+    "description": "Botón para iniciar el Bot IA",
+    "type": "String"
+  },
+  "aiBotStop": "Detener Bot",
+  "@aiBotStop": {
+    "description": "Botón para detener el Bot IA",
+    "type": "String"
+  },
+  "aiBotPause": "Pausar Bot",
+  "@aiBotPause": {
+    "description": "Botón para pausar el Bot IA",
+    "type": "String"
+  },
+  "aiBotResume": "Reanudar Bot",
+  "@aiBotResume": {
+    "description": "Botón para reanudar el Bot IA",
+    "type": "String"
+  },
+  "aiBotEmergencyStop": "Parada de Emergencia",
+  "@aiBotEmergencyStop": {
+    "description": "Botón para parada de emergencia del Bot IA",
+    "type": "String"
+  },
+  "aiBotAnalysisCount": "Análisis",
+  "@aiBotAnalysisCount": {
+    "description": "Número de análisis realizados por el Bot IA",
+    "type": "String"
+  },
+  "aiBotExecutionCount": "Ejecuciones",
+  "@aiBotExecutionCount": {
+    "description": "Número de ejecuciones realizadas por el Bot IA",
+    "type": "String"
+  },
+  "aiBotErrorCount": "Errores",
+  "@aiBotErrorCount": {
+    "description": "Número de errores encontrados por el Bot IA",
+    "type": "String"
+  },
+  "aiBotOpenPositions": "Posiciones Abiertas",
+  "@aiBotOpenPositions": {
+    "description": "Número de posiciones abiertas del Bot IA",
+    "type": "String"
+  },
+  "aiBotDailyLoss": "Pérdida Diaria",
+  "@aiBotDailyLoss": {
+    "description": "Pérdida diaria del Bot IA",
+    "type": "String"
+  },
+  "aiBotDailyTrades": "Operaciones Diarias",
+  "@aiBotDailyTrades": {
+    "description": "Número de operaciones diarias del Bot IA",
+    "type": "String"
+  },
+  "aiBotConfirmStart": "¿Estás seguro de que quieres iniciar el Bot IA?",
+  "@aiBotConfirmStart": {
+    "description": "Mensaje de confirmación antes de iniciar el Bot IA",
+    "type": "String"
+  },
+  "aiBotConfirmStop": "¿Estás seguro de que quieres detener el Bot IA?",
+  "@aiBotConfirmStop": {
+    "description": "Mensaje de confirmación antes de detener el Bot IA",
+    "type": "String"
+  },
+  "aiBotConfirmEmergency": "La parada de emergencia detendrá inmediatamente todas las operaciones del Bot IA. ¿Continuar?",
+  "@aiBotConfirmEmergency": {
+    "description": "Mensaje de confirmación antes de la parada de emergencia",
+    "type": "String"
+  },
+  "aiBotStartedSuccess": "Bot IA iniciado exitosamente",
+  "@aiBotStartedSuccess": {
+    "description": "Mensaje de éxito cuando el Bot IA se inicia",
+    "type": "String"
+  },
+  "aiBotStoppedSuccess": "Bot IA detenido exitosamente",
+  "@aiBotStoppedSuccess": {
+    "description": "Mensaje de éxito cuando el Bot IA se detiene",
+    "type": "String"
+  },
+  "aiBotConfig": "Configuración del Bot",
+  "@aiBotConfig": {
+    "description": "Sección de configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotConfigTitle": "Configurar Bot IA",
+  "@aiBotConfigTitle": {
+    "description": "Título de la pantalla de configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotConfigSave": "Guardar Configuración",
+  "@aiBotConfigSave": {
+    "description": "Botón para guardar la configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotDryRun": "Modo Simulación",
+  "@aiBotDryRun": {
+    "description": "Modo de simulación del Bot IA (dry run)",
+    "type": "String"
+  },
+  "aiBotLiveMode": "Modo Trading en Vivo",
+  "@aiBotLiveMode": {
+    "description": "Modo de trading en vivo del Bot IA",
+    "type": "String"
+  },
+  "aiBotAutoExecute": "Ejecución Automática",
+  "@aiBotAutoExecute": {
+    "description": "Activador de ejecución automática del Bot IA",
+    "type": "String"
+  },
+  "aiBotConfidenceThreshold": "Umbral de Confianza",
+  "@aiBotConfidenceThreshold": {
+    "description": "Umbral mínimo de confianza para el Bot IA",
+    "type": "String"
+  },
+  "aiBotTradeSize": "Tamaño de Operación",
+  "@aiBotTradeSize": {
+    "description": "Tamaño de operación para el Bot IA",
+    "type": "String"
+  },
+  "aiBotLeverage": "Apalancamiento",
+  "@aiBotLeverage": {
+    "description": "Apalancamiento para el Bot IA",
+    "type": "String"
+  },
+  "aiBotMaxDailyLoss": "Pérdida Diaria Máxima",
+  "@aiBotMaxDailyLoss": {
+    "description": "Límite de pérdida diaria máxima para el Bot IA",
+    "type": "String"
+  },
+  "aiBotMaxDailyTrades": "Operaciones Diarias Máximas",
+  "@aiBotMaxDailyTrades": {
+    "description": "Límite de operaciones diarias máximas para el Bot IA",
+    "type": "String"
+  },
+  "aiBotTradingPair": "Par de Trading",
+  "@aiBotTradingPair": {
+    "description": "Par de trading para el Bot IA",
+    "type": "String"
+  },
+  "aiBotPresetConservative": "Conservador",
+  "@aiBotPresetConservative": {
+    "description": "Preset conservador para configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotPresetIntermediate": "Intermedio",
+  "@aiBotPresetIntermediate": {
+    "description": "Preset intermedio para configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotPresetAggressive": "Agresivo",
+  "@aiBotPresetAggressive": {
+    "description": "Preset agresivo para configuración del Bot IA",
+    "type": "String"
+  },
+  "aiBotWarningLiveMode": "Advertencia: El modo de trading en vivo ejecutará operaciones reales con fondos reales",
+  "@aiBotWarningLiveMode": {
+    "description": "Mensaje de advertencia para el modo de trading en vivo",
+    "type": "String"
+  },
+  "aiBotConfigUpdated": "Configuración del Bot IA actualizada exitosamente",
+  "@aiBotConfigUpdated": {
+    "description": "Mensaje de éxito cuando se actualiza la configuración del Bot IA",
+    "type": "String"
+  },
+  "analysisTitle": "Análisis de Mercado",
+  "@analysisTitle": {
+    "description": "Título de la pantalla de análisis completo",
+    "type": "String"
+  },
+  "analysisRefresh": "Actualizar Análisis",
+  "@analysisRefresh": {
+    "description": "Botón para actualizar el análisis de mercado",
+    "type": "String"
+  },
+  "analysisLoading": "Analizando datos del mercado...",
+  "@analysisLoading": {
+    "description": "Mensaje de carga para el análisis de mercado",
+    "type": "String"
+  },
+  "analysisTechnical": "Análisis Técnico",
+  "@analysisTechnical": {
+    "description": "Sección de análisis técnico",
+    "type": "String"
+  },
+  "analysisMultiTimeframe": "Análisis Multi-Temporalidad",
+  "@analysisMultiTimeframe": {
+    "description": "Sección de análisis multi-temporalidad",
+    "type": "String"
+  },
+  "analysisRecommendation": "Recomendación de Trading",
+  "@analysisRecommendation": {
+    "description": "Sección de recomendación de trading",
+    "type": "String"
+  },
+  "analysisScenarios": "Escenarios",
+  "@analysisScenarios": {
+    "description": "Sección de escenarios de trading",
+    "type": "String"
+  },
+  "analysisRisk": "Análisis de Riesgo",
+  "@analysisRisk": {
+    "description": "Sección de análisis de riesgo",
+    "type": "String"
+  },
+  "analysisOversold": "Sobrevendido",
+  "@analysisOversold": {
+    "description": "Condición de mercado: sobrevendido",
+    "type": "String"
+  },
+  "analysisOverbought": "Sobrecomprado",
+  "@analysisOverbought": {
+    "description": "Condición de mercado: sobrecomprado",
+    "type": "String"
+  },
+  "analysisNeutral": "Neutral",
+  "@analysisNeutral": {
+    "description": "Condición de mercado: neutral",
+    "type": "String"
+  },
+  "analysisBullish": "Alcista",
+  "@analysisBullish": {
+    "description": "Sentimiento de mercado: alcista",
+    "type": "String"
+  },
+  "analysisBearish": "Bajista",
+  "@analysisBearish": {
+    "description": "Sentimiento de mercado: bajista",
+    "type": "String"
+  },
+  "analysisLowRisk": "Riesgo Bajo",
+  "@analysisLowRisk": {
+    "description": "Nivel de riesgo: bajo",
+    "type": "String"
+  },
+  "analysisMediumRisk": "Riesgo Medio",
+  "@analysisMediumRisk": {
+    "description": "Nivel de riesgo: medio",
+    "type": "String"
+  },
+  "analysisHighRisk": "Riesgo Alto",
+  "@analysisHighRisk": {
+    "description": "Nivel de riesgo: alto",
+    "type": "String"
+  },
+  "analysisConfidence": "Confianza",
+  "@analysisConfidence": {
+    "description": "Nivel de confianza del análisis",
+    "type": "String"
+  },
+  "analysisEntry": "Precio de Entrada",
+  "@analysisEntry": {
+    "description": "Precio de entrada recomendado",
+    "type": "String"
+  },
+  "analysisStopLoss": "Stop Loss",
+  "@analysisStopLoss": {
+    "description": "Precio de stop loss recomendado",
+    "type": "String"
+  },
+  "analysisTakeProfit": "Take Profit",
+  "@analysisTakeProfit": {
+    "description": "Precio de take profit recomendado",
+    "type": "String"
+  },
+  "futuresPositions": "Posiciones de Futuros",
+  "@futuresPositions": {
+    "description": "Título para posiciones de futuros",
+    "type": "String"
+  },
+  "futuresClose": "Cerrar Posición",
+  "@futuresClose": {
+    "description": "Botón para cerrar una posición de futuros",
+    "type": "String"
+  },
+  "futuresCloseAll": "Cerrar Todas las Posiciones",
+  "@futuresCloseAll": {
+    "description": "Botón para cerrar todas las posiciones de futuros",
+    "type": "String"
+  },
+  "futuresCloseConfirm": "¿Estás seguro de que quieres cerrar esta posición?",
+  "@futuresCloseConfirm": {
+    "description": "Mensaje de confirmación antes de cerrar posición de futuros",
+    "type": "String"
+  },
+  "futuresClosedSuccess": "Posición cerrada exitosamente",
+  "@futuresClosedSuccess": {
+    "description": "Mensaje de éxito cuando se cierra una posición de futuros",
+    "type": "String"
+  },
+  "futuresSize": "Tamaño de Posición",
+  "@futuresSize": {
+    "description": "Tamaño de la posición de futuros",
+    "type": "String"
+  },
+  "futuresLeverage": "Apalancamiento",
+  "@futuresLeverage": {
+    "description": "Apalancamiento para la posición de futuros",
+    "type": "String"
+  },
+  "futuresMargin": "Margen",
+  "@futuresMargin": {
+    "description": "Margen para la posición de futuros",
+    "type": "String"
+  },
+  "futuresLiquidation": "Precio de Liquidación",
+  "@futuresLiquidation": {
+    "description": "Precio de liquidación para la posición de futuros",
+    "type": "String"
+  },
+  "futuresUnrealizedPnl": "P&L No Realizado",
+  "@futuresUnrealizedPnl": {
+    "description": "Ganancia y pérdida no realizada",
+    "type": "String"
+  },
+  "futuresRealizedPnl": "P&L Realizado",
+  "@futuresRealizedPnl": {
+    "description": "Ganancia y pérdida realizada",
+    "type": "String"
+  },
+  "futuresTotalPnl": "P&L Total",
+  "@futuresTotalPnl": {
+    "description": "Ganancia y pérdida total",
+    "type": "String"
+  },
+  "confirm": "Confirmar",
+  "@confirm": {
+    "description": "Botón de confirmación genérico",
+    "type": "String"
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Etiqueta de error genérica",
+    "type": "String"
+  },
+  "success": "Éxito",
+  "@success": {
+    "description": "Etiqueta de éxito genérica",
+    "type": "String"
+  },
+  "refresh": "Actualizar",
+  "@refresh": {
+    "description": "Botón de actualización genérico",
+    "type": "String"
+  },
+  "back": "Atrás",
+  "@back": {
+    "description": "Botón de retroceso genérico",
+    "type": "String"
+  },
+  "close": "Cerrar",
+  "@close": {
+    "description": "Botón de cierre genérico",
+    "type": "String"
+  },
+  "multiTimeframeAnalysis": "Análisis Multi-Temporalidad",
+  "@multiTimeframeAnalysis": {
+    "description": "Título para análisis multi-temporalidad",
+    "type": "String"
+  },
+  "technicalAnalysisMultipleTimeframes": "Análisis técnico en múltiples temporalidades",
+  "@technicalAnalysisMultipleTimeframes": {
+    "description": "Descripción para análisis multi-temporalidad",
+    "type": "String"
+  },
+  "backtesting": "Backtesting",
+  "@backtesting": {
+    "description": "Título para función de backtesting",
+    "type": "String"
+  },
+  "testStrategiesWithHistoricalData": "Prueba estrategias con datos históricos",
+  "@testStrategiesWithHistoricalData": {
+    "description": "Descripción para backtesting",
+    "type": "String"
+  },
+  "parameterOptimization": "Optimización de Parámetros",
+  "@parameterOptimization": {
+    "description": "Título para optimización de parámetros",
+    "type": "String"
+  },
+  "optimizeStrategyParameters": "Optimiza parámetros de estrategia",
+  "@optimizeStrategyParameters": {
+    "description": "Descripción para optimización de parámetros",
+    "type": "String"
+  },
+  "performanceCharts": "Gráficas de Rendimiento",
+  "@performanceCharts": {
+    "description": "Título para gráficas de rendimiento",
+    "type": "String"
+  },
+  "emergencyStopActivated": "Parada de Emergencia Activada",
+  "@emergencyStopActivated": {
+    "description": "Mensaje cuando se activa la parada de emergencia",
+    "type": "String"
+  },
+  "botResumedSuccess": "Bot reanudado exitosamente",
+  "@botResumedSuccess": {
+    "description": "Mensaje de éxito cuando el bot se reanuda",
+    "type": "String"
+  },
+  "mode": "Modo",
+  "@mode": {
+    "description": "Etiqueta para configuración de modo",
+    "type": "String"
+  },
+  "botMetrics": "Métricas del Bot",
+  "@botMetrics": {
+    "description": "Título de sección para métricas del bot",
+    "type": "String"
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Etiqueta para conteo total",
+    "type": "String"
+  },
+  "executed": "Ejecutadas",
+  "@executed": {
+    "description": "Etiqueta para elementos ejecutados",
+    "type": "String"
+  },
+  "percentUsed": "% usado",
+  "@percentUsed": {
+    "description": "Etiqueta para porcentaje usado",
+    "type": "String"
+  },
+  "dailyLimits": "Límites Diarios",
+  "@dailyLimits": {
+    "description": "Título de sección para límites diarios",
+    "type": "String"
+  },
+  "consecutive": "consecutivos",
+  "@consecutive": {
+    "description": "Etiqueta para conteo consecutivo",
+    "type": "String"
+  },
+  "tradingMode": "Modo de Trading",
+  "@tradingMode": {
+    "description": "Título de sección para modo de trading",
+    "type": "String"
+  },
+  "simulationMode": "Modo de simulación - sin operaciones reales",
+  "@simulationMode": {
+    "description": "Descripción para modo de simulación/dry run",
+    "type": "String"
+  },
+  "autoExecuteDescription": "Ejecutar automáticamente las recomendaciones de IA",
+  "@autoExecuteDescription": {
+    "description": "Descripción para activador de ejecución automática",
+    "type": "String"
+  },
+  "tradingParameters": "Parámetros de Trading",
+  "@tradingParameters": {
+    "description": "Título de sección para parámetros de trading",
+    "type": "String"
+  },
+  "minimumConfidenceDescription": "Confianza mínima requerida para operaciones",
+  "@minimumConfidenceDescription": {
+    "description": "Descripción para umbral de confianza",
+    "type": "String"
+  },
+  "leverageDescription": "Multiplicador de apalancamiento de trading",
+  "@leverageDescription": {
+    "description": "Descripción para configuración de apalancamiento",
+    "type": "String"
+  },
+  "required": "Requerido",
+  "@required": {
+    "description": "Mensaje de validación para campo requerido",
+    "type": "String"
+  },
+  "mustBePositive": "Debe ser positivo",
+  "@mustBePositive": {
+    "description": "Mensaje de validación para número positivo",
+    "type": "String"
+  },
+  "safetyLimits": "Límites de Seguridad",
+  "@safetyLimits": {
+    "description": "Título de sección para límites de seguridad",
+    "type": "String"
+  },
+  "configurationPresets": "Presets de Configuración",
+  "@configurationPresets": {
+    "description": "Título de sección para presets de configuración",
+    "type": "String"
+  },
+  "high24h": "Máximo 24h",
+  "@high24h": {
+    "description": "Etiqueta para precio máximo de 24 horas",
+    "type": "String"
+  },
+  "low24h": "Mínimo 24h",
+  "@low24h": {
+    "description": "Etiqueta para precio mínimo de 24 horas",
+    "type": "String"
+  },
+  "volume": "Volumen",
+  "@volume": {
+    "description": "Etiqueta para volumen de trading",
+    "type": "String"
+  },
+  "trend": "Tendencia",
+  "@trend": {
+    "description": "Etiqueta para tendencia de mercado",
+    "type": "String"
+  },
+  "aligned": "ALINEADO",
+  "@aligned": {
+    "description": "Etiqueta cuando las temporalidades están alineadas",
+    "type": "String"
+  },
+  "notAligned": "NO ALINEADO",
+  "@notAligned": {
+    "description": "Etiqueta cuando las temporalidades no están alineadas",
+    "type": "String"
+  },
+  "reasoning": "Razonamiento:",
+  "@reasoning": {
+    "description": "Etiqueta para sección de razonamiento",
+    "type": "String"
+  },
+  "target": "Objetivo",
+  "@target": {
+    "description": "Etiqueta para precio objetivo",
+    "type": "String"
+  },
+  "riskScore": "Puntuación de Riesgo:",
+  "@riskScore": {
+    "description": "Etiqueta para puntuación de riesgo",
+    "type": "String"
+  },
+  "volatility": "Volatilidad:",
+  "@volatility": {
+    "description": "Etiqueta para volatilidad",
+    "type": "String"
+  },
+  "riskFactors": "Factores de Riesgo:",
+  "@riskFactors": {
+    "description": "Etiqueta para sección de factores de riesgo",
+    "type": "String"
   }
 }
