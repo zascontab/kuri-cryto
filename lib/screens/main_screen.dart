@@ -13,7 +13,12 @@ import 'alerts_screen.dart';
 import 'execution_stats_screen.dart';
 import 'performance_charts_screen.dart';
 import 'ai_bot_control_screen.dart';
+import 'ai_bot_config_screen.dart';
 import 'comprehensive_analysis_screen.dart';
+import 'futures_positions_screen.dart';
+import 'trading_hub_screen.dart';
+import 'mcp_main_screen.dart';
+import 'market_type_demo_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../l10n/l10n_export.dart';
 
@@ -107,224 +112,332 @@ class _MainScreenState extends State<MainScreen> {
           _buildMoreScreen(),
         ],
       ),
-      bottomNavigationBar: Builder(
-        builder: (context) {
-          final l10n = context.l10n;
-          return NavigationBar(
-            selectedIndex: _currentIndex,
-            onDestinationSelected: _onTabTapped,
-            destinations: [
-              NavigationDestination(
-                icon: const Icon(Icons.dashboard_outlined),
-                selectedIcon: const Icon(Icons.dashboard),
-                label: l10n.home,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.account_balance_wallet_outlined),
-                selectedIcon: const Icon(Icons.account_balance_wallet),
-                label: l10n.positions,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.psychology_outlined),
-                selectedIcon: const Icon(Icons.psychology),
-                label: l10n.strategies,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.security_outlined),
-                selectedIcon: const Icon(Icons.security),
-                label: l10n.risk,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.more_horiz_outlined),
-                selectedIcon: const Icon(Icons.more_horiz),
-                label: l10n.more,
-              ),
-            ],
-          );
-        }
-      ),
+      bottomNavigationBar: Builder(builder: (context) {
+        final l10n = context.l10n;
+        return NavigationBar(
+          selectedIndex: _currentIndex,
+          onDestinationSelected: _onTabTapped,
+          destinations: [
+            NavigationDestination(
+              icon: const Icon(Icons.dashboard_outlined),
+              selectedIcon: const Icon(Icons.dashboard),
+              label: l10n.home,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.account_balance_wallet_outlined),
+              selectedIcon: const Icon(Icons.account_balance_wallet),
+              label: l10n.positions,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.psychology_outlined),
+              selectedIcon: const Icon(Icons.psychology),
+              label: l10n.strategies,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.security_outlined),
+              selectedIcon: const Icon(Icons.security),
+              label: l10n.risk,
+            ),
+            NavigationDestination(
+              icon: const Icon(Icons.more_horiz_outlined),
+              selectedIcon: const Icon(Icons.more_horiz),
+              label: l10n.more,
+            ),
+          ],
+        );
+      }),
     );
   }
 
   Widget _buildMoreScreen() {
-    return Builder(
-      builder: (context) {
-        final l10n = context.l10n;
-        return ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.analytics),
-                    title: Text(l10n.multiTimeframeAnalysis),
-                    subtitle: Text(l10n.technicalAnalysisMultipleTimeframes),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const MultiTimeframeScreen(),
-                        ),
-                      );
-                    },
+    return Builder(builder: (context) {
+      final l10n = context.l10n;
+      return ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.dashboard_customize),
+                  title: const Text('Trading Hub'),
+                  subtitle: const Text('Unified trading interface'),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'NEW',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.history),
-                    title: Text(l10n.backtesting),
-                    subtitle: Text(l10n.testStrategiesWithHistoricalData),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const BacktestScreen(),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TradingHubScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.analytics),
+                  title: Text(l10n.multiTimeframeAnalysis),
+                  subtitle: Text(l10n.technicalAnalysisMultipleTimeframes),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MultiTimeframeScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.history),
+                  title: Text(l10n.backtesting),
+                  subtitle: Text(l10n.testStrategiesWithHistoricalData),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const BacktestScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.tune),
+                  title: Text(l10n.parameterOptimization),
+                  subtitle: Text(l10n.optimizeStrategyParameters),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const OptimizationScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.speed),
+                  title: Text(l10n.executionStats),
+                  subtitle: Text(l10n.viewLatencyPerformance),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ExecutionStatsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.show_chart),
+                  title: Text(l10n.performanceCharts),
+                  subtitle: Text(l10n.detailedCharts),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const PerformanceChartsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.paid),
+                  title: Text(l10n.tradingPairs),
+                  subtitle: Text(l10n.manageTradingPairs),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const TradingPairsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.notifications),
+                  title: Text(l10n.alerts),
+                  subtitle: Text(l10n.configureNotifications),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AlertsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.smart_toy),
+                  title: Text(l10n.aiBotTitle),
+                  subtitle: Text(l10n.aiBotStatus),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AiBotControlScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.insights),
+                  title: Text(l10n.analysisTitle),
+                  subtitle: Text(l10n.analysisTechnical),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const ComprehensiveAnalysisScreen(
+                          symbol: 'BTC-USDT',
+                          exchange: 'kucoin',
                         ),
-                      );
-                    },
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.account_balance),
+                  title: const Text('Futures Positions'),
+                  subtitle: const Text('View & manage futures positions'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const FuturesPositionsScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.analytics),
+                  title: const Text('MCP Trading'),
+                  subtitle: const Text('Signals & Analysis'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MCPMainScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.settings_suggest),
+                  title: const Text('Bot Configuration'),
+                  subtitle: const Text('Configure AI Bot Settings'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AiBotConfigScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.swap_horiz),
+                  title: const Text('Market Types'),
+                  subtitle: const Text('Spot, Futures, Margin, Options'),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'DEMO',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.tune),
-                    title: Text(l10n.parameterOptimization),
-                    subtitle: Text(l10n.optimizeStrategyParameters),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const OptimizationScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.speed),
-                    title: Text(l10n.executionStats),
-                    subtitle: Text(l10n.viewLatencyPerformance),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ExecutionStatsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.show_chart),
-                    title: Text(l10n.performanceCharts),
-                    subtitle: Text(l10n.detailedCharts),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const PerformanceChartsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.paid),
-                    title: Text(l10n.tradingPairs),
-                    subtitle: Text(l10n.manageTradingPairs),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const TradingPairsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.notifications),
-                    title: Text(l10n.alerts),
-                    subtitle: Text(l10n.configureNotifications),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AlertsScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.smart_toy),
-                    title: Text(l10n.aiBotTitle),
-                    subtitle: Text(l10n.aiBotStatus),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const AiBotControlScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.insights),
-                    title: Text(l10n.analysisTitle),
-                    subtitle: Text(l10n.analysisTechnical),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const ComprehensiveAnalysisScreen(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MarketTypeDemoScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
-            const SizedBox(height: 16),
-            Card(
-              child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.settings),
-                    title: Text(l10n.settings),
-                    subtitle: Text(l10n.appPreferences),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      // Navigate to settings
-                    },
-                  ),
-                  const Divider(height: 1),
-                  ListTile(
-                    leading: const Icon(Icons.info_outline),
-                    title: Text(l10n.about),
-                    subtitle: Text(l10n.appInformation),
-                    trailing: const Icon(Icons.chevron_right),
-                    onTap: () {
-                      HapticFeedback.lightImpact();
-                      _showAboutDialog();
-                    },
-                  ),
-                ],
-              ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            child: Column(
+              children: [
+                ListTile(
+                  leading: const Icon(Icons.settings),
+                  title: Text(l10n.settings),
+                  subtitle: Text(l10n.appPreferences),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    // Navigate to settings
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.info_outline),
+                  title: Text(l10n.about),
+                  subtitle: Text(l10n.appInformation),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    _showAboutDialog();
+                  },
+                ),
+              ],
             ),
-          ],
-        );
-      }
-    );
+          ),
+        ],
+      );
+    });
   }
 
   void _showAboutDialog() {

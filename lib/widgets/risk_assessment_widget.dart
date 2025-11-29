@@ -141,7 +141,7 @@ class RiskAssessmentWidget extends StatelessWidget {
                               child: LinearProgressIndicator(
                                 value: animValue,
                                 minHeight: 16,
-                                backgroundColor: colorScheme.surfaceVariant,
+                                backgroundColor: colorScheme.surfaceContainerHighest,
                                 valueColor: AlwaysStoppedAnimation<Color>(
                                   riskColor,
                                 ),
@@ -296,7 +296,7 @@ class RiskAssessmentWidget extends StatelessWidget {
                       ),
                     ),
                   );
-                }).toList(),
+                }),
             ],
           ),
         ),

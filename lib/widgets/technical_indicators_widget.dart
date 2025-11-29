@@ -110,7 +110,7 @@ class TechnicalIndicatorsWidget extends StatelessWidget {
                                   value: animValue,
                                   minHeight: 8,
                                   backgroundColor:
-                                      colorScheme.surfaceVariant,
+                                      colorScheme.surfaceContainerHighest,
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                     _getTrendColor(
                                       technicalAnalysis.trend,

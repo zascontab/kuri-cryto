@@ -53,7 +53,8 @@ class AiBotStatus {
       dailyLoss: (json['daily_loss'] as num?)?.toDouble() ?? 0.0,
       dailyTrades: json['daily_trades'] as int? ?? 0,
       openPositions: json['open_positions'] as int? ?? 0,
-      config: AiBotConfig.fromJson(json['config'] as Map<String, dynamic>? ?? {}),
+      config:
+          AiBotConfig.fromJson(json['config'] as Map<String, dynamic>? ?? {}),
     );
   }
 
@@ -92,5 +93,72 @@ class AiBotStatus {
   double get dailyTradesPercent {
     if (config.maxDailyTrades == 0) return 0.0;
     return (dailyTrades / config.maxDailyTrades) * 100;
+  }
+
+  // Additional computed properties
+
+  /// Uptime as Duration
+  Duration get uptime => Duration(seconds: uptimeSeconds);
+
+  /// Indicates if the bot is healthy (no consecutive errors)
+  bool get isHealthy => consecutiveErrors < 3;
+
+  /// Indicates if daily limits have been reached
+  bool get hasReachedDailyLimit {
+    return dailyTrades >= config.maxDailyTrades ||
+        dailyLoss.abs() >= config.maxDailyLossUsd;
+  }
+
+  /// Formatted uptime string (e.g., "2h 30m")
+  String get uptimeFormatted {
+    final duration = uptime;
+    if (duration.inDays > 0) {
+      return '${duration.inDays}d ${duration.inHours % 24}h';
+    } else if (duration.inHours > 0) {
+      return '${duration.inHours}h ${duration.inMinutes % 60}m';
+    } else if (duration.inMinutes > 0) {
+      return '${duration.inMinutes}m ${duration.inSeconds % 60}s';
+    } else {
+      return '${duration.inSeconds}s';
+    }
+  }
+
+  /// Success rate of executions (percentage)
+  double get successRate {
+    if (analysisCount == 0) return 0.0;
+    final successCount = analysisCount - errorCount;
+    return (successCount / analysisCount) * 100;
+  }
+
+  /// Execution rate (executions per analysis)
+  double get executionRate {
+    if (analysisCount == 0) return 0.0;
+    return executionCount / analysisCount;
+  }
+
+  /// Average daily loss per trade
+  double get avgLossPerTrade {
+    if (dailyTrades == 0) return 0.0;
+    return dailyLoss / dailyTrades;
+  }
+
+  /// Status description for UI
+  String get statusDescription {
+    if (emergencyStop) return 'Emergency Stop Active';
+    if (!running) return 'Stopped';
+    if (paused) return 'Paused';
+    if (hasReachedDailyLimit) return 'Daily Limit Reached';
+    if (!isHealthy) return 'Warning: Multiple Errors';
+    return 'Running';
+  }
+
+  /// Status color indicator
+  String get statusColor {
+    if (emergencyStop) return 'red';
+    if (!running) return 'gray';
+    if (paused) return 'orange';
+    if (hasReachedDailyLimit) return 'yellow';
+    if (!isHealthy) return 'orange';
+    return 'green';
   }
 }

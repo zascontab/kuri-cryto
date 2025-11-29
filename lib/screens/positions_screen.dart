@@ -49,7 +49,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.closingPosition(positionId: positionId)),
+            content: Text(l10n.closingPosition(positionId)),
             backgroundColor: const Color(0xFF4CAF50),
             duration: const Duration(seconds: 2),
           ),
@@ -90,7 +90,9 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
     final l10n = context.l10n;
 
     try {
-      await ref.read(breakevenMoverProvider.notifier).moveToBreakeven(positionId);
+      await ref
+          .read(breakevenMoverProvider.notifier)
+          .moveToBreakeven(positionId);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -125,9 +127,9 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
     try {
       // Use default 0.5% trailing distance
       await ref.read(trailingStopEnablerProvider.notifier).enableTrailingStop(
-        positionId: positionId,
-        distancePercent: 0.5,
-      );
+            positionId: positionId,
+            distancePercent: 0.5,
+          );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -324,9 +326,7 @@ class _PositionsScreenState extends ConsumerState<PositionsScreen>
           ),
           const SizedBox(height: 8),
           Text(
-            isOpen
-                ? l10n.startEngineToTrade
-                : l10n.closedPositionsHere,
+            isOpen ? l10n.startEngineToTrade : l10n.closedPositionsHere,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: Colors.grey[500],
                 ),
@@ -383,10 +383,10 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
 
       try {
         await ref.read(slTpUpdaterProvider.notifier).updateSlTp(
-          positionId: widget.positionId,
-          stopLoss: stopLoss,
-          takeProfit: takeProfit,
-        );
+              positionId: widget.positionId,
+              stopLoss: stopLoss,
+              takeProfit: takeProfit,
+            );
 
         if (mounted) {
           Navigator.pop(context);
@@ -450,7 +450,8 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
                   border: const OutlineInputBorder(),
                   helperText: l10n.priceCloseIfLosing,
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return null; // Optional field
@@ -471,7 +472,8 @@ class _SLTPEditSheetState extends ConsumerState<_SLTPEditSheet> {
                   border: const OutlineInputBorder(),
                   helperText: l10n.priceCloseIfWinning,
                 ),
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return null; // Optional field

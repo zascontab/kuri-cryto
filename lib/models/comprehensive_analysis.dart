@@ -1,428 +1,618 @@
-/// Análisis comprehensivo de mercado con AI
+import 'market_type.dart';
+import 'futures_data.dart';
+import 'margin_data.dart';
+import 'options_data.dart';
+import 'key_levels.dart';
+import 'risk_assessment.dart';
+
+/// Comprehensive market analysis model
+///
+/// Contains complete market analysis including price data, technical indicators
+/// across multiple timeframes, scenarios, and AI-powered recommendations.
+///
+/// Supports market-type specific data:
+/// - Futures: funding_rate, mark_price, liquidation_price
+/// - Margin: interest_rate, margin_level, borrowed_amount
+/// - Options: implied_volatility, greeks
 class ComprehensiveAnalysis {
   final String symbol;
   final String exchange;
   final DateTime timestamp;
-  final CurrentPrice currentPrice;
-  final TechnicalAnalysis technicalAnalysis;
-  final MultiTimeframeAnalysis multiTimeframe;
-  final List<CandleData> recentMovement;
-  final KeyLevels keyLevels;
+  final PriceData priceData;
+  final Map<String, TechnicalIndicators> technicalIndicators;
+  final Map<String, Scenario> scenarios;
   final Recommendation recommendation;
-  final List<MarketScenario> scenarios;
-  final RiskAssessment riskAssessment;
 
-  const ComprehensiveAnalysis({
+  /// Market type (spot, futures, margin, options)
+  final MarketType? marketType;
+
+  /// Futures-specific data (only present for futures market type)
+  final FuturesData? futuresData;
+
+  /// Margin-specific data (only present for margin market type)
+  final MarginData? marginData;
+
+  /// Options-specific data (only present for options market type)
+  final OptionsData? optionsData;
+
+  /// Key price levels (support and resistance)
+  final KeyLevels? keyLevels;
+
+  /// Risk assessment
+  final RiskAssessment? riskAssessment;
+
+  ComprehensiveAnalysis({
     required this.symbol,
     required this.exchange,
     required this.timestamp,
-    required this.currentPrice,
-    required this.technicalAnalysis,
-    required this.multiTimeframe,
-    required this.recentMovement,
-    required this.keyLevels,
-    required this.recommendation,
+    required this.priceData,
+    required this.technicalIndicators,
     required this.scenarios,
-    required this.riskAssessment,
+    required this.recommendation,
+    this.marketType,
+    this.futuresData,
+    this.marginData,
+    this.optionsData,
+    this.keyLevels,
+    this.riskAssessment,
   });
 
   factory ComprehensiveAnalysis.fromJson(Map<String, dynamic> json) {
     return ComprehensiveAnalysis(
-      symbol: json['symbol'] as String,
-      exchange: json['exchange'] as String,
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      currentPrice: CurrentPrice.fromJson(json['current_price'] as Map<String, dynamic>),
-      technicalAnalysis: TechnicalAnalysis.fromJson(json['technical_analysis'] as Map<String, dynamic>),
-      multiTimeframe: MultiTimeframeAnalysis.fromJson(json['multi_timeframe'] as Map<String, dynamic>),
-      recentMovement: (json['recent_movement'] as List)
-          .map((e) => CandleData.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      keyLevels: KeyLevels.fromJson(json['key_levels'] as Map<String, dynamic>),
-      recommendation: Recommendation.fromJson(json['recommendation'] as Map<String, dynamic>),
-      scenarios: (json['scenarios'] as List)
-          .map((e) => MarketScenario.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      riskAssessment: RiskAssessment.fromJson(json['risk_assessment'] as Map<String, dynamic>),
+      symbol: json['symbol'] as String? ?? '',
+      exchange: json['exchange'] as String? ?? 'kucoin',
+      timestamp: json['timestamp'] != null
+          ? DateTime.parse(json['timestamp'] as String)
+          : DateTime.now(),
+      priceData: PriceData.fromJson(
+        json['current_price'] as Map<String, dynamic>? ??
+            json['price_data'] as Map<String, dynamic>? ??
+            {},
+      ),
+      technicalIndicators: _parseTechnicalIndicators(
+        json['multi_timeframe'] ??
+            json['technical_indicators'] ??
+            json['technical_analysis'],
+      ),
+      scenarios: _parseScenariosFromList(json['scenarios']),
+      recommendation: Recommendation.fromJson(
+        json['recommendation'] as Map<String, dynamic>? ?? {},
+      ),
+      // Market type specific fields
+      marketType: json['market_type'] != null
+          ? MarketType.fromString(json['market_type'] as String)
+          : null,
+      futuresData: json['futures_data'] != null
+          ? FuturesData.fromJson(json['futures_data'] as Map<String, dynamic>)
+          : null,
+      marginData: json['margin_data'] != null
+          ? MarginData.fromJson(json['margin_data'] as Map<String, dynamic>)
+          : null,
+      optionsData: json['options_data'] != null
+          ? OptionsData.fromJson(json['options_data'] as Map<String, dynamic>)
+          : null,
+      keyLevels: json['key_levels'] != null
+          ? KeyLevels.fromJson(json['key_levels'] as Map<String, dynamic>)
+          : null,
+      riskAssessment: json['risk_assessment'] != null
+          ? RiskAssessment.fromJson(
+              json['risk_assessment'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'symbol': symbol,
+      'exchange': exchange,
+      'timestamp': timestamp.toIso8601String(),
+      'price_data': priceData.toJson(),
+      'technical_indicators': technicalIndicators.map(
+        (key, value) => MapEntry(key, value.toJson()),
+      ),
+      'scenarios': scenarios.map(
+        (key, value) => MapEntry(key, value.toJson()),
+      ),
+      'recommendation': recommendation.toJson(),
+      if (marketType != null) 'market_type': marketType!.value,
+      if (futuresData != null) 'futures_data': futuresData!.toJson(),
+      if (marginData != null) 'margin_data': marginData!.toJson(),
+      if (optionsData != null) 'options_data': optionsData!.toJson(),
+      if (keyLevels != null) 'key_levels': keyLevels!.toJson(),
+      if (riskAssessment != null) 'risk_assessment': riskAssessment!.toJson(),
+    };
+  }
+
+  static Map<String, TechnicalIndicators> _parseTechnicalIndicators(
+    dynamic data,
+  ) {
+    if (data == null || data is! Map) return {};
+
+    final Map<String, TechnicalIndicators> indicators = {};
+    final dataMap = data as Map<String, dynamic>;
+
+    for (var entry in dataMap.entries) {
+      // Skip non-timeframe keys like 'alignment'
+      if (entry.key == 'alignment') continue;
+
+      if (entry.value is Map<String, dynamic>) {
+        final indicatorData = entry.value as Map<String, dynamic>;
+        // Add timeframe to the data if not present
+        if (!indicatorData.containsKey('timeframe')) {
+          indicatorData['timeframe'] = entry.key;
+        }
+        indicators[entry.key] = TechnicalIndicators.fromJson(indicatorData);
+      }
+    }
+
+    return indicators;
+  }
+
+  static Map<String, Scenario> _parseScenarios(dynamic data) {
+    if (data == null || data is! Map) return {};
+
+    return Map.fromEntries(
+      (data as Map<String, dynamic>).entries.map(
+            (e) => MapEntry(
+              e.key,
+              Scenario.fromJson(e.value as Map<String, dynamic>),
+            ),
+          ),
+    );
+  }
+
+  static Map<String, Scenario> _parseScenariosFromList(dynamic data) {
+    if (data == null) return {};
+
+    // If it's already a Map, use the existing parser
+    if (data is Map) return _parseScenarios(data);
+
+    // If it's a List, convert to Map using type as key
+    if (data is List) {
+      final Map<String, Scenario> scenariosMap = {};
+      for (var item in data) {
+        if (item is Map<String, dynamic>) {
+          final scenario = Scenario.fromJson(item);
+          scenariosMap[scenario.type] = scenario;
+        }
+      }
+      return scenariosMap;
+    }
+
+    return {};
+  }
+
+  // Computed properties
+  bool get isStrongBuy =>
+      recommendation.action == 'BUY' && recommendation.confidence >= 0.8;
+
+  bool get isStrongSell =>
+      recommendation.action == 'SELL' && recommendation.confidence >= 0.8;
+
+  bool get isBullish => (scenarios['bullish']?.probability ?? 0) > 0.6;
+
+  bool get isBearish => (scenarios['bearish']?.probability ?? 0) > 0.6;
+
+  Scenario? get mostLikelyScenario {
+    if (scenarios.isEmpty) return null;
+    return scenarios.values.reduce(
+      (a, b) => a.probability > b.probability ? a : b,
     );
   }
 }
 
-/// Precio actual y estadísticas 24h
-class CurrentPrice {
-  final double current;
-  final double change24h;
+/// Price data for a trading pair
+class PriceData {
+  final double last;
+  final double bid;
+  final double ask;
+  final double volume;
   final double high24h;
   final double low24h;
-  final double volume24h;
+  final double change24h;
+  final double changePercent24h;
 
-  const CurrentPrice({
-    required this.current,
-    required this.change24h,
+  PriceData({
+    required this.last,
+    required this.bid,
+    required this.ask,
+    required this.volume,
     required this.high24h,
     required this.low24h,
-    required this.volume24h,
+    required this.change24h,
+    required this.changePercent24h,
   });
 
-  factory CurrentPrice.fromJson(Map<String, dynamic> json) {
-    return CurrentPrice(
-      current: (json['current'] as num).toDouble(),
-      change24h: (json['change_24h'] as num).toDouble(),
-      high24h: (json['high_24h'] as num).toDouble(),
-      low24h: (json['low_24h'] as num).toDouble(),
-      volume24h: (json['volume_24h'] as num).toDouble(),
+  factory PriceData.fromJson(Map<String, dynamic> json) {
+    return PriceData(
+      last: (json['current'] as num?)?.toDouble() ??
+          (json['last'] as num?)?.toDouble() ??
+          0.0,
+      bid: (json['bid'] as num?)?.toDouble() ?? 0.0,
+      ask: (json['ask'] as num?)?.toDouble() ?? 0.0,
+      volume: (json['volume_24h'] as num?)?.toDouble() ??
+          (json['volume'] as num?)?.toDouble() ??
+          0.0,
+      high24h: (json['high_24h'] as num?)?.toDouble() ?? 0.0,
+      low24h: (json['low_24h'] as num?)?.toDouble() ?? 0.0,
+      change24h: (json['change_24h'] as num?)?.toDouble() ?? 0.0,
+      changePercent24h: (json['change_percent_24h'] as num?)?.toDouble() ?? 0.0,
     );
   }
 
-  bool get isPositiveChange => change24h >= 0;
+  Map<String, dynamic> toJson() {
+    return {
+      'last': last,
+      'bid': bid,
+      'ask': ask,
+      'volume': volume,
+      'high_24h': high24h,
+      'low_24h': low24h,
+      'change_24h': change24h,
+      'change_percent_24h': changePercent24h,
+    };
+  }
+
+  // Computed properties
+  double get spread => ask - bid;
+  double get spreadPercent => (spread / last) * 100;
+  double get midPrice => (bid + ask) / 2;
+  bool get isRising => change24h > 0;
 }
 
-/// Análisis técnico con indicadores
-class TechnicalAnalysis {
-  final RsiData rsi;
-  final MacdData macd;
-  final BollingerData bollinger;
-  final EmaData ema;
-  final String trend; // 'bullish', 'bearish', 'neutral'
-  final double strength; // 0.0 a 1.0
+/// Technical indicators for a specific timeframe
+class TechnicalIndicators {
+  final String timeframe;
+  final RSIData? rsi;
+  final MACDData? macd;
+  final BollingerBandsData? bollingerBands;
+  final EMAData? ema;
+  final VolumeData? volume;
 
-  const TechnicalAnalysis({
-    required this.rsi,
-    required this.macd,
-    required this.bollinger,
-    required this.ema,
-    required this.trend,
-    required this.strength,
+  TechnicalIndicators({
+    required this.timeframe,
+    this.rsi,
+    this.macd,
+    this.bollingerBands,
+    this.ema,
+    this.volume,
   });
 
-  factory TechnicalAnalysis.fromJson(Map<String, dynamic> json) {
-    return TechnicalAnalysis(
-      rsi: RsiData.fromJson(json['rsi'] as Map<String, dynamic>),
-      macd: MacdData.fromJson(json['macd'] as Map<String, dynamic>),
-      bollinger: BollingerData.fromJson(json['bollinger'] as Map<String, dynamic>),
-      ema: EmaData.fromJson(json['ema'] as Map<String, dynamic>),
-      trend: json['trend'] as String,
-      strength: (json['strength'] as num).toDouble(),
+  factory TechnicalIndicators.fromJson(Map<String, dynamic> json) {
+    // Handle simplified API format where rsi is a number directly
+    RSIData? rsiData;
+    if (json['rsi'] != null) {
+      if (json['rsi'] is Map) {
+        rsiData = RSIData.fromJson(json['rsi'] as Map<String, dynamic>);
+      } else if (json['rsi'] is num) {
+        rsiData = RSIData(
+          value: (json['rsi'] as num).toDouble(),
+          signal: json['signal'] as String? ?? 'neutral',
+        );
+      }
+    }
+
+    return TechnicalIndicators(
+      timeframe: json['timeframe'] as String? ?? '',
+      rsi: rsiData,
+      macd: json['macd'] != null
+          ? MACDData.fromJson(json['macd'] as Map<String, dynamic>)
+          : null,
+      bollingerBands: json['bollinger_bands'] != null
+          ? BollingerBandsData.fromJson(
+              json['bollinger_bands'] as Map<String, dynamic>,
+            )
+          : null,
+      ema: json['ema'] != null
+          ? EMAData.fromJson(json['ema'] as Map<String, dynamic>)
+          : null,
+      volume: json['volume'] != null
+          ? VolumeData.fromJson(json['volume'] as Map<String, dynamic>)
+          : null,
     );
   }
 
-  bool get isBullish => trend == 'bullish';
-  bool get isBearish => trend == 'bearish';
-  bool get isNeutral => trend == 'neutral';
+  Map<String, dynamic> toJson() {
+    return {
+      'timeframe': timeframe,
+      if (rsi != null) 'rsi': rsi!.toJson(),
+      if (macd != null) 'macd': macd!.toJson(),
+      if (bollingerBands != null) 'bollinger_bands': bollingerBands!.toJson(),
+      if (ema != null) 'ema': ema!.toJson(),
+      if (volume != null) 'volume': volume!.toJson(),
+    };
+  }
 }
 
-class RsiData {
+/// RSI (Relative Strength Index) data
+class RSIData {
   final double value;
-  final String interpretation;
-  final String signal; // 'oversold', 'overbought', 'neutral'
+  final String signal; // 'overbought', 'oversold', 'neutral'
 
-  const RsiData({
+  RSIData({
     required this.value,
-    required this.interpretation,
     required this.signal,
   });
 
-  factory RsiData.fromJson(Map<String, dynamic> json) {
-    return RsiData(
-      value: (json['value'] as num).toDouble(),
-      interpretation: json['interpretation'] as String,
-      signal: json['signal'] as String,
+  factory RSIData.fromJson(Map<String, dynamic> json) {
+    return RSIData(
+      value: (json['value'] as num?)?.toDouble() ?? 50.0,
+      signal: json['signal'] as String? ?? 'neutral',
     );
   }
 
-  bool get isOversold => signal == 'oversold' || value < 30;
-  bool get isOverbought => signal == 'overbought' || value > 70;
+  Map<String, dynamic> toJson() {
+    return {
+      'value': value,
+      'signal': signal,
+    };
+  }
+
+  bool get isOverbought => value > 70;
+  bool get isOversold => value < 30;
 }
 
-class MacdData {
-  final double value;
+/// MACD (Moving Average Convergence Divergence) data
+class MACDData {
+  final double macd;
   final double signal;
   final double histogram;
   final String trend; // 'bullish', 'bearish', 'neutral'
 
-  const MacdData({
-    required this.value,
+  MACDData({
+    required this.macd,
     required this.signal,
     required this.histogram,
     required this.trend,
   });
 
-  factory MacdData.fromJson(Map<String, dynamic> json) {
-    return MacdData(
-      value: (json['value'] as num).toDouble(),
-      signal: (json['signal'] as num).toDouble(),
-      histogram: (json['histogram'] as num).toDouble(),
-      trend: json['trend'] as String,
+  factory MACDData.fromJson(Map<String, dynamic> json) {
+    return MACDData(
+      macd: (json['macd'] as num?)?.toDouble() ?? 0.0,
+      signal: (json['signal'] as num?)?.toDouble() ?? 0.0,
+      histogram: (json['histogram'] as num?)?.toDouble() ?? 0.0,
+      trend: json['trend'] as String? ?? 'neutral',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'macd': macd,
+      'signal': signal,
+      'histogram': histogram,
+      'trend': trend,
+    };
+  }
+
+  bool get isBullish => histogram > 0;
+  bool get isBearish => histogram < 0;
 }
 
-class BollingerData {
+/// Bollinger Bands data
+class BollingerBandsData {
   final double upper;
   final double middle;
   final double lower;
-  final String position; // 'upper', 'middle', 'lower'
+  final double currentPrice;
+  final String position; // 'above_upper', 'below_lower', 'within_bands'
 
-  const BollingerData({
+  BollingerBandsData({
     required this.upper,
     required this.middle,
     required this.lower,
+    required this.currentPrice,
     required this.position,
   });
 
-  factory BollingerData.fromJson(Map<String, dynamic> json) {
-    return BollingerData(
-      upper: (json['upper'] as num).toDouble(),
-      middle: (json['middle'] as num).toDouble(),
-      lower: (json['lower'] as num).toDouble(),
-      position: json['position'] as String,
+  factory BollingerBandsData.fromJson(Map<String, dynamic> json) {
+    return BollingerBandsData(
+      upper: (json['upper'] as num?)?.toDouble() ?? 0.0,
+      middle: (json['middle'] as num?)?.toDouble() ?? 0.0,
+      lower: (json['lower'] as num?)?.toDouble() ?? 0.0,
+      currentPrice: (json['current_price'] as num?)?.toDouble() ?? 0.0,
+      position: json['position'] as String? ?? 'within_bands',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'upper': upper,
+      'middle': middle,
+      'lower': lower,
+      'current_price': currentPrice,
+      'position': position,
+    };
+  }
+
+  bool get isAboveUpper => currentPrice > upper;
+  bool get isBelowLower => currentPrice < lower;
+  double get bandWidth => upper - lower;
 }
 
-class EmaData {
-  final double ema9;
-  final double ema21;
+/// EMA (Exponential Moving Average) data
+class EMAData {
+  final double ema20;
   final double ema50;
-  final String priceVsEma;
+  final double ema200;
+  final String trend; // 'bullish', 'bearish', 'neutral'
 
-  const EmaData({
-    required this.ema9,
-    required this.ema21,
+  EMAData({
+    required this.ema20,
     required this.ema50,
-    required this.priceVsEma,
-  });
-
-  factory EmaData.fromJson(Map<String, dynamic> json) {
-    return EmaData(
-      ema9: (json['ema_9'] as num).toDouble(),
-      ema21: (json['ema_21'] as num).toDouble(),
-      ema50: (json['ema_50'] as num).toDouble(),
-      priceVsEma: json['price_vs_ema'] as String,
-    );
-  }
-}
-
-/// Análisis multi-temporalidad
-class MultiTimeframeAnalysis {
-  final TimeframeData oneMinute;
-  final TimeframeData fiveMinutes;
-  final TimeframeData fifteenMinutes;
-  final TimeframeData oneHour;
-  final String alignment; // 'bullish_aligned', 'bearish_aligned', 'not_aligned'
-
-  const MultiTimeframeAnalysis({
-    required this.oneMinute,
-    required this.fiveMinutes,
-    required this.fifteenMinutes,
-    required this.oneHour,
-    required this.alignment,
-  });
-
-  factory MultiTimeframeAnalysis.fromJson(Map<String, dynamic> json) {
-    return MultiTimeframeAnalysis(
-      oneMinute: TimeframeData.fromJson(json['1m'] as Map<String, dynamic>),
-      fiveMinutes: TimeframeData.fromJson(json['5m'] as Map<String, dynamic>),
-      fifteenMinutes: TimeframeData.fromJson(json['15m'] as Map<String, dynamic>),
-      oneHour: TimeframeData.fromJson(json['1h'] as Map<String, dynamic>),
-      alignment: json['alignment'] as String,
-    );
-  }
-
-  bool get isAligned => alignment != 'not_aligned';
-  bool get isBullishAligned => alignment == 'bullish_aligned';
-  bool get isBearishAligned => alignment == 'bearish_aligned';
-}
-
-class TimeframeData {
-  final double rsi;
-  final String trend;
-  final String signal;
-
-  const TimeframeData({
-    required this.rsi,
+    required this.ema200,
     required this.trend,
-    required this.signal,
   });
 
-  factory TimeframeData.fromJson(Map<String, dynamic> json) {
-    return TimeframeData(
-      rsi: (json['rsi'] as num).toDouble(),
-      trend: json['trend'] as String,
-      signal: json['signal'] as String,
-    );
-  }
-}
-
-/// Datos de vela (OHLCV)
-class CandleData {
-  final DateTime timestamp;
-  final double open;
-  final double high;
-  final double low;
-  final double close;
-  final double volume;
-  final String direction; // 'bullish', 'bearish'
-  final double changePercent;
-
-  const CandleData({
-    required this.timestamp,
-    required this.open,
-    required this.high,
-    required this.low,
-    required this.close,
-    required this.volume,
-    required this.direction,
-    required this.changePercent,
-  });
-
-  factory CandleData.fromJson(Map<String, dynamic> json) {
-    return CandleData(
-      timestamp: DateTime.parse(json['timestamp'] as String),
-      open: (json['open'] as num).toDouble(),
-      high: (json['high'] as num).toDouble(),
-      low: (json['low'] as num).toDouble(),
-      close: (json['close'] as num).toDouble(),
-      volume: (json['volume'] as num).toDouble(),
-      direction: json['direction'] as String,
-      changePercent: (json['change_percent'] as num).toDouble(),
+  factory EMAData.fromJson(Map<String, dynamic> json) {
+    return EMAData(
+      ema20: (json['ema_20'] as num?)?.toDouble() ?? 0.0,
+      ema50: (json['ema_50'] as num?)?.toDouble() ?? 0.0,
+      ema200: (json['ema_200'] as num?)?.toDouble() ?? 0.0,
+      trend: json['trend'] as String? ?? 'neutral',
     );
   }
 
-  bool get isBullish => direction == 'bullish';
+  Map<String, dynamic> toJson() {
+    return {
+      'ema_20': ema20,
+      'ema_50': ema50,
+      'ema_200': ema200,
+      'trend': trend,
+    };
+  }
+
+  bool get isGoldenCross => ema20 > ema50 && ema50 > ema200;
+  bool get isDeathCross => ema20 < ema50 && ema50 < ema200;
 }
 
-/// Niveles clave de soporte y resistencia
-class KeyLevels {
-  final double support;
-  final double resistance;
-  final DistanceData distance;
+/// Volume data
+class VolumeData {
+  final double current;
+  final double average;
+  final String trend; // 'increasing', 'decreasing', 'stable'
 
-  const KeyLevels({
-    required this.support,
-    required this.resistance,
-    required this.distance,
+  VolumeData({
+    required this.current,
+    required this.average,
+    required this.trend,
   });
 
-  factory KeyLevels.fromJson(Map<String, dynamic> json) {
-    return KeyLevels(
-      support: (json['support'] as num).toDouble(),
-      resistance: (json['resistance'] as num).toDouble(),
-      distance: DistanceData.fromJson(json['distance'] as Map<String, dynamic>),
+  factory VolumeData.fromJson(Map<String, dynamic> json) {
+    return VolumeData(
+      current: (json['current'] as num?)?.toDouble() ?? 0.0,
+      average: (json['average'] as num?)?.toDouble() ?? 0.0,
+      trend: json['trend'] as String? ?? 'stable',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'current': current,
+      'average': average,
+      'trend': trend,
+    };
+  }
+
+  bool get isAboveAverage => current > average;
+  double get volumeRatio => average > 0 ? current / average : 0;
 }
 
-class DistanceData {
-  final double toSupportPercent;
-  final double toResistancePercent;
+/// Market scenario with probability
+class Scenario {
+  final String type; // 'bullish', 'bearish', 'neutral'
+  final double probability;
+  final String description;
+  final List<String> conditions;
+  final double? targetPrice;
+  final double? stopLoss;
 
-  const DistanceData({
-    required this.toSupportPercent,
-    required this.toResistancePercent,
+  Scenario({
+    required this.type,
+    required this.probability,
+    required this.description,
+    required this.conditions,
+    this.targetPrice,
+    this.stopLoss,
   });
 
-  factory DistanceData.fromJson(Map<String, dynamic> json) {
-    return DistanceData(
-      toSupportPercent: (json['to_support_percent'] as num).toDouble(),
-      toResistancePercent: (json['to_resistance_percent'] as num).toDouble(),
+  factory Scenario.fromJson(Map<String, dynamic> json) {
+    return Scenario(
+      type: json['type'] as String? ?? 'neutral',
+      probability: (json['probability'] as num?)?.toDouble() ??
+          (json['change_percent'] as num?)?.toDouble() ??
+          0.0,
+      description: json['description'] as String? ?? '',
+      conditions:
+          (json['conditions'] as List?)?.map((e) => e.toString()).toList() ??
+              (json['factors'] as List?)?.map((e) => e.toString()).toList() ??
+              [],
+      targetPrice: (json['target_price'] as num?)?.toDouble() ??
+          (json['target'] as num?)?.toDouble(),
+      stopLoss: (json['stop_loss'] as num?)?.toDouble(),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'type': type,
+      'probability': probability,
+      'description': description,
+      'conditions': conditions,
+      if (targetPrice != null) 'target_price': targetPrice,
+      if (stopLoss != null) 'stop_loss': stopLoss,
+    };
+  }
+
+  bool get isHighProbability => probability >= 0.7;
+  bool get isMediumProbability => probability >= 0.4 && probability < 0.7;
+  bool get isLowProbability => probability < 0.4;
 }
 
-/// Recomendación de trading
+/// AI-powered trading recommendation
 class Recommendation {
   final String action; // 'BUY', 'SELL', 'WAIT'
   final double confidence;
+  final double? entry;
+  final double? stopLoss;
+  final double? takeProfit;
   final List<String> reasoning;
-  final double entryPrice;
-  final double stopLoss;
-  final double takeProfit;
+  final List<String> risks;
 
-  const Recommendation({
+  Recommendation({
     required this.action,
     required this.confidence,
+    this.entry,
+    this.stopLoss,
+    this.takeProfit,
     required this.reasoning,
-    required this.entryPrice,
-    required this.stopLoss,
-    required this.takeProfit,
+    required this.risks,
   });
 
   factory Recommendation.fromJson(Map<String, dynamic> json) {
+    // Handle reasoning as either List or String
+    List<String> reasoningList = [];
+    if (json['reasoning'] is List) {
+      reasoningList =
+          (json['reasoning'] as List).map((e) => e.toString()).toList();
+    } else if (json['reasoning'] is String) {
+      reasoningList = [json['reasoning'] as String];
+    }
+
     return Recommendation(
-      action: json['action'] as String,
-      confidence: (json['confidence'] as num).toDouble(),
-      reasoning: List<String>.from(json['reasoning'] as List),
-      entryPrice: (json['entry_price'] as num).toDouble(),
-      stopLoss: (json['stop_loss'] as num).toDouble(),
-      takeProfit: (json['take_profit'] as num).toDouble(),
+      action: json['action'] as String? ?? 'WAIT',
+      confidence: (json['confidence'] as num?)?.toDouble() ?? 0.0,
+      entry: (json['entry'] as num?)?.toDouble(),
+      stopLoss: (json['stop_loss'] as num?)?.toDouble(),
+      takeProfit: (json['take_profit'] as num?)?.toDouble(),
+      reasoning: reasoningList,
+      risks: (json['risks'] as List?)?.map((e) => e.toString()).toList() ?? [],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'action': action,
+      'confidence': confidence,
+      if (entry != null) 'entry': entry,
+      if (stopLoss != null) 'stop_loss': stopLoss,
+      if (takeProfit != null) 'take_profit': takeProfit,
+      'reasoning': reasoning,
+      'risks': risks,
+    };
+  }
+
+  bool get isHighConfidence => confidence >= 0.8;
+  bool get isMediumConfidence => confidence >= 0.6 && confidence < 0.8;
+  bool get isLowConfidence => confidence < 0.6;
 
   bool get isBuy => action == 'BUY';
   bool get isSell => action == 'SELL';
   bool get isWait => action == 'WAIT';
-}
 
-/// Escenario de mercado posible
-class MarketScenario {
-  final String name;
-  final double probability;
-  final double targetPrice;
-  final double changePercent;
-  final String timeframe;
-  final String impact; // 'positive', 'negative', 'neutral'
-  final String description;
-
-  const MarketScenario({
-    required this.name,
-    required this.probability,
-    required this.targetPrice,
-    required this.changePercent,
-    required this.timeframe,
-    required this.impact,
-    required this.description,
-  });
-
-  factory MarketScenario.fromJson(Map<String, dynamic> json) {
-    return MarketScenario(
-      name: json['name'] as String,
-      probability: (json['probability'] as num).toDouble(),
-      targetPrice: (json['target_price'] as num).toDouble(),
-      changePercent: (json['change_percent'] as num).toDouble(),
-      timeframe: json['timeframe'] as String,
-      impact: json['impact'] as String,
-      description: json['description'] as String,
-    );
+  double? get riskRewardRatio {
+    if (entry == null || stopLoss == null || takeProfit == null) return null;
+    final risk = (entry! - stopLoss!).abs();
+    final reward = (takeProfit! - entry!).abs();
+    return risk > 0 ? reward / risk : null;
   }
-
-  bool get isPositive => impact == 'positive';
-  bool get isNegative => impact == 'negative';
-}
-
-/// Evaluación de riesgo
-class RiskAssessment {
-  final String level; // 'low', 'medium', 'high'
-  final double score; // 0-100
-  final List<String> factors;
-  final String volatility; // 'low', 'medium', 'high'
-
-  const RiskAssessment({
-    required this.level,
-    required this.score,
-    required this.factors,
-    required this.volatility,
-  });
-
-  factory RiskAssessment.fromJson(Map<String, dynamic> json) {
-    return RiskAssessment(
-      level: json['level'] as String,
-      score: (json['score'] as num).toDouble(),
-      factors: List<String>.from(json['factors'] as List),
-      volatility: json['volatility'] as String,
-    );
-  }
-
-  bool get isLowRisk => level == 'low';
-  bool get isMediumRisk => level == 'medium';
-  bool get isHighRisk => level == 'high';
 }

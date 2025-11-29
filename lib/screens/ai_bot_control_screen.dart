@@ -223,10 +223,10 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
       if (mounted) {
         HapticFeedback.heavyImpact();
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
+          const SnackBar(
             content: Text('Emergency Stop Activated'),
             backgroundColor: AppTheme.lossRed,
-            duration: const Duration(seconds: 3),
+            duration: Duration(seconds: 3),
           ),
         );
       }
@@ -264,11 +264,19 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
     return Icons.stop_circle;
   }
 
-  String _formatUptime(int seconds) {
-    final hours = seconds ~/ 3600;
-    final minutes = (seconds % 3600) ~/ 60;
-    final secs = seconds % 60;
-    return '${hours}h ${minutes}m ${secs}s';
+  String _formatDateTime(DateTime dateTime) {
+    final now = DateTime.now();
+    final difference = now.difference(dateTime);
+
+    if (difference.inSeconds < 60) {
+      return '${difference.inSeconds}s ago';
+    } else if (difference.inMinutes < 60) {
+      return '${difference.inMinutes}m ago';
+    } else if (difference.inHours < 24) {
+      return '${difference.inHours}h ago';
+    } else {
+      return '${dateTime.day}/${dateTime.month} ${dateTime.hour}:${dateTime.minute.toString().padLeft(2, '0')}';
+    }
   }
 
   @override
@@ -365,6 +373,54 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                           ],
                         ),
                         const SizedBox(height: 16),
+
+                        // Health Badge
+                        Center(
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: status.isHealthy
+                                  ? AppTheme.profitGreen.withOpacity(0.2)
+                                  : AppTheme.warningYellow.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: status.isHealthy
+                                    ? AppTheme.profitGreen
+                                    : AppTheme.warningYellow,
+                                width: 2,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  status.isHealthy
+                                      ? Icons.check_circle
+                                      : Icons.warning,
+                                  color: status.isHealthy
+                                      ? AppTheme.profitGreen
+                                      : AppTheme.warningYellow,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  status.isHealthy ? 'Healthy' : 'Warning',
+                                  style: theme.textTheme.titleSmall?.copyWith(
+                                    color: status.isHealthy
+                                        ? AppTheme.profitGreen
+                                        : AppTheme.warningYellow,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 16),
                         const Divider(),
                         const SizedBox(height: 12),
                         Row(
@@ -372,7 +428,7 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                           children: [
                             _buildStatusInfo(
                               l10n.uptime,
-                              _formatUptime(status.uptimeSeconds),
+                              status.uptimeFormatted,
                               theme,
                             ),
                             _buildStatusInfo(
@@ -387,6 +443,16 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                             ),
                           ],
                         ),
+                        if (status.lastAnalysisAt != null) ...[
+                          const SizedBox(height: 12),
+                          Text(
+                            'Last Analysis: ${_formatDateTime(status.lastAnalysisAt!)}',
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.onSurfaceVariant,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -394,11 +460,34 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                 const SizedBox(height: 20),
 
                 // Metrics Grid
-                Text(
-                  'Bot Metrics',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Bot Metrics',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (status.analysisCount > 0)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppTheme.profitGreen.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '${status.successRate.toStringAsFixed(1)}% Success',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: AppTheme.profitGreen,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 GridView.count(
@@ -413,14 +502,16 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                       icon: Icons.analytics,
                       title: l10n.aiBotAnalysisCount,
                       value: status.analysisCount.toString(),
-                      change: 'Total',
+                      change: 'Total analyses',
                       isLoading: false,
                     ),
                     MetricCard(
                       icon: Icons.check_circle,
                       title: l10n.aiBotExecutionCount,
                       value: status.executionCount.toString(),
-                      change: 'Executed',
+                      change: status.analysisCount > 0
+                          ? '${(status.executionRate * 100).toStringAsFixed(1)}% exec rate'
+                          : 'Executed',
                       changeColor: AppTheme.profitGreen,
                       isLoading: false,
                     ),
@@ -428,17 +519,21 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                       icon: Icons.error,
                       title: l10n.aiBotErrorCount,
                       value: status.errorCount.toString(),
-                      change: '${status.consecutiveErrors} consecutive',
+                      change: status.consecutiveErrors > 0
+                          ? '${status.consecutiveErrors} consecutive'
+                          : 'No errors',
                       changeColor: status.consecutiveErrors >= 3
                           ? AppTheme.lossRed
-                          : AppTheme.neutralGray,
+                          : status.consecutiveErrors > 0
+                              ? AppTheme.warningYellow
+                              : AppTheme.profitGreen,
                       isLoading: false,
                     ),
                     MetricCard(
                       icon: Icons.account_balance_wallet,
                       title: l10n.aiBotOpenPositions,
                       value: status.openPositions.toString(),
-                      change: 'Active',
+                      change: 'Active positions',
                       isLoading: false,
                     ),
                   ],
@@ -446,11 +541,45 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
                 const SizedBox(height: 20),
 
                 // Daily Limits Progress
-                Text(
-                  'Daily Limits',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Daily Limits',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    if (status.hasReachedDailyLimit)
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppTheme.lossRed.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.warning,
+                              size: 14,
+                              color: AppTheme.lossRed,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              'Limit Reached',
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: AppTheme.lossRed,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 Card(
@@ -655,7 +784,7 @@ class _AiBotControlScreenState extends ConsumerState<AiBotControlScreen> {
         const SizedBox(height: 8),
         LinearProgressIndicator(
           value: percent / 100,
-          backgroundColor: theme.colorScheme.surfaceVariant,
+          backgroundColor: theme.colorScheme.surfaceContainerHighest,
           valueColor: AlwaysStoppedAnimation<Color>(progressColor),
         ),
         const SizedBox(height: 4),

@@ -4,24 +4,26 @@ import '../models/comprehensive_analysis.dart';
 /// Widget that displays multi-timeframe analysis
 ///
 /// Shows:
-/// - Analysis for 1m, 5m, 15m, and 1h timeframes
-/// - RSI, trend, and signal for each timeframe
-/// - Alignment badge indicating if timeframes agree
+/// - Analysis for multiple timeframes (1m, 5m, 15m, 1h, 4h)
+/// - RSI, MACD, and other indicators for each timeframe
+/// - Trend signals for each timeframe
 ///
-/// Color-coded signals and alignment status
+/// Color-coded signals based on indicator values
 class MultiTimeframeWidget extends StatelessWidget {
-  /// Multi-timeframe analysis data
-  final MultiTimeframeAnalysis multiTimeframe;
+  /// Map of timeframe to technical indicators
+  final Map<String, TechnicalIndicators> technicalIndicators;
 
   const MultiTimeframeWidget({
     super.key,
-    required this.multiTimeframe,
+    required this.technicalIndicators,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
+
+    // Sort timeframes in order
+    final sortedTimeframes = _sortTimeframes(technicalIndicators.keys.toList());
 
     return Card(
       child: Padding(
@@ -29,353 +31,229 @@ class MultiTimeframeWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Title and Alignment Badge
+            // Title
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                Icon(
+                  Icons.timeline,
+                  color: theme.colorScheme.primary,
+                  size: 24,
+                ),
+                const SizedBox(width: 8),
                 Text(
                   'Multi-Timeframe Analysis',
                   style: theme.textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                _AlignmentBadge(
-                  alignment: multiTimeframe.alignment,
-                ),
               ],
             ),
             const SizedBox(height: 16),
 
-            // 1m Timeframe
-            _TimeframeRow(
-              timeframe: '1m',
-              data: multiTimeframe.oneMinute,
-              isFirst: true,
-            ),
-            const Divider(height: 20),
+            // Timeframe rows
+            if (sortedTimeframes.isEmpty)
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(24.0),
+                  child: Text(
+                    'No timeframe data available',
+                    style: theme.textTheme.bodyMedium?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              )
+            else
+              ...sortedTimeframes.asMap().entries.map((entry) {
+                final index = entry.key;
+                final timeframe = entry.value;
+                final indicators = technicalIndicators[timeframe]!;
 
-            // 5m Timeframe
-            _TimeframeRow(
-              timeframe: '5m',
-              data: multiTimeframe.fiveMinutes,
-            ),
-            const Divider(height: 20),
-
-            // 15m Timeframe
-            _TimeframeRow(
-              timeframe: '15m',
-              data: multiTimeframe.fifteenMinutes,
-            ),
-            const Divider(height: 20),
-
-            // 1h Timeframe
-            _TimeframeRow(
-              timeframe: '1h',
-              data: multiTimeframe.oneHour,
-              isLast: true,
-            ),
+                return Column(
+                  children: [
+                    _TimeframeRow(
+                      timeframe: timeframe,
+                      indicators: indicators,
+                    ),
+                    if (index < sortedTimeframes.length - 1)
+                      const Divider(height: 20),
+                  ],
+                );
+              }),
           ],
         ),
       ),
     );
+  }
+
+  List<String> _sortTimeframes(List<String> timeframes) {
+    final order = ['1m', '5m', '15m', '1h', '4h', '1d'];
+    timeframes.sort((a, b) {
+      final aIndex = order.indexOf(a);
+      final bIndex = order.indexOf(b);
+      if (aIndex == -1 && bIndex == -1) return 0;
+      if (aIndex == -1) return 1;
+      if (bIndex == -1) return -1;
+      return aIndex.compareTo(bIndex);
+    });
+    return timeframes;
   }
 }
 
 /// Row widget for displaying a single timeframe's analysis
 class _TimeframeRow extends StatelessWidget {
   final String timeframe;
-  final TimeframeData data;
-  final bool isFirst;
-  final bool isLast;
+  final TechnicalIndicators indicators;
 
   const _TimeframeRow({
     required this.timeframe,
-    required this.data,
-    this.isFirst = false,
-    this.isLast = false,
+    required this.indicators,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
 
-    return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0.0, end: 1.0),
-      duration: Duration(
-        milliseconds: 400 + (_getTimeframeIndex(timeframe) * 100),
-      ),
-      curve: Curves.easeOut,
-      builder: (context, animValue, child) {
-        return Opacity(
-          opacity: animValue,
-          child: Transform.translate(
-            offset: Offset(20 * (1 - animValue), 0),
-            child: child,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Timeframe header
+        Text(
+          timeframe.toUpperCase(),
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
           ),
-        );
-      },
-      child: Row(
-        children: [
-          // Timeframe Label
-          SizedBox(
-            width: 40,
-            child: Text(
-              timeframe,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.primary,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-
-          // RSI Value
-          Expanded(
-            flex: 2,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'RSI',
-                  style: theme.textTheme.bodySmall?.copyWith(
-                    color: colorScheme.onSurfaceVariant,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  data.rsi.toStringAsFixed(1),
-                  style: theme.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: _getRsiColor(data.rsi),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // Trend Badge
-          Expanded(
-            flex: 3,
-            child: _TrendBadge(
-              trend: data.trend,
-            ),
-          ),
-          const SizedBox(width: 8),
-
-          // Signal Badge
-          Expanded(
-            flex: 3,
-            child: _SignalBadge(
-              signal: data.signal,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  int _getTimeframeIndex(String tf) {
-    switch (tf) {
-      case '1m':
-        return 0;
-      case '5m':
-        return 1;
-      case '15m':
-        return 2;
-      case '1h':
-        return 3;
-      default:
-        return 0;
-    }
-  }
-
-  Color _getRsiColor(double rsi) {
-    if (rsi < 30) return const Color(0xFF10B981); // Oversold - Green
-    if (rsi > 70) return const Color(0xFFEF4444); // Overbought - Red
-    return const Color(0xFF6B7280); // Neutral - Gray
-  }
-}
-
-/// Badge for displaying alignment status
-class _AlignmentBadge extends StatelessWidget {
-  final String alignment;
-
-  const _AlignmentBadge({
-    required this.alignment,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final isBullish = alignment == 'bullish_aligned';
-    final isBearish = alignment == 'bearish_aligned';
-    final isAligned = isBullish || isBearish;
-
-    final color = isBullish
-        ? const Color(0xFF10B981) // Green
-        : isBearish
-            ? const Color(0xFFEF4444) // Red
-            : const Color(0xFF6B7280); // Gray
-
-    final text = isBullish
-        ? 'BULLISH'
-        : isBearish
-            ? 'BEARISH'
-            : 'NOT ALIGNED';
-
-    final icon = isBullish
-        ? Icons.arrow_upward
-        : isBearish
-            ? Icons.arrow_downward
-            : Icons.horizontal_rule;
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: color.withOpacity(isAligned ? 0.5 : 0.3),
-          width: isAligned ? 2 : 1,
         ),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 14,
-            color: color,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            text,
-            style: theme.textTheme.bodySmall?.copyWith(
-              color: color,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
+        const SizedBox(height: 12),
+
+        // Indicators
+        Wrap(
+          spacing: 12,
+          runSpacing: 12,
+          children: [
+            if (indicators.rsi != null)
+              _IndicatorChip(
+                label: 'RSI',
+                value: indicators.rsi!.value.toStringAsFixed(1),
+                signal: indicators.rsi!.signal,
+                color: _getRSIColor(indicators.rsi!.value),
+              ),
+            if (indicators.macd != null)
+              _IndicatorChip(
+                label: 'MACD',
+                value: indicators.macd!.trend,
+                signal: indicators.macd!.histogram > 0 ? 'bullish' : 'bearish',
+                color: indicators.macd!.isBullish ? Colors.green : Colors.red,
+              ),
+            if (indicators.bollingerBands != null)
+              _IndicatorChip(
+                label: 'BB',
+                value: indicators.bollingerBands!.position,
+                signal: indicators.bollingerBands!.position,
+                color: _getBBColor(indicators.bollingerBands!.position),
+              ),
+            if (indicators.ema != null)
+              _IndicatorChip(
+                label: 'EMA',
+                value: indicators.ema!.trend,
+                signal: indicators.ema!.trend,
+                color: _getTrendColor(indicators.ema!.trend),
+              ),
+            if (indicators.volume != null)
+              _IndicatorChip(
+                label: 'Volume',
+                value: indicators.volume!.trend,
+                signal: indicators.volume!.trend,
+                color: _getTrendColor(indicators.volume!.trend),
+              ),
+          ],
+        ),
+      ],
     );
   }
-}
 
-/// Badge for displaying trend
-class _TrendBadge extends StatelessWidget {
-  final String trend;
+  Color _getRSIColor(double rsi) {
+    if (rsi > 70) return Colors.red;
+    if (rsi < 30) return Colors.green;
+    return Colors.blue;
+  }
 
-  const _TrendBadge({
-    required this.trend,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = _getTrendColor(trend);
-    final icon = _getTrendIcon(trend);
-
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 12,
-            color: color,
-          ),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              trend.toUpperCase(),
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 10,
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
-          ),
-        ],
-      ),
-    );
+  Color _getBBColor(String position) {
+    switch (position.toLowerCase()) {
+      case 'above_upper':
+        return Colors.red;
+      case 'below_lower':
+        return Colors.green;
+      default:
+        return Colors.blue;
+    }
   }
 
   Color _getTrendColor(String trend) {
     switch (trend.toLowerCase()) {
       case 'bullish':
-      case 'up':
-        return const Color(0xFF10B981); // Green
+      case 'increasing':
+        return Colors.green;
       case 'bearish':
-      case 'down':
-        return const Color(0xFFEF4444); // Red
+      case 'decreasing':
+        return Colors.red;
       default:
-        return const Color(0xFF6B7280); // Gray
-    }
-  }
-
-  IconData _getTrendIcon(String trend) {
-    switch (trend.toLowerCase()) {
-      case 'bullish':
-      case 'up':
-        return Icons.trending_up;
-      case 'bearish':
-      case 'down':
-        return Icons.trending_down;
-      default:
-        return Icons.trending_flat;
+        return Colors.grey;
     }
   }
 }
 
-/// Badge for displaying signal
-class _SignalBadge extends StatelessWidget {
+/// Chip widget for displaying an indicator
+class _IndicatorChip extends StatelessWidget {
+  final String label;
+  final String value;
   final String signal;
+  final Color color;
 
-  const _SignalBadge({
+  const _IndicatorChip({
+    required this.label,
+    required this.value,
     required this.signal,
+    required this.color,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final color = _getSignalColor(signal);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Text(
-        signal.toUpperCase(),
-        style: theme.textTheme.bodySmall?.copyWith(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: 10,
+        color: color.withValues(alpha: 0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withValues(alpha: 0.3),
+          width: 1,
         ),
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+              fontSize: 10,
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            value,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: color,
+              fontSize: 13,
+            ),
+          ),
+        ],
       ),
     );
-  }
-
-  Color _getSignalColor(String signal) {
-    switch (signal.toLowerCase()) {
-      case 'buy':
-      case 'long':
-        return const Color(0xFF10B981); // Green
-      case 'sell':
-      case 'short':
-        return const Color(0xFFEF4444); // Red
-      default:
-        return const Color(0xFF6B7280); // Gray
-    }
   }
 }

@@ -1984,7 +1984,547 @@ class _PositionsBySymbolProviderElement
   String get exchange => (origin as PositionsBySymbolProvider).exchange;
 }
 
-String _$futuresPositionsHash() => r'18e3582f4fcd4a0378d1b92e9368c77d990dff6b';
+String _$liquidationAlertsHash() => r'444d4fb082bc1e8a1f656d3021f930d0deabcd8d';
+
+/// Provider for liquidation alerts
+///
+/// Returns list of symbols that are near liquidation (< 10% distance).
+/// Useful for showing warnings in UI.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [liquidationAlerts].
+@ProviderFor(liquidationAlerts)
+const liquidationAlertsProvider = LiquidationAlertsFamily();
+
+/// Provider for liquidation alerts
+///
+/// Returns list of symbols that are near liquidation (< 10% distance).
+/// Useful for showing warnings in UI.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [liquidationAlerts].
+class LiquidationAlertsFamily extends Family<List<String>> {
+  /// Provider for liquidation alerts
+  ///
+  /// Returns list of symbols that are near liquidation (< 10% distance).
+  /// Useful for showing warnings in UI.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [liquidationAlerts].
+  const LiquidationAlertsFamily();
+
+  /// Provider for liquidation alerts
+  ///
+  /// Returns list of symbols that are near liquidation (< 10% distance).
+  /// Useful for showing warnings in UI.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [liquidationAlerts].
+  LiquidationAlertsProvider call({
+    String exchange = 'kucoin',
+  }) {
+    return LiquidationAlertsProvider(
+      exchange: exchange,
+    );
+  }
+
+  @override
+  LiquidationAlertsProvider getProviderOverride(
+    covariant LiquidationAlertsProvider provider,
+  ) {
+    return call(
+      exchange: provider.exchange,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'liquidationAlertsProvider';
+}
+
+/// Provider for liquidation alerts
+///
+/// Returns list of symbols that are near liquidation (< 10% distance).
+/// Useful for showing warnings in UI.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [liquidationAlerts].
+class LiquidationAlertsProvider extends AutoDisposeProvider<List<String>> {
+  /// Provider for liquidation alerts
+  ///
+  /// Returns list of symbols that are near liquidation (< 10% distance).
+  /// Useful for showing warnings in UI.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [liquidationAlerts].
+  LiquidationAlertsProvider({
+    String exchange = 'kucoin',
+  }) : this._internal(
+          (ref) => liquidationAlerts(
+            ref as LiquidationAlertsRef,
+            exchange: exchange,
+          ),
+          from: liquidationAlertsProvider,
+          name: r'liquidationAlertsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$liquidationAlertsHash,
+          dependencies: LiquidationAlertsFamily._dependencies,
+          allTransitiveDependencies:
+              LiquidationAlertsFamily._allTransitiveDependencies,
+          exchange: exchange,
+        );
+
+  LiquidationAlertsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.exchange,
+  }) : super.internal();
+
+  final String exchange;
+
+  @override
+  Override overrideWith(
+    List<String> Function(LiquidationAlertsRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: LiquidationAlertsProvider._internal(
+        (ref) => create(ref as LiquidationAlertsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        exchange: exchange,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<List<String>> createElement() {
+    return _LiquidationAlertsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is LiquidationAlertsProvider && other.exchange == exchange;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, exchange.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin LiquidationAlertsRef on AutoDisposeProviderRef<List<String>> {
+  /// The parameter `exchange` of this provider.
+  String get exchange;
+}
+
+class _LiquidationAlertsProviderElement
+    extends AutoDisposeProviderElement<List<String>> with LiquidationAlertsRef {
+  _LiquidationAlertsProviderElement(super.provider);
+
+  @override
+  String get exchange => (origin as LiquidationAlertsProvider).exchange;
+}
+
+String _$positionsNearLiquidationHash() =>
+    r'2eedad5aed22972d2ec2281a5da741c0ccddce5f';
+
+/// Provider for positions near liquidation
+///
+/// Returns positions that are within 10% of liquidation price.
+/// These positions require immediate attention.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [positionsNearLiquidation].
+@ProviderFor(positionsNearLiquidation)
+const positionsNearLiquidationProvider = PositionsNearLiquidationFamily();
+
+/// Provider for positions near liquidation
+///
+/// Returns positions that are within 10% of liquidation price.
+/// These positions require immediate attention.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [positionsNearLiquidation].
+class PositionsNearLiquidationFamily extends Family<List<FuturesPosition>> {
+  /// Provider for positions near liquidation
+  ///
+  /// Returns positions that are within 10% of liquidation price.
+  /// These positions require immediate attention.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [positionsNearLiquidation].
+  const PositionsNearLiquidationFamily();
+
+  /// Provider for positions near liquidation
+  ///
+  /// Returns positions that are within 10% of liquidation price.
+  /// These positions require immediate attention.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [positionsNearLiquidation].
+  PositionsNearLiquidationProvider call({
+    String exchange = 'kucoin',
+  }) {
+    return PositionsNearLiquidationProvider(
+      exchange: exchange,
+    );
+  }
+
+  @override
+  PositionsNearLiquidationProvider getProviderOverride(
+    covariant PositionsNearLiquidationProvider provider,
+  ) {
+    return call(
+      exchange: provider.exchange,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'positionsNearLiquidationProvider';
+}
+
+/// Provider for positions near liquidation
+///
+/// Returns positions that are within 10% of liquidation price.
+/// These positions require immediate attention.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [positionsNearLiquidation].
+class PositionsNearLiquidationProvider
+    extends AutoDisposeProvider<List<FuturesPosition>> {
+  /// Provider for positions near liquidation
+  ///
+  /// Returns positions that are within 10% of liquidation price.
+  /// These positions require immediate attention.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [positionsNearLiquidation].
+  PositionsNearLiquidationProvider({
+    String exchange = 'kucoin',
+  }) : this._internal(
+          (ref) => positionsNearLiquidation(
+            ref as PositionsNearLiquidationRef,
+            exchange: exchange,
+          ),
+          from: positionsNearLiquidationProvider,
+          name: r'positionsNearLiquidationProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$positionsNearLiquidationHash,
+          dependencies: PositionsNearLiquidationFamily._dependencies,
+          allTransitiveDependencies:
+              PositionsNearLiquidationFamily._allTransitiveDependencies,
+          exchange: exchange,
+        );
+
+  PositionsNearLiquidationProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.exchange,
+  }) : super.internal();
+
+  final String exchange;
+
+  @override
+  Override overrideWith(
+    List<FuturesPosition> Function(PositionsNearLiquidationRef provider) create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: PositionsNearLiquidationProvider._internal(
+        (ref) => create(ref as PositionsNearLiquidationRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        exchange: exchange,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeProviderElement<List<FuturesPosition>> createElement() {
+    return _PositionsNearLiquidationProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is PositionsNearLiquidationProvider &&
+        other.exchange == exchange;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, exchange.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin PositionsNearLiquidationRef
+    on AutoDisposeProviderRef<List<FuturesPosition>> {
+  /// The parameter `exchange` of this provider.
+  String get exchange;
+}
+
+class _PositionsNearLiquidationProviderElement
+    extends AutoDisposeProviderElement<List<FuturesPosition>>
+    with PositionsNearLiquidationRef {
+  _PositionsNearLiquidationProviderElement(super.provider);
+
+  @override
+  String get exchange => (origin as PositionsNearLiquidationProvider).exchange;
+}
+
+String _$markPricesForPositionsHash() =>
+    r'b95bfa73331c62a044a6a9fa6b20e97025240201';
+
+/// Provider for mark prices map
+///
+/// Returns a map of symbol -> mark price for all open positions.
+/// Useful for displaying current prices in position lists.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [markPricesForPositions].
+@ProviderFor(markPricesForPositions)
+const markPricesForPositionsProvider = MarkPricesForPositionsFamily();
+
+/// Provider for mark prices map
+///
+/// Returns a map of symbol -> mark price for all open positions.
+/// Useful for displaying current prices in position lists.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [markPricesForPositions].
+class MarkPricesForPositionsFamily
+    extends Family<AsyncValue<Map<String, double>>> {
+  /// Provider for mark prices map
+  ///
+  /// Returns a map of symbol -> mark price for all open positions.
+  /// Useful for displaying current prices in position lists.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [markPricesForPositions].
+  const MarkPricesForPositionsFamily();
+
+  /// Provider for mark prices map
+  ///
+  /// Returns a map of symbol -> mark price for all open positions.
+  /// Useful for displaying current prices in position lists.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [markPricesForPositions].
+  MarkPricesForPositionsProvider call({
+    String exchange = 'kucoin',
+  }) {
+    return MarkPricesForPositionsProvider(
+      exchange: exchange,
+    );
+  }
+
+  @override
+  MarkPricesForPositionsProvider getProviderOverride(
+    covariant MarkPricesForPositionsProvider provider,
+  ) {
+    return call(
+      exchange: provider.exchange,
+    );
+  }
+
+  static const Iterable<ProviderOrFamily>? _dependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get dependencies => _dependencies;
+
+  static const Iterable<ProviderOrFamily>? _allTransitiveDependencies = null;
+
+  @override
+  Iterable<ProviderOrFamily>? get allTransitiveDependencies =>
+      _allTransitiveDependencies;
+
+  @override
+  String? get name => r'markPricesForPositionsProvider';
+}
+
+/// Provider for mark prices map
+///
+/// Returns a map of symbol -> mark price for all open positions.
+/// Useful for displaying current prices in position lists.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+///
+/// Copied from [markPricesForPositions].
+class MarkPricesForPositionsProvider
+    extends AutoDisposeFutureProvider<Map<String, double>> {
+  /// Provider for mark prices map
+  ///
+  /// Returns a map of symbol -> mark price for all open positions.
+  /// Useful for displaying current prices in position lists.
+  ///
+  /// Parameters:
+  /// - exchange: Exchange name (default: 'kucoin')
+  ///
+  /// Copied from [markPricesForPositions].
+  MarkPricesForPositionsProvider({
+    String exchange = 'kucoin',
+  }) : this._internal(
+          (ref) => markPricesForPositions(
+            ref as MarkPricesForPositionsRef,
+            exchange: exchange,
+          ),
+          from: markPricesForPositionsProvider,
+          name: r'markPricesForPositionsProvider',
+          debugGetCreateSourceHash:
+              const bool.fromEnvironment('dart.vm.product')
+                  ? null
+                  : _$markPricesForPositionsHash,
+          dependencies: MarkPricesForPositionsFamily._dependencies,
+          allTransitiveDependencies:
+              MarkPricesForPositionsFamily._allTransitiveDependencies,
+          exchange: exchange,
+        );
+
+  MarkPricesForPositionsProvider._internal(
+    super._createNotifier, {
+    required super.name,
+    required super.dependencies,
+    required super.allTransitiveDependencies,
+    required super.debugGetCreateSourceHash,
+    required super.from,
+    required this.exchange,
+  }) : super.internal();
+
+  final String exchange;
+
+  @override
+  Override overrideWith(
+    FutureOr<Map<String, double>> Function(MarkPricesForPositionsRef provider)
+        create,
+  ) {
+    return ProviderOverride(
+      origin: this,
+      override: MarkPricesForPositionsProvider._internal(
+        (ref) => create(ref as MarkPricesForPositionsRef),
+        from: from,
+        name: null,
+        dependencies: null,
+        allTransitiveDependencies: null,
+        debugGetCreateSourceHash: null,
+        exchange: exchange,
+      ),
+    );
+  }
+
+  @override
+  AutoDisposeFutureProviderElement<Map<String, double>> createElement() {
+    return _MarkPricesForPositionsProviderElement(this);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return other is MarkPricesForPositionsProvider &&
+        other.exchange == exchange;
+  }
+
+  @override
+  int get hashCode {
+    var hash = _SystemHash.combine(0, runtimeType.hashCode);
+    hash = _SystemHash.combine(hash, exchange.hashCode);
+
+    return _SystemHash.finish(hash);
+  }
+}
+
+mixin MarkPricesForPositionsRef
+    on AutoDisposeFutureProviderRef<Map<String, double>> {
+  /// The parameter `exchange` of this provider.
+  String get exchange;
+}
+
+class _MarkPricesForPositionsProviderElement
+    extends AutoDisposeFutureProviderElement<Map<String, double>>
+    with MarkPricesForPositionsRef {
+  _MarkPricesForPositionsProviderElement(super.provider);
+
+  @override
+  String get exchange => (origin as MarkPricesForPositionsProvider).exchange;
+}
+
+String _$futuresPositionsHash() => r'236861a255f33b42e30b9237b3323e0a4a58dff4';
 
 abstract class _$FuturesPositions
     extends BuildlessAutoDisposeAsyncNotifier<FuturesPositionsResponse> {

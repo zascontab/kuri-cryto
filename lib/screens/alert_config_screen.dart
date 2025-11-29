@@ -386,7 +386,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
         final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
           ),
         );
@@ -551,7 +551,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(l10n.errorOccurred(error: e.toString())),
+                      content: Text('${l10n.errorOccurred}: $e'),
                       backgroundColor: const Color(0xFFF44336),
                     ),
                   );
@@ -580,7 +580,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
         final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
           ),
         );
@@ -592,7 +592,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
     final confirmed = await showTikTokModal<bool>(
       context: context,
       title: l10n.deleteRule,
-      message: l10n.confirmDeleteRule(name: rule.name),
+      message: l10n.confirmDeleteRule,
       actions: [
         TikTokModalButton(
           text: l10n.delete,
@@ -622,7 +622,7 @@ class _AlertConfigScreenState extends ConsumerState<AlertConfigScreen> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(l10n.errorOccurred(error: e.toString())),
+              content: Text('${l10n.errorOccurred}: $e'),
               backgroundColor: const Color(0xFFF44336),
             ),
           );

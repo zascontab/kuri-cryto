@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../l10n/l10n_export.dart';
 import '../config/app_theme.dart';
 import '../widgets/tiktok_modal.dart';
+import '../widgets/market_type_selector.dart';
+import '../models/market_type.dart';
 import '../providers/ai_bot_provider.dart';
 import '../providers/trading_pairs_provider.dart';
 
@@ -26,19 +28,22 @@ class AiBotConfigScreen extends ConsumerStatefulWidget {
 
 class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Form controllers
   late TextEditingController _tradeSizeController;
   late TextEditingController _maxDailyLossController;
   late TextEditingController _maxDailyTradesController;
-  
+  late TextEditingController _maxConsecutiveErrorsController;
+  late TextEditingController _maxOpenPositionsController;
+
   // Form state
   bool _isDryRun = true;
   bool _autoExecute = false;
   double _confidenceThreshold = 0.70;
   int _leverage = 5;
   String _selectedPair = 'DOGE-USDT';
-  
+  String _selectedMarketType = 'futures';
+
   bool _isLoading = false;
 
   @override
@@ -47,7 +52,9 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
     _tradeSizeController = TextEditingController(text: '3.0');
     _maxDailyLossController = TextEditingController(text: '50.0');
     _maxDailyTradesController = TextEditingController(text: '20');
-    
+    _maxConsecutiveErrorsController = TextEditingController(text: '3');
+    _maxOpenPositionsController = TextEditingController(text: '2');
+
     // Load current config
     _loadCurrentConfig();
   }
@@ -57,6 +64,8 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
     _tradeSizeController.dispose();
     _maxDailyLossController.dispose();
     _maxDailyTradesController.dispose();
+    _maxConsecutiveErrorsController.dispose();
+    _maxOpenPositionsController.dispose();
     super.dispose();
   }
 
@@ -73,6 +82,9 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
           _tradeSizeController.text = config.tradeSizeUsd.toString();
           _maxDailyLossController.text = config.maxDailyLossUsd.toString();
           _maxDailyTradesController.text = config.maxDailyTrades.toString();
+          _maxConsecutiveErrorsController.text =
+              config.maxConsecutiveErrors.toString();
+          _maxOpenPositionsController.text = config.maxOpenPositions.toString();
         });
       }
     });
@@ -153,12 +165,18 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
         'confidence_threshold': _confidenceThreshold,
         'leverage': _leverage,
         'pair': _selectedPair,
+        'market_type': _selectedMarketType,
         'trade_size_usd': double.parse(_tradeSizeController.text),
         'max_daily_loss_usd': double.parse(_maxDailyLossController.text),
         'max_daily_trades': int.parse(_maxDailyTradesController.text),
+        'max_consecutive_errors':
+            int.parse(_maxConsecutiveErrorsController.text),
+        'max_open_positions': int.parse(_maxOpenPositionsController.text),
       };
 
-      await ref.read(aiBotConfigNotifierProvider.notifier).updateConfig(updates);
+      await ref
+          .read(aiBotConfigNotifierProvider.notifier)
+          .updateConfig(updates);
 
       if (mounted) {
         HapticFeedback.heavyImpact();
@@ -186,6 +204,35 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
         setState(() => _isLoading = false);
       }
     }
+  }
+
+  Widget _buildPreviewRow(
+    ThemeData theme,
+    String label,
+    String value,
+    Color? valueColor,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurfaceVariant,
+            ),
+          ),
+          Text(
+            value,
+            style: theme.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: valueColor,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -222,7 +269,7 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                           : l10n.aiBotLiveMode,
                     ),
                     value: _isDryRun,
-                    activeColor: AppTheme.profitGreen,
+                    activeThumbColor: AppTheme.profitGreen,
                     onChanged: (value) {
                       HapticFeedback.lightImpact();
                       setState(() => _isDryRun = value);
@@ -231,9 +278,10 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                   const Divider(height: 1),
                   SwitchListTile(
                     title: Text(l10n.aiBotAutoExecute),
-                    subtitle: const Text('Automatically execute AI recommendations'),
+                    subtitle:
+                        const Text('Automatically execute AI recommendations'),
                     value: _autoExecute,
-                    activeColor: AppTheme.profitGreen,
+                    activeThumbColor: AppTheme.profitGreen,
                     onChanged: (value) {
                       HapticFeedback.lightImpact();
                       setState(() => _autoExecute = value);
@@ -252,7 +300,7 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             // Trading Pair
             Card(
               child: Padding(
@@ -263,9 +311,9 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                     if (!availablePairs.contains(_selectedPair)) {
                       availablePairs.insert(0, _selectedPair);
                     }
-                    
+
                     return DropdownButtonFormField<String>(
-                      value: _selectedPair,
+                      initialValue: _selectedPair,
                       decoration: InputDecoration(
                         labelText: l10n.aiBotTradingPair,
                         border: const OutlineInputBorder(),
@@ -284,7 +332,7 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                     );
                   },
                   loading: () => DropdownButtonFormField<String>(
-                    value: _selectedPair,
+                    initialValue: _selectedPair,
                     decoration: InputDecoration(
                       labelText: l10n.aiBotTradingPair,
                       border: const OutlineInputBorder(),
@@ -305,6 +353,134 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                     ),
                     onChanged: (value) => _selectedPair = value,
                   ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 12),
+
+            // Market Type Selector with Visual Indicators
+            Card(
+              elevation: 2,
+              color: MarketType.fromString(_selectedMarketType)
+                  .color
+                  .withOpacity(0.05),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: MarketType.fromString(_selectedMarketType)
+                                .color
+                                .withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Icon(
+                            MarketType.fromString(_selectedMarketType).iconData,
+                            color: MarketType.fromString(_selectedMarketType)
+                                .color,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Market Type',
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Select trading market type',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: theme.colorScheme.onSurfaceVariant,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        // Leverage indicator
+                        if (_selectedMarketType != 'spot')
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.profitGreen.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(
+                                  Icons.trending_up,
+                                  size: 14,
+                                  color: AppTheme.profitGreen,
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  'Leverage',
+                                  style: theme.textTheme.labelSmall?.copyWith(
+                                    color: AppTheme.profitGreen,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    MarketTypeChips(
+                      selectedType: MarketType.fromString(_selectedMarketType),
+                      onChanged: (type) {
+                        HapticFeedback.mediumImpact();
+                        setState(() {
+                          _selectedMarketType = type.value;
+                          // Reset leverage if spot
+                          if (type == MarketType.spot) {
+                            _leverage = 1;
+                          }
+                        });
+                      },
+                      showAllTypes: false,
+                    ),
+                    const SizedBox(height: 12),
+                    Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.surfaceContainerHighest,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.info_outline,
+                            size: 16,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              MarketType.fromString(_selectedMarketType)
+                                  .description,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                color: theme.colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -338,7 +514,8 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                       min: 0.5,
                       max: 1.0,
                       divisions: 50,
-                      label: '${(_confidenceThreshold * 100).toStringAsFixed(0)}%',
+                      label:
+                          '${(_confidenceThreshold * 100).toStringAsFixed(0)}%',
                       onChanged: (value) {
                         setState(() => _confidenceThreshold = value);
                       },
@@ -355,52 +532,57 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
             ),
             const SizedBox(height: 12),
 
-            // Leverage Slider
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          l10n.aiBotLeverage,
-                          style: theme.textTheme.bodyLarge,
-                        ),
-                        Text(
-                          '${_leverage}x',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: _leverage > 10
-                                ? AppTheme.lossRed
-                                : theme.colorScheme.primary,
+            // Leverage Slider (only for non-spot markets)
+            if (_selectedMarketType != 'spot')
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            l10n.aiBotLeverage,
+                            style: theme.textTheme.bodyLarge,
                           ),
-                        ),
-                      ],
-                    ),
-                    Slider(
-                      value: _leverage.toDouble(),
-                      min: 1,
-                      max: 100,
-                      divisions: 99,
-                      label: '${_leverage}x',
-                      onChanged: (value) {
-                        HapticFeedback.selectionClick();
-                        setState(() => _leverage = value.toInt());
-                      },
-                    ),
-                    Text(
-                      'Trading leverage multiplier',
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurfaceVariant,
+                          Text(
+                            '${_leverage}x',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: _leverage > 10
+                                  ? AppTheme.lossRed
+                                  : theme.colorScheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                      Slider(
+                        value: _leverage.toDouble(),
+                        min: 1,
+                        max: MarketType.fromString(_selectedMarketType)
+                            .maxLeverage
+                            .toDouble(),
+                        divisions: MarketType.fromString(_selectedMarketType)
+                                .maxLeverage -
+                            1,
+                        label: '${_leverage}x',
+                        onChanged: (value) {
+                          HapticFeedback.selectionClick();
+                          setState(() => _leverage = value.toInt());
+                        },
+                      ),
+                      Text(
+                        'Trading leverage multiplier (1-${MarketType.fromString(_selectedMarketType).maxLeverage}x for ${_selectedMarketType})',
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
             const SizedBox(height: 12),
 
             // Trade Size
@@ -438,7 +620,7 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            
+
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -470,6 +652,48 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                         labelText: l10n.aiBotMaxDailyTrades,
                         border: const OutlineInputBorder(),
                         prefixIcon: const Icon(Icons.repeat),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        final num = int.tryParse(value);
+                        if (num == null || num <= 0) {
+                          return 'Must be positive';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _maxConsecutiveErrorsController,
+                      decoration: const InputDecoration(
+                        labelText: 'Max Consecutive Errors',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.error_outline),
+                        helperText: 'Bot stops after this many errors',
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Required';
+                        }
+                        final num = int.tryParse(value);
+                        if (num == null || num <= 0) {
+                          return 'Must be positive';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _maxOpenPositionsController,
+                      decoration: const InputDecoration(
+                        labelText: 'Max Open Positions',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.layers),
+                        helperText: 'Maximum simultaneous positions',
                       ),
                       keyboardType: TextInputType.number,
                       validator: (value) {
@@ -548,6 +772,111 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
               ),
               const SizedBox(height: 12),
             ],
+
+            // Configuration Preview Card
+            Card(
+              elevation: 3,
+              color: theme.colorScheme.primaryContainer.withOpacity(0.3),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Icon(
+                          Icons.preview,
+                          color: theme.colorScheme.primary,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Configuration Preview',
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: theme.colorScheme.primary,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    const Divider(),
+                    const SizedBox(height: 8),
+                    _buildPreviewRow(
+                      theme,
+                      'Mode',
+                      _isDryRun ? 'DRY RUN 🧪' : 'LIVE 🔴',
+                      _isDryRun ? AppTheme.profitGreen : AppTheme.lossRed,
+                    ),
+                    _buildPreviewRow(
+                      theme,
+                      'Market Type',
+                      '${MarketType.fromString(_selectedMarketType).icon} ${MarketType.fromString(_selectedMarketType).displayName}',
+                      MarketType.fromString(_selectedMarketType).color,
+                    ),
+                    _buildPreviewRow(
+                      theme,
+                      'Trading Pair',
+                      _selectedPair,
+                      null,
+                    ),
+                    if (_selectedMarketType != 'spot')
+                      _buildPreviewRow(
+                        theme,
+                        'Leverage',
+                        '${_leverage}x',
+                        _leverage > 10 ? AppTheme.warningYellow : null,
+                      ),
+                    _buildPreviewRow(
+                      theme,
+                      'Confidence',
+                      '${(_confidenceThreshold * 100).toStringAsFixed(0)}%',
+                      null,
+                    ),
+                    _buildPreviewRow(
+                      theme,
+                      'Trade Size',
+                      '\$${_tradeSizeController.text}',
+                      null,
+                    ),
+                    _buildPreviewRow(
+                      theme,
+                      'Daily Limits',
+                      '\$${_maxDailyLossController.text} / ${_maxDailyTradesController.text} trades',
+                      null,
+                    ),
+                    const SizedBox(height: 8),
+                    if (_leverage > 20 && _selectedMarketType != 'spot')
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: AppTheme.warningYellow.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.warning,
+                              size: 16,
+                              color: AppTheme.warningYellow,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'High leverage detected! Use with caution.',
+                                style: theme.textTheme.bodySmall?.copyWith(
+                                  color: AppTheme.warningYellow,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
 
             // Save Button
             SizedBox(

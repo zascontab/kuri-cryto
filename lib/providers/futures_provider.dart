@@ -40,7 +40,10 @@ class FuturesPositions extends _$FuturesPositions {
 
   Future<FuturesPositionsResponse> _fetchPositions(String exchange) async {
     final service = ref.read(futuresServiceProvider);
-    return await service.getPositions(exchange: exchange);
+    return await service.getPositions(
+      exchange: exchange,
+      marketType: 'futures', // Backend fixed - parameter working correctly
+    );
   }
 
   /// Manual refresh of futures positions
@@ -118,7 +121,8 @@ class FuturesPositions extends _$FuturesPositions {
   Future<List<CloseFuturesPositionResponse>> closeProfitablePositions() async {
     try {
       final service = ref.read(futuresServiceProvider);
-      final results = await service.closeProfitablePositions(exchange: exchange);
+      final results =
+          await service.closeProfitablePositions(exchange: exchange);
 
       // Refresh positions after closing
       await refresh();
@@ -344,7 +348,8 @@ List<FuturesPosition> longPositions(
   );
 
   return positionsAsync.when(
-    data: (response) => response.positions.where((p) => p.side == 'LONG').toList(),
+    data: (response) =>
+        response.positions.where((p) => p.side == 'LONG').toList(),
     loading: () => [],
     error: (_, __) => [],
   );
@@ -364,7 +369,8 @@ List<FuturesPosition> shortPositions(
   );
 
   return positionsAsync.when(
-    data: (response) => response.positions.where((p) => p.side == 'SHORT').toList(),
+    data: (response) =>
+        response.positions.where((p) => p.side == 'SHORT').toList(),
     loading: () => [],
     error: (_, __) => [],
   );
@@ -531,4 +537,89 @@ class FuturesStatistics {
       largestLoss: 0.0,
     );
   }
+}
+
+/// Provider for liquidation alerts
+///
+/// Returns list of symbols that are near liquidation (< 10% distance).
+/// Useful for showing warnings in UI.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+@riverpod
+List<String> liquidationAlerts(
+  LiquidationAlertsRef ref, {
+  String exchange = 'kucoin',
+}) {
+  final positionsAsync = ref.watch(
+    futuresPositionsProvider(exchange: exchange),
+  );
+
+  return positionsAsync.when(
+    data: (response) => response.positions
+        .where((p) => p.isNearLiquidation)
+        .map((p) => p.symbol)
+        .toList(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+}
+
+/// Provider for positions near liquidation
+///
+/// Returns positions that are within 10% of liquidation price.
+/// These positions require immediate attention.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+@riverpod
+List<FuturesPosition> positionsNearLiquidation(
+  PositionsNearLiquidationRef ref, {
+  String exchange = 'kucoin',
+}) {
+  final positionsAsync = ref.watch(
+    futuresPositionsProvider(exchange: exchange),
+  );
+
+  return positionsAsync.when(
+    data: (response) =>
+        response.positions.where((p) => p.isNearLiquidation).toList(),
+    loading: () => [],
+    error: (_, __) => [],
+  );
+}
+
+/// Provider for mark prices map
+///
+/// Returns a map of symbol -> mark price for all open positions.
+/// Useful for displaying current prices in position lists.
+///
+/// Parameters:
+/// - exchange: Exchange name (default: 'kucoin')
+@riverpod
+Future<Map<String, double>> markPricesForPositions(
+  MarkPricesForPositionsRef ref, {
+  String exchange = 'kucoin',
+}) async {
+  final positionsResponse = await ref.watch(
+    futuresPositionsProvider(exchange: exchange).future,
+  );
+
+  final service = ref.watch(futuresServiceProvider);
+  final markPrices = <String, double>{};
+
+  for (final position in positionsResponse.positions) {
+    try {
+      final markPrice = await service.getMarkPrice(
+        symbol: position.symbol,
+        exchange: exchange,
+      );
+      markPrices[position.symbol] = markPrice;
+    } catch (e) {
+      // Use current price from position if mark price fetch fails
+      markPrices[position.symbol] = position.currentPrice;
+    }
+  }
+
+  return markPrices;
 }

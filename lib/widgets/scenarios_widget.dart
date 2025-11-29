@@ -6,14 +6,13 @@ import '../models/comprehensive_analysis.dart';
 /// Shows:
 /// - List of possible market scenarios
 /// - Probability percentage for each scenario
-/// - Target price and change percentage
-/// - Impact type (positive/negative/neutral)
-/// - Description and timeframe
+/// - Target price and stop loss
+/// - Description and conditions
 ///
-/// Color-coded based on impact type
+/// Color-coded based on scenario type (bullish/bearish/neutral)
 class ScenariosWidget extends StatelessWidget {
   /// List of market scenarios
-  final List<MarketScenario> scenarios;
+  final List<Scenario> scenarios;
 
   const ScenariosWidget({
     super.key,
@@ -66,30 +65,14 @@ class ScenariosWidget extends StatelessWidget {
               ...scenarios.asMap().entries.map((entry) {
                 final index = entry.key;
                 final scenario = entry.value;
-                return TweenAnimationBuilder<double>(
-                  tween: Tween(begin: 0.0, end: 1.0),
-                  duration: Duration(
-                    milliseconds: 400 + (index * 150),
-                  ),
-                  curve: Curves.easeOut,
-                  builder: (context, animValue, child) {
-                    return Opacity(
-                      opacity: animValue,
-                      child: Transform.translate(
-                        offset: Offset(30 * (1 - animValue), 0),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      _ScenarioCard(scenario: scenario),
-                      if (index < scenarios.length - 1)
-                        const SizedBox(height: 12),
-                    ],
-                  ),
+                return Column(
+                  children: [
+                    _ScenarioCard(scenario: scenario),
+                    if (index < scenarios.length - 1)
+                      const SizedBox(height: 12),
+                  ],
                 );
-              }).toList(),
+              }),
           ],
         ),
       ),
@@ -99,7 +82,7 @@ class ScenariosWidget extends StatelessWidget {
 
 /// Card widget for displaying a single market scenario
 class _ScenarioCard extends StatelessWidget {
-  final MarketScenario scenario;
+  final Scenario scenario;
 
   const _ScenarioCard({
     required this.scenario,
@@ -110,29 +93,27 @@ class _ScenarioCard extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final impactColor = _getImpactColor();
-    final isPositive = scenario.isPositive;
-    final isNegative = scenario.isNegative;
 
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: impactColor.withOpacity(0.05),
+        color: impactColor.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: impactColor.withOpacity(0.3),
+          color: impactColor.withValues(alpha: 0.3),
           width: 1.5,
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Header with name and impact badge
+          // Header with type and badge
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Text(
-                  scenario.name,
+                  scenario.type.toUpperCase(),
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
@@ -141,7 +122,7 @@ class _ScenarioCard extends StatelessWidget {
               ),
               const SizedBox(width: 8),
               _ImpactBadge(
-                impact: scenario.impact,
+                impact: scenario.type,
                 color: impactColor,
               ),
             ],
@@ -176,20 +157,11 @@ class _ScenarioCard extends StatelessWidget {
                     const SizedBox(height: 6),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: TweenAnimationBuilder<double>(
-                        tween: Tween(begin: 0.0, end: scenario.probability),
-                        duration: const Duration(milliseconds: 1000),
-                        curve: Curves.easeOut,
-                        builder: (context, animValue, child) {
-                          return LinearProgressIndicator(
-                            value: animValue,
-                            minHeight: 6,
-                            backgroundColor: colorScheme.surfaceVariant,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              impactColor,
-                            ),
-                          );
-                        },
+                      child: LinearProgressIndicator(
+                        value: scenario.probability,
+                        minHeight: 6,
+                        backgroundColor: colorScheme.surfaceContainerHighest,
+                        valueColor: AlwaysStoppedAnimation<Color>(impactColor),
                       ),
                     ),
                   ],
@@ -199,36 +171,33 @@ class _ScenarioCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Target and Change
-          Row(
-            children: [
-              Expanded(
-                child: _MetricItem(
-                  label: 'Target',
-                  value: '\$${scenario.targetPrice.toStringAsFixed(2)}',
-                  theme: theme,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _MetricItem(
-                  label: 'Change',
-                  value: '${isPositive ? '+' : ''}${scenario.changePercent.toStringAsFixed(2)}%',
-                  valueColor: impactColor,
-                  theme: theme,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _MetricItem(
-                  label: 'Timeframe',
-                  value: scenario.timeframe,
-                  theme: theme,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
+          // Target and Stop Loss
+          if (scenario.targetPrice != null || scenario.stopLoss != null)
+            Row(
+              children: [
+                if (scenario.targetPrice != null)
+                  Expanded(
+                    child: _MetricItem(
+                      label: 'Target',
+                      value: '\$${scenario.targetPrice!.toStringAsFixed(2)}',
+                      theme: theme,
+                    ),
+                  ),
+                if (scenario.targetPrice != null && scenario.stopLoss != null)
+                  const SizedBox(width: 12),
+                if (scenario.stopLoss != null)
+                  Expanded(
+                    child: _MetricItem(
+                      label: 'Stop Loss',
+                      value: '\$${scenario.stopLoss!.toStringAsFixed(2)}',
+                      valueColor: Colors.red,
+                      theme: theme,
+                    ),
+                  ),
+              ],
+            ),
+          if (scenario.targetPrice != null || scenario.stopLoss != null)
+            const SizedBox(height: 12),
 
           // Description
           Container(
@@ -258,16 +227,45 @@ class _ScenarioCard extends StatelessWidget {
               ],
             ),
           ),
+
+          // Conditions
+          if (scenario.conditions.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            ...scenario.conditions.map((condition) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 4),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(
+                      Icons.check_circle_outline,
+                      size: 16,
+                      color: impactColor,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
+                        condition,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
         ],
       ),
     );
   }
 
   Color _getImpactColor() {
-    switch (scenario.impact.toLowerCase()) {
-      case 'positive':
+    switch (scenario.type.toLowerCase()) {
+      case 'bullish':
         return const Color(0xFF10B981); // Green
-      case 'negative':
+      case 'bearish':
         return const Color(0xFFEF4444); // Red
       default:
         return const Color(0xFF6B7280); // Gray
@@ -293,9 +291,9 @@ class _ImpactBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.15),
+        color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.5), width: 1),
+        border: Border.all(color: color.withValues(alpha: 0.5), width: 1),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -321,9 +319,9 @@ class _ImpactBadge extends StatelessWidget {
 
   IconData _getImpactIcon() {
     switch (impact.toLowerCase()) {
-      case 'positive':
+      case 'bullish':
         return Icons.arrow_upward;
-      case 'negative':
+      case 'bearish':
         return Icons.arrow_downward;
       default:
         return Icons.horizontal_rule;

@@ -3,9 +3,13 @@ import '../config/api_config.dart';
 import '../models/ai_bot_config.dart';
 import '../models/ai_bot_status.dart';
 import '../models/ai_analysis.dart';
+import '../models/comprehensive_analysis.dart';
 import 'api_exception.dart';
 
 /// Servicio para interactuar con el AI Trading Bot
+///
+/// ✅ NO REQUIERE AUTENTICACIÓN
+/// Todos los endpoints del MCP Server son públicos y no necesitan headers de auth.
 class AiBotService {
   final Dio _dio;
 
@@ -100,7 +104,8 @@ class AiBotService {
   /// ⚠️ USAR SOLO EN EMERGENCIAS
   Future<Map<String, dynamic>> emergencyStop() async {
     try {
-      final response = await _dio.post('${ApiConfig.aiBotBaseUrl}/emergency-stop');
+      final response =
+          await _dio.post('${ApiConfig.aiBotBaseUrl}/emergency-stop');
       return response.data as Map<String, dynamic>;
     } on DioException catch (e) {
       throw _handleError(e);
@@ -130,6 +135,41 @@ class AiBotService {
     }
   }
 
+  /// Obtiene análisis comprehensivo del mercado con todos los indicadores
+  ///
+  /// Retorna un análisis completo que incluye:
+  /// - Datos de precio actuales
+  /// - Indicadores técnicos para múltiples timeframes (1m, 5m, 15m, 1h, 4h)
+  /// - Escenarios de mercado (bullish, bearish, neutral) con probabilidades
+  /// - Recomendación de trading con niveles de entrada, stop loss y take profit
+  ///
+  /// [marketType]: Optional market type ('spot', 'futures', 'margin', 'options')
+  Future<ComprehensiveAnalysis> getComprehensiveAnalysis({
+    required String symbol,
+    String exchange = 'kucoin',
+    String? marketType,
+  }) async {
+    try {
+      final data = <String, dynamic>{
+        'symbol': symbol,
+        'exchange': exchange,
+      };
+
+      if (marketType != null) {
+        data['market_type'] = marketType;
+      }
+
+      final response = await _dio.post(
+        ApiConfig.comprehensiveAnalysisUrl,
+        data: data,
+      );
+      return ComprehensiveAnalysis.fromJson(
+          response.data as Map<String, dynamic>);
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   // ============================================================================
   // Positions
   // ============================================================================
@@ -140,7 +180,9 @@ class AiBotService {
       final response = await _dio.get('${ApiConfig.aiBotBaseUrl}/positions');
       final data = response.data as Map<String, dynamic>;
       final positions = data['positions'] as List;
-      return positions.map((p) => AiPosition.fromJson(p as Map<String, dynamic>)).toList();
+      return positions
+          .map((p) => AiPosition.fromJson(p as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw _handleError(e);
     }
@@ -215,8 +257,12 @@ class AiBotService {
     final updates = <String, dynamic>{};
     if (maxDailyLoss != null) updates['max_daily_loss_usd'] = maxDailyLoss;
     if (maxDailyTrades != null) updates['max_daily_trades'] = maxDailyTrades;
-    if (maxConsecutiveErrors != null) updates['max_consecutive_errors'] = maxConsecutiveErrors;
-    if (maxOpenPositions != null) updates['max_open_positions'] = maxOpenPositions;
+    if (maxConsecutiveErrors != null) {
+      updates['max_consecutive_errors'] = maxConsecutiveErrors;
+    }
+    if (maxOpenPositions != null) {
+      updates['max_open_positions'] = maxOpenPositions;
+    }
     return updateConfig(updates);
   }
 

@@ -422,7 +422,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
             action: SnackBarAction(
               label: l10n.retry,
@@ -454,7 +454,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
             action: SnackBarAction(
               label: l10n.retry,
@@ -486,7 +486,7 @@ class _AlertsScreenState extends ConsumerState<AlertsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
             action: SnackBarAction(
               label: l10n.retry,

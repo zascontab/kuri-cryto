@@ -358,5 +358,171 @@ final futuresServiceProvider = AutoDisposeProvider<FuturesService>.internal(
 );
 
 typedef FuturesServiceRef = AutoDisposeProviderRef<FuturesService>;
+String _$mcpServiceHash() => r'bca90fc1706ddc7625adcf0ef437f0e360d62408';
+
+/// Provider for MCP Service
+///
+/// Generic service for calling MCP Tools via JSON-RPC 2.0:
+/// - Centralized tool execution
+/// - Type-safe responses
+/// - Error handling
+/// - Request ID management
+/// - Access to all 67 MCP tools
+///
+/// Herramientas disponibles:
+/// - Market data: get_ticker, get_candles, get_orderbook
+/// - Technical indicators: calculate_rsi, calculate_macd, etc.
+/// - Trading: execute_scalping_trade, place_market_order
+/// - Account: account_info, get_account_balances
+/// - Y 57 herramientas más
+///
+/// Copied from [mcpService].
+@ProviderFor(mcpService)
+final mcpServiceProvider = AutoDisposeProvider<MCPService>.internal(
+  mcpService,
+  name: r'mcpServiceProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : _$mcpServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef McpServiceRef = AutoDisposeProviderRef<MCPService>;
+String _$marketDataServiceHash() => r'f3853df11b574e415138e8e170fa975c6aecd430';
+
+/// Provider for Market Data Service
+///
+/// Wrapper tipo-seguro para herramientas MCP de datos de mercado:
+/// - get_ticker: Ticker actual con precio, bid, ask, volumen, cambios 24h
+/// - get_candles: Datos históricos OHLCV (Open, High, Low, Close, Volume)
+/// - get_orderbook: Libro de órdenes con bids/asks y análisis de liquidez
+/// - get_24h_stats: Estadísticas de 24 horas
+/// - get_multiple_tickers: Múltiples tickers en paralelo
+/// - get_mark_price: Precio de referencia para futures
+///
+/// Incluye métodos de conveniencia para:
+/// - Análisis de spread y liquidez
+/// - Cálculo de slippage esperado
+/// - Verificación de liquidez disponible
+/// - Detección de tendencias
+///
+/// Copied from [marketDataService].
+@ProviderFor(marketDataService)
+final marketDataServiceProvider =
+    AutoDisposeProvider<MarketDataService>.internal(
+  marketDataService,
+  name: r'marketDataServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$marketDataServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef MarketDataServiceRef = AutoDisposeProviderRef<MarketDataService>;
+String _$technicalIndicatorsServiceHash() =>
+    r'f2e875069b7f8072e0d65e9bb555bd5f81e635d2';
+
+/// Provider for Technical Indicators Service
+///
+/// Wrapper tipo-seguro para herramientas MCP de indicadores técnicos:
+/// - RSI (Relative Strength Index): Oscilador de momentum (0-100)
+/// - MACD (Moving Average Convergence Divergence): Indicador de tendencia
+/// - Bollinger Bands: Bandas de volatilidad
+/// - EMA/SMA: Medias móviles exponenciales y simples
+/// - ATR (Average True Range): Medida de volatilidad
+/// - Stochastic Oscillator: Oscilador de momentum
+/// - ADX (Average Directional Index): Fuerza de tendencia
+/// - CCI (Commodity Channel Index): Indicador de momentum
+/// - Williams %R: Oscilador de momentum
+///
+/// Incluye métodos para:
+/// - Análisis técnico individual de cada indicador
+/// - Cálculo de múltiples EMAs en paralelo
+/// - Análisis técnico completo combinando múltiples indicadores
+///
+/// Copied from [technicalIndicatorsService].
+@ProviderFor(technicalIndicatorsService)
+final technicalIndicatorsServiceProvider =
+    AutoDisposeProvider<TechnicalIndicatorsService>.internal(
+  technicalIndicatorsService,
+  name: r'technicalIndicatorsServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$technicalIndicatorsServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef TechnicalIndicatorsServiceRef
+    = AutoDisposeProviderRef<TechnicalIndicatorsService>;
+String _$accountPortfolioServiceHash() =>
+    r'b7ae3c3f24a597db23cb288ef394a2d5fed49fad';
+
+/// Provider for Account & Portfolio Service
+///
+/// Wrapper tipo-seguro para herramientas MCP de gestión de cuenta:
+/// - account_info: Información de cuenta con permisos y comisiones
+/// - get_account_balances: Todos los balances de activos
+/// - get_balance: Balance de un activo específico
+/// - get_portfolio: Composición del portafolio con análisis
+/// - portfolio_analysis: Análisis de diversificación y riesgo
+///
+/// Incluye métodos para:
+/// - Obtener información de cuenta y permisos
+/// - Gestionar balances de activos
+/// - Analizar composición del portafolio
+/// - Calcular métricas de diversificación
+/// - Verificar disponibilidad de fondos
+///
+/// Copied from [accountPortfolioService].
+@ProviderFor(accountPortfolioService)
+final accountPortfolioServiceProvider =
+    AutoDisposeProvider<AccountPortfolioService>.internal(
+  accountPortfolioService,
+  name: r'accountPortfolioServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$accountPortfolioServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef AccountPortfolioServiceRef
+    = AutoDisposeProviderRef<AccountPortfolioService>;
+String _$integratedAnalysisServiceHash() =>
+    r'3648b5bfe6f43e3163118fb6ec94a0f74c6b3f9b';
+
+/// Provider for Integrated Analysis Service
+///
+/// Servicio que integra múltiples fuentes de datos para análisis completo:
+/// - Market Data (ticker, candles, orderbook)
+/// - Technical Indicators (RSI, MACD, Bollinger Bands)
+/// - Generación de señales de trading
+///
+/// Funcionalidades:
+/// - Análisis completo de mercado combinando múltiples indicadores
+/// - Generación de señales BUY/SELL/HOLD con niveles de confianza
+/// - Análisis rápido para escaneo de múltiples pares
+/// - Búsqueda de oportunidades de compra
+/// - Análisis de condiciones de mercado (volatilidad, momentum)
+///
+/// Depende de MarketDataService y TechnicalIndicatorsService
+///
+/// Copied from [integratedAnalysisService].
+@ProviderFor(integratedAnalysisService)
+final integratedAnalysisServiceProvider =
+    AutoDisposeProvider<IntegratedAnalysisService>.internal(
+  integratedAnalysisService,
+  name: r'integratedAnalysisServiceProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$integratedAnalysisServiceHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef IntegratedAnalysisServiceRef
+    = AutoDisposeProviderRef<IntegratedAnalysisService>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

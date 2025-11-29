@@ -3,6 +3,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import '../models/ai_bot_status.dart';
 import '../models/ai_bot_config.dart';
 import '../models/ai_analysis.dart';
+import '../models/comprehensive_analysis.dart';
 import '../services/ai_bot_service.dart';
 import 'services_provider.dart';
 
@@ -274,5 +275,54 @@ class AiBotPositions extends _$AiBotPositions {
   Future<void> refresh() async {
     state = const AsyncValue.loading();
     state = await AsyncValue.guard(() => _fetchPositions());
+  }
+}
+
+/// Provider for Comprehensive Market Analysis
+///
+/// Provides detailed market analysis including:
+/// - Price data
+/// - Technical indicators across multiple timeframes
+/// - Market scenarios with probabilities
+/// - AI-powered trading recommendations
+@riverpod
+class ComprehensiveAnalysisNotifier extends _$ComprehensiveAnalysisNotifier {
+  @override
+  FutureOr<ComprehensiveAnalysis?> build() async {
+    // Start with null, user must explicitly request analysis
+    return null;
+  }
+
+  /// Load comprehensive analysis for a symbol
+  Future<void> loadAnalysis({
+    required String symbol,
+    String exchange = 'kucoin',
+    String? marketType,
+  }) async {
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      final service = ref.read(aiBotServiceProvider);
+      return await service.getComprehensiveAnalysis(
+        symbol: symbol,
+        exchange: exchange,
+        marketType: marketType,
+      );
+    });
+  }
+
+  /// Refresh current analysis
+  Future<void> refresh() async {
+    final currentAnalysis = state.value;
+    if (currentAnalysis != null) {
+      await loadAnalysis(
+        symbol: currentAnalysis.symbol,
+        exchange: currentAnalysis.exchange,
+      );
+    }
+  }
+
+  /// Clear analysis
+  void clear() {
+    state = const AsyncValue.data(null);
   }
 }

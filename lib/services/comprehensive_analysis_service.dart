@@ -1,9 +1,13 @@
 import 'package:dio/dio.dart';
 import '../config/api_config.dart';
 import '../models/comprehensive_analysis.dart';
+import '../models/market_type.dart';
 import 'api_exception.dart';
 
 /// Servicio para obtener análisis comprehensivo de mercado con AI
+///
+/// ✅ NO REQUIERE AUTENTICACIÓN
+/// Todos los endpoints del MCP Server son públicos y no necesitan headers de auth.
 class ComprehensiveAnalysisService {
   final Dio _dio;
 
@@ -23,16 +27,25 @@ class ComprehensiveAnalysisService {
   Future<ComprehensiveAnalysis> getAnalysis({
     required String symbol,
     String exchange = 'kucoin',
+    MarketType? marketType,
   }) async {
     try {
+      final data = <String, dynamic>{
+        'symbol': symbol,
+        'exchange': exchange,
+      };
+
+      // Add market_type if specified
+      if (marketType != null) {
+        data['market_type'] = marketType.value;
+      }
+
       final response = await _dio.post(
         ApiConfig.comprehensiveAnalysisUrl,
-        data: {
-          'symbol': symbol,
-          'exchange': exchange,
-        },
+        data: data,
       );
-      return ComprehensiveAnalysis.fromJson(response.data as Map<String, dynamic>);
+      return ComprehensiveAnalysis.fromJson(
+          response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw _handleError(e);
     }

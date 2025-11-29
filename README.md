@@ -10,6 +10,14 @@ Aplicación móvil de trading de criptomonedas con análisis avanzado y gestión
 - ✅ **Modo Sistema**: Se adapta automáticamente a las preferencias del dispositivo
 - ✅ **Persistencia**: Recuerda tu preferencia entre sesiones
 
+### 💱 Market Types
+- ✅ **4 Tipos de Mercado**: Spot, Futures, Margin, Options
+- ✅ **Selección Intuitiva**: Múltiples componentes UI (Segmented Button, Chips, Dropdown)
+- ✅ **Validación Automática**: Leverage ajustado según tipo de mercado
+- ✅ **Tutorial Interactivo**: Aprende sobre cada tipo con ejemplos visuales
+- ✅ **Gestión de Riesgo**: Indicadores de riesgo en tiempo real
+- ✅ **Integración Backend**: Parámetro market_type en todas las APIs
+
 ### 📊 Trading (En Desarrollo)
 - Dashboard con métricas en tiempo real
 - Gestión de posiciones abiertas
@@ -51,7 +59,19 @@ Aplicación móvil de trading de criptomonedas con análisis avanzado y gestión
 
 ## 📱 Capturas de Pantalla
 
-*Próximamente...*
+### Market Types Demo
+![Market Types Selection](docs/screenshots/market_types_demo.png)
+*Selección de tipos de mercado con validación de leverage*
+
+### Interactive Tutorial
+![Tutorial](docs/screenshots/market_types_tutorial.png)
+*Tutorial interactivo con explicaciones detalladas*
+
+### Risk Assessment
+![Risk Indicator](docs/screenshots/risk_assessment.png)
+*Indicador de riesgo dinámico según tipo y leverage*
+
+*Más capturas próximamente...*
 
 ## 🎨 Sistema de Temas
 
@@ -96,10 +116,27 @@ ref.read(theme_provider.themeProvider.notifier).setThemeMode(
 lib/
 ├── config/          # Configuración (temas, constantes)
 ├── providers/       # Gestión de estado con Riverpod
+│   ├── theme_provider.dart
+│   ├── market_type_provider.dart  # ✨ Nuevo
+│   └── ...
 ├── screens/         # Pantallas de la aplicación
+│   ├── market_type_demo_screen.dart  # ✨ Nuevo
+│   └── ...
 ├── widgets/         # Widgets reutilizables
+│   ├── market_type_selector.dart  # ✨ Nuevo
+│   └── ...
 ├── services/        # Servicios (API, WebSocket)
-└── models/          # Modelos de datos
+│   ├── market_type_service.dart  # ✨ Nuevo
+│   └── ...
+├── models/          # Modelos de datos
+│   ├── market_type.dart  # ✨ Nuevo
+│   └── ...
+└── docs/            # Documentación
+    ├── help/        # ✨ Nuevo - Guías de usuario
+    │   ├── understanding_market_types.md
+    │   ├── choosing_market_type.md
+    │   └── leverage_and_risk.md
+    └── MARKET_TYPES_IMPLEMENTATION.md  # ✨ Nuevo
 ```
 
 ## 🔗 Integración con Backend
@@ -112,14 +149,37 @@ La aplicación está diseñada para conectarse con el Trading MCP Server.
 - `GET /api/v1/scalping/strategies` - Estrategias disponibles
 - `WebSocket ws://localhost:8081/ws` - Actualizaciones en tiempo real
 
+### Market Types Integration ✨
+Todos los endpoints ahora soportan el parámetro opcional `market_type`:
+```json
+{
+  "symbol": "BTC/USDT",
+  "exchange": "binance",
+  "market_type": "futures"  // spot, futures, margin, options
+}
+```
+
+El sistema automáticamente:
+- Convierte símbolos según el tipo de mercado
+- Valida leverage permitido
+- Aplica reglas específicas del tipo
+
 Para más detalles, consulta:
 - [API-DOCUMENTATION.md](./API-DOCUMENTATION.md)
 - [API-SUMMARY-FOR-FLUTTER-TEAM.md](./API-SUMMARY-FOR-FLUTTER-TEAM.md)
+- [MARKET_TYPES_IMPLEMENTATION.md](./lib/docs/MARKET_TYPES_IMPLEMENTATION.md) ✨
 
 ## 📅 Roadmap
 
 ### Fase 0: Critical Safety ✅
 - [x] Implementación de temas (modo claro/oscuro)
+- [x] **Market Types System** ✨
+  - [x] 4 tipos de mercado (Spot, Futures, Margin, Options)
+  - [x] Componentes UI reutilizables
+  - [x] Validación automática de leverage
+  - [x] Tutorial interactivo
+  - [x] Documentación completa
+  - [x] Integración con backend
 - [ ] Risk Monitor Widget
 - [ ] Kill Switch UI
 - [ ] Position Management
@@ -161,7 +221,19 @@ Este proyecto es privado y está en desarrollo.
 
 Para preguntas o soporte, contacta al equipo de desarrollo.
 
+## 📚 Documentación Adicional
+
+### Para Usuarios
+- [Understanding Market Types](./lib/docs/help/understanding_market_types.md) - Guía completa de tipos de mercado
+- [Choosing the Right Market Type](./lib/docs/help/choosing_market_type.md) - Cómo elegir el tipo correcto
+- [Leverage and Risk Management](./lib/docs/help/leverage_and_risk.md) - Gestión de riesgo y leverage
+
+### Para Desarrolladores
+- [Market Types Implementation](./lib/docs/MARKET_TYPES_IMPLEMENTATION.md) - Guía de implementación
+- [Theme Implementation](./THEME_IMPLEMENTATION.md) - Sistema de temas
+- [API Documentation](./API-DOCUMENTATION.md) - Documentación de API
+
 ---
 
-**Versión**: 1.0.0
-**Última Actualización**: 2025-11-16
+**Versión**: 1.1.0
+**Última Actualización**: 2025-11-27

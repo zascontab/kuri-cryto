@@ -452,7 +452,7 @@ class _LimitProgressBar extends StatelessWidget {
                   return LinearProgressIndicator(
                     value: animValue,
                     minHeight: 10,
-                    backgroundColor: colorScheme.surfaceVariant,
+                    backgroundColor: colorScheme.surfaceContainerHighest,
                     valueColor: AlwaysStoppedAnimation<Color>(progressColor),
                   );
                 },

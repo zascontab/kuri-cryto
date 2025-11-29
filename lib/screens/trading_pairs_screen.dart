@@ -39,7 +39,8 @@ class TradingPairsScreen extends ConsumerWidget {
     );
   }
 
-  Widget _buildPairsList(BuildContext context, WidgetRef ref, List<TradingPair> pairs) {
+  Widget _buildPairsList(
+      BuildContext context, WidgetRef ref, List<TradingPair> pairs) {
     final l10n = context.l10n;
 
     if (pairs.isEmpty) {
@@ -106,7 +107,7 @@ class TradingPairsScreen extends ConsumerWidget {
             const Icon(Icons.error, color: Colors.red, size: 64),
             const SizedBox(height: 16),
             Text(
-              l10n.errorOccurred(error: error.toString()),
+              '${l10n.errorOccurred}: $error',
               style: const TextStyle(color: Colors.red),
               textAlign: TextAlign.center,
             ),
@@ -122,7 +123,8 @@ class TradingPairsScreen extends ConsumerWidget {
     );
   }
 
-  void _confirmRemovePair(BuildContext context, WidgetRef ref, TradingPair pair) {
+  void _confirmRemovePair(
+      BuildContext context, WidgetRef ref, TradingPair pair) {
     final l10n = context.l10n;
 
     // Check if pair has open positions
@@ -134,10 +136,7 @@ class TradingPairsScreen extends ConsumerWidget {
     showTikTokModal(
       context: context,
       title: l10n.removePair,
-      message: l10n.removePairConfirmation(
-        exchange: pair.exchange.toUpperCase(),
-        symbol: pair.symbol,
-      ),
+      message: l10n.removePairConfirmation,
       actions: [
         TikTokModalButton(
           text: l10n.remove,
@@ -162,9 +161,7 @@ class TradingPairsScreen extends ConsumerWidget {
     showTikTokModal(
       context: context,
       title: l10n.cannotRemovePair,
-      message: l10n.cannotRemovePairWithPositions(
-        count: pair.openPositions ?? 0,
-      ),
+      message: l10n.cannotRemovePairWithPositions,
       actions: [
         TikTokModalButton(
           text: l10n.ok,
@@ -175,7 +172,8 @@ class TradingPairsScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _removePair(BuildContext context, WidgetRef ref, TradingPair pair) async {
+  Future<void> _removePair(
+      BuildContext context, WidgetRef ref, TradingPair pair) async {
     final l10n = context.l10n;
 
     try {
@@ -188,7 +186,7 @@ class TradingPairsScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.pairRemovedSuccess(symbol: pair.symbol)),
+            content: Text(l10n.pairRemovedSuccess(pair.symbol)),
             backgroundColor: const Color(0xFF4CAF50),
           ),
         );
@@ -197,7 +195,7 @@ class TradingPairsScreen extends ConsumerWidget {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
             action: SnackBarAction(
               label: l10n.retry,
@@ -565,7 +563,10 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
       data: (pairs) {
         final filteredPairs = _searchQuery.isEmpty
             ? pairs
-            : pairs.where((pair) => pair.symbol.toLowerCase().contains(_searchQuery)).toList();
+            : pairs
+                .where(
+                    (pair) => pair.symbol.toLowerCase().contains(_searchQuery))
+                .toList();
 
         if (filteredPairs.isEmpty) {
           return Center(child: Text(l10n.noPairsFound));
@@ -601,7 +602,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
       loading: () => const Center(child: CircularProgressIndicator()),
       error: (error, _) => Center(
         child: Text(
-          l10n.errorOccurred(error: error.toString()),
+          '${l10n.errorOccurred}: $error',
           style: const TextStyle(color: Colors.red),
         ),
       ),
@@ -685,7 +686,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.pairAddedSuccess(symbol: _selectedPair!.symbol)),
+            content: Text(l10n.pairAddedSuccess(_selectedPair!.symbol)),
             backgroundColor: const Color(0xFF4CAF50),
           ),
         );
@@ -694,7 +695,7 @@ class _AddPairDialogState extends ConsumerState<_AddPairDialog> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.errorOccurred(error: e.toString())),
+            content: Text('${l10n.errorOccurred}: $e'),
             backgroundColor: const Color(0xFFF44336),
           ),
         );

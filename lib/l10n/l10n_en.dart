@@ -733,4 +733,823 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get riskFactors => 'Risk Factors:';
+
+  @override
+  String get appTitle => 'Kuri Crypto';
+
+  @override
+  String get startTrading => 'Start Trading';
+
+  @override
+  String get activeStrategies => 'Active Strategies';
+
+  @override
+  String get recentAlerts => 'Recent Alerts';
+
+  @override
+  String get entry => 'Entry';
+
+  @override
+  String get current => 'Current';
+
+  @override
+  String get long => 'LONG';
+
+  @override
+  String get short => 'SHORT';
+
+  @override
+  String get rsiScalping => 'RSI Scalping';
+
+  @override
+  String get macdScalping => 'MACD Scalping';
+
+  @override
+  String get bollingerScalping => 'Bollinger Scalping';
+
+  @override
+  String get volumeScalping => 'Volume Scalping';
+
+  @override
+  String get paused => 'Paused';
+
+  @override
+  String get warning => 'Warning';
+
+  @override
+  String get info => 'Info';
+
+  @override
+  String get change24h => '24h Change';
+
+  @override
+  String get riskLevel => 'Risk Level';
+
+  @override
+  String get low => 'Low';
+
+  @override
+  String get medium => 'Medium';
+
+  @override
+  String get high => 'High';
+
+  @override
+  String get critical => 'Critical';
+
+  @override
+  String get acknowledge => 'Acknowledge';
+
+  @override
+  String get activate => 'Activate';
+
+  @override
+  String get activateKillSwitch => 'Activate Kill Switch';
+
+  @override
+  String get activeAlerts => 'Active Alerts';
+
+  @override
+  String get add => 'Add';
+
+  @override
+  String get addAlertRule => 'Add Alert Rule';
+
+  @override
+  String get addNewPair => 'Add New Pair';
+
+  @override
+  String get addPair => 'Add Pair';
+
+  @override
+  String get addParameter => 'Add Parameter';
+
+  @override
+  String get addRule => 'Add Rule';
+
+  @override
+  String get alertAcknowledged => 'Alert Acknowledged';
+
+  @override
+  String get alertConfiguration => 'Alert Configuration';
+
+  @override
+  String get alertConfigurationSaved => 'Alert Configuration Saved';
+
+  @override
+  String get alertDismissed => 'Alert Dismissed';
+
+  @override
+  String get alertHistoryWillAppearHere => 'Alert history will appear here';
+
+  @override
+  String get alertRules => 'Alert Rules';
+
+  @override
+  String get alertType => 'Alert Type';
+
+  @override
+  String get all => 'All';
+
+  @override
+  String get allClear => 'All Clear';
+
+  @override
+  String get allPositionsWillClose => 'All positions will be closed';
+
+  @override
+  String get allResults => 'All Results';
+
+  @override
+  String get allStrategies => 'All Strategies';
+
+  @override
+  String get allSymbols => 'All Symbols';
+
+  @override
+  String get allTradingWillStop => 'All trading will stop';
+
+  @override
+  String get apply => 'Apply';
+
+  @override
+  String get applyParameters => 'Apply Parameters';
+
+  @override
+  String get applyParametersConfirmation =>
+      'Are you sure you want to apply these parameters?';
+
+  @override
+  String get applyTheseParameters => 'Apply These Parameters';
+
+  @override
+  String get areYouSure => 'Are you sure?';
+
+  @override
+  String get average => 'Average';
+
+  @override
+  String get avgExecutionTime => 'Avg Execution Time';
+
+  @override
+  String get avgSlippage => 'Avg Slippage';
+
+  @override
+  String get avgWaitTime => 'Avg Wait Time';
+
+  @override
+  String get backToForm => 'Back to Form';
+
+  @override
+  String get backtestConfiguration => 'Backtest Configuration';
+
+  @override
+  String get backtestFailed => 'Backtest Failed';
+
+  @override
+  String get backtestRunning => 'Backtest Running';
+
+  @override
+  String get backtestStarted => 'Backtest Started';
+
+  @override
+  String get basisPoints => 'Basis Points';
+
+  @override
+  String get bayesianOptimization => 'Bayesian Optimization';
+
+  @override
+  String get bayesianOptimizationDesc =>
+      'Intelligent search using Bayesian methods';
+
+  @override
+  String get bestParameters => 'Best Parameters';
+
+  @override
+  String get bestScore => 'Best Score';
+
+  @override
+  String get cancelOptimization => 'Cancel Optimization';
+
+  @override
+  String get cancelOptimizationConfirmation =>
+      'Are you sure you want to cancel this optimization?';
+
+  @override
+  String get cancelled => 'Cancelled';
+
+  @override
+  String get cannotRemovePair => 'Cannot remove pair';
+
+  @override
+  String get cannotRemovePairWithPositions =>
+      'Cannot remove pair with open positions';
+
+  @override
+  String get combinations => 'combinations';
+
+  @override
+  String get completed => 'Completed';
+
+  @override
+  String get confidence => 'Confidence';
+
+  @override
+  String get configureAlertConditions => 'Configure Alert Conditions';
+
+  @override
+  String get confirmDeactivation => 'Confirm Deactivation';
+
+  @override
+  String get confirmDeleteRule => 'Delete Rule';
+
+  @override
+  String get confirmResumeTrading => 'Resume Trading';
+
+  @override
+  String get consensusSignal => 'Consensus Signal';
+
+  @override
+  String get continue_ => 'Continue';
+
+  @override
+  String get cooldownMinutes => 'Cooldown (minutes)';
+
+  @override
+  String get dateRange => 'Date Range';
+
+  @override
+  String get deactivateKillSwitch => 'Deactivate Kill Switch';
+
+  @override
+  String get delete => 'Delete';
+
+  @override
+  String get deleteOptimization => 'Delete Optimization';
+
+  @override
+  String get deleteOptimizationConfirmation =>
+      'Are you sure you want to delete this optimization?';
+
+  @override
+  String get deleteRule => 'Delete Rule';
+
+  @override
+  String get dismiss => 'Dismiss';
+
+  @override
+  String get drawdownChart => 'Drawdown Chart';
+
+  @override
+  String get duration => 'Duration';
+
+  @override
+  String get edit => 'Edit';
+
+  @override
+  String get editAlertRule => 'Edit Alert Rule';
+
+  @override
+  String get editParameter => 'Edit Parameter';
+
+  @override
+  String get enableAlerts => 'Enable Alerts';
+
+  @override
+  String get endDate => 'End Date';
+
+  @override
+  String get enterAmount => 'Enter Amount';
+
+  @override
+  String get entryPrice => 'Entry Price';
+
+  @override
+  String get entryTime => 'Entry Time';
+
+  @override
+  String get equityCurve => 'Equity Curve';
+
+  @override
+  String get errorLoadingAlerts => 'Error loading alerts';
+
+  @override
+  String get errorLoadingConfiguration => 'Error loading configuration';
+
+  @override
+  String get errorOccurred => 'An error occurred';
+
+  @override
+  String get errorRate => 'Error Rate';
+
+  @override
+  String get estimatedCombinations => 'Estimated Combinations';
+
+  @override
+  String get estimatedTimeRemaining => 'Estimated Time Remaining';
+
+  @override
+  String get exchange => 'Exchange';
+
+  @override
+  String get executionPerformance => 'Execution Performance';
+
+  @override
+  String get executionQueue => 'Execution Queue';
+
+  @override
+  String get executionsTracked => 'Executions Tracked';
+
+  @override
+  String get exitPrice => 'Exit Price';
+
+  @override
+  String get exitTime => 'Exit Time';
+
+  @override
+  String get exposure => 'Exposure';
+
+  @override
+  String get failed => 'Failed';
+
+  @override
+  String get failedExecutions => 'Failed Executions';
+
+  @override
+  String get fillRate => 'Fill Rate';
+
+  @override
+  String get filled => 'Filled';
+
+  @override
+  String get filterByStatus => 'Filter by Status';
+
+  @override
+  String get filterByStrategy => 'Filter by Strategy';
+
+  @override
+  String get filterBySymbol => 'Filter by Symbol';
+
+  @override
+  String get goBack => 'Go Back';
+
+  @override
+  String get gridSearch => 'Grid Search';
+
+  @override
+  String get gridSearchDesc => 'Exhaustive search through parameter grid';
+
+  @override
+  String get inAppNotifications => 'In-App Notifications';
+
+  @override
+  String get inactive => 'Inactive';
+
+  @override
+  String get initialCapital => 'Initial Capital';
+
+  @override
+  String get killSwitchActive => 'Kill Switch Active';
+
+  @override
+  String get killSwitchWarning => 'Kill Switch Warning';
+
+  @override
+  String get lastPrice => 'Last Price';
+
+  @override
+  String get latency => 'Latency';
+
+  @override
+  String get latencyChart => 'Latency Chart';
+
+  @override
+  String get latencyStatistics => 'Latency Statistics';
+
+  @override
+  String get loadingResults => 'Loading results...';
+
+  @override
+  String get manageAlertRules => 'Manage Alert Rules';
+
+  @override
+  String get max => 'Max';
+
+  @override
+  String get maxConsecutiveLosses => 'Max Consecutive Losses';
+
+  @override
+  String get maxDrawdown => 'Max Drawdown';
+
+  @override
+  String get maxIterations => 'Max Iterations';
+
+  @override
+  String get maximum => 'Maximum';
+
+  @override
+  String get maximumValue => 'Maximum Value';
+
+  @override
+  String get median => 'Median';
+
+  @override
+  String get min => 'Min';
+
+  @override
+  String get minimum => 'Minimum';
+
+  @override
+  String get minimumValue => 'Minimum Value';
+
+  @override
+  String get newBacktest => 'New Backtest';
+
+  @override
+  String get newOptimization => 'New Optimization';
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get noActiveAlerts => 'No Active Alerts';
+
+  @override
+  String get noAlertRulesYet => 'No alert rules yet';
+
+  @override
+  String get noAlertsYet => 'No alerts yet';
+
+  @override
+  String get noBacktestsYet => 'No backtests yet';
+
+  @override
+  String get noExecutionsYet => 'No executions yet';
+
+  @override
+  String get noOptimizationsYet => 'No optimizations yet';
+
+  @override
+  String get noPairsFound => 'No pairs found';
+
+  @override
+  String get noParametersConfigured => 'No parameters configured';
+
+  @override
+  String get noTradingPairs => 'No Trading Pairs';
+
+  @override
+  String get notAvailable => 'Not Available';
+
+  @override
+  String get notificationSettings => 'Notification Settings';
+
+  @override
+  String get objective => 'Objective';
+
+  @override
+  String get objectiveToOptimize => 'Objective to Optimize';
+
+  @override
+  String get ofLabel => 'of';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get optimizationCancelled => 'Optimization Cancelled';
+
+  @override
+  String get optimizationCancelledSuccessfully =>
+      'Optimization cancelled successfully';
+
+  @override
+  String get optimizationConfiguration => 'Optimization Configuration';
+
+  @override
+  String get optimizationDeletedSuccessfully =>
+      'Optimization deleted successfully';
+
+  @override
+  String get optimizationFailed => 'Optimization Failed';
+
+  @override
+  String get optimizationMethod => 'Optimization Method';
+
+  @override
+  String get optimizationResults => 'Optimization Results';
+
+  @override
+  String get optimizationRunning => 'Optimization Running';
+
+  @override
+  String get optimizationStarted => 'Optimization Started';
+
+  @override
+  String get optimizationSummary => 'Optimization Summary';
+
+  @override
+  String get orderId => 'Order ID';
+
+  @override
+  String get orderType => 'Order Type';
+
+  @override
+  String pairAddedSuccess(Object symbol) {
+    return 'Pair $symbol added successfully';
+  }
+
+  @override
+  String pairRemovedSuccess(Object symbol) {
+    return 'Pair $symbol removed successfully';
+  }
+
+  @override
+  String get parameterName => 'Parameter Name';
+
+  @override
+  String get parameterRanges => 'Parameter Ranges';
+
+  @override
+  String get parameters => 'Parameters';
+
+  @override
+  String get parametersAppliedSuccessfully => 'Parameters applied successfully';
+
+  @override
+  String get partial => 'Partial';
+
+  @override
+  String get percentile95 => '95th Percentile';
+
+  @override
+  String get percentile99 => '99th Percentile';
+
+  @override
+  String get performance => 'Performance';
+
+  @override
+  String get period30d => '30 Days';
+
+  @override
+  String get period7d => '7 Days';
+
+  @override
+  String get period90d => '90 Days';
+
+  @override
+  String get periodAll => 'All Time';
+
+  @override
+  String get pleaseEnterRuleName => 'Please enter rule name';
+
+  @override
+  String get pleaseEnterTelegramChatId => 'Please enter Telegram Chat ID';
+
+  @override
+  String get pleaseEnterTelegramToken => 'Please enter Telegram Bot Token';
+
+  @override
+  String get pleaseEnterValidNumber => 'Please enter a valid number';
+
+  @override
+  String get pleaseFixConfigurationErrors => 'Please fix configuration errors';
+
+  @override
+  String get pleaseSelectExchange => 'Please select an exchange';
+
+  @override
+  String get pnl => 'P&L';
+
+  @override
+  String get pnlChart => 'P&L Chart';
+
+  @override
+  String get preventDuplicateAlerts => 'Prevent Duplicate Alerts';
+
+  @override
+  String get price => 'Price';
+
+  @override
+  String get profitFactor => 'Profit Factor';
+
+  @override
+  String get pushNotifications => 'Push Notifications';
+
+  @override
+  String get queue => 'Queue';
+
+  @override
+  String get queueEmpty => 'Queue Empty';
+
+  @override
+  String get queueLength => 'Queue Length';
+
+  @override
+  String get queueStatus => 'Queue Status';
+
+  @override
+  String get randomSearch => 'Random Search';
+
+  @override
+  String get randomSearchDesc => 'Random search through parameter space';
+
+  @override
+  String get rank => 'Rank';
+
+  @override
+  String get refreshStats => 'Refresh Stats';
+
+  @override
+  String get rejected => 'Rejected';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String get removePair => 'Remove Pair';
+
+  @override
+  String get removePairConfirmation =>
+      'Are you sure you want to remove this pair?';
+
+  @override
+  String get requiresManualReactivation => 'Requires Manual Reactivation';
+
+  @override
+  String get results => 'Results';
+
+  @override
+  String get resume => 'Resume';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get ruleAdded => 'Rule Added';
+
+  @override
+  String get ruleDeleted => 'Rule Deleted';
+
+  @override
+  String get ruleName => 'Rule Name';
+
+  @override
+  String get ruleUpdated => 'Rule Updated';
+
+  @override
+  String get runBacktest => 'Run Backtest';
+
+  @override
+  String get runOptimization => 'Run Optimization';
+
+  @override
+  String get score => 'Score';
+
+  @override
+  String get scoreDistribution => 'Score Distribution';
+
+  @override
+  String get searchPairs => 'Search Pairs';
+
+  @override
+  String get selectSymbolToAnalyze => 'Select Symbol to Analyze';
+
+  @override
+  String get selectedPair => 'Selected Pair';
+
+  @override
+  String get sendTestAlert => 'Send Test Alert';
+
+  @override
+  String get severity => 'Severity';
+
+  @override
+  String get sharpeRatio => 'Sharpe Ratio';
+
+  @override
+  String get sharpeRatioDesc => 'Risk-adjusted return metric';
+
+  @override
+  String get showing => 'Showing';
+
+  @override
+  String get side => 'Side';
+
+  @override
+  String get signal => 'Signal';
+
+  @override
+  String get size => 'Size';
+
+  @override
+  String get slippageBySymbol => 'Slippage by Symbol';
+
+  @override
+  String get sortBy => 'Sort By';
+
+  @override
+  String get startDate => 'Start Date';
+
+  @override
+  String get started => 'Started';
+
+  @override
+  String get status => 'Status';
+
+  @override
+  String get step => 'Step';
+
+  @override
+  String get stepSize => 'Step Size';
+
+  @override
+  String get strategy => 'Strategy';
+
+  @override
+  String get successfulExecutions => 'Successful Executions';
+
+  @override
+  String get symbol => 'Symbol';
+
+  @override
+  String get tapAddPairToStart => 'Tap \'+ Add Pair\' to start';
+
+  @override
+  String get tapAddToCreateRule => 'Tap \'+ Add\' to create a rule';
+
+  @override
+  String get technicalIndicators => 'Technical Indicators';
+
+  @override
+  String get telegramBotToken => 'Telegram Bot Token';
+
+  @override
+  String get telegramChatId => 'Telegram Chat ID';
+
+  @override
+  String get telegramConfiguration => 'Telegram Configuration';
+
+  @override
+  String get telegramSetupInstructions => 'Telegram Setup Instructions';
+
+  @override
+  String get testAlertSent => 'Test Alert Sent';
+
+  @override
+  String get testAlertSystem => 'Test Alert System';
+
+  @override
+  String get thisWillResumeTrading => 'This will resume trading. Continue?';
+
+  @override
+  String get threshold => 'Threshold';
+
+  @override
+  String get time => 'Time';
+
+  @override
+  String get timeInQueue => 'Time in Queue';
+
+  @override
+  String get toggleAlertSystem => 'Toggle Alert System';
+
+  @override
+  String get totalCombinations => 'Total Combinations';
+
+  @override
+  String get totalPnlDesc => 'Total Profit & Loss';
+
+  @override
+  String get tradeHistory => 'Trade History';
+
+  @override
+  String get trades => 'Trades';
+
+  @override
+  String get tradingDisabled => 'Trading Disabled';
+
+  @override
+  String get tradingSignal => 'Trading Signal';
+
+  @override
+  String get trigger => 'Trigger';
+
+  @override
+  String get type => 'Type';
+
+  @override
+  String get value => 'Value';
+
+  @override
+  String get volume24h => '24h Volume';
+
+  @override
+  String get winRateChart => 'Win Rate Chart';
+
+  @override
+  String get winRateDesc => 'Percentage of winning trades';
+
+  @override
+  String get yes => 'Yes';
 }

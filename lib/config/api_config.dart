@@ -30,7 +30,8 @@ class ApiConfig {
   /// ⭐ URL base para ApiClient - Scalping API via Gateway
   /// Incluye el path completo hasta /scalping para que los servicios
   /// puedan usar paths relativos simples
-  static const String apiBaseUrl = '$gatewayBaseUrl/api/scalping/api/v1/scalping';
+  static const String apiBaseUrl =
+      '$gatewayBaseUrl/api/scalping/api/v1/scalping';
 
   // ============================================================================
   // MCP Server - AI Bot & Trading Tools Endpoints
@@ -40,13 +41,20 @@ class ApiConfig {
   static const String mcpToolsUrl = '$gatewayBaseUrl/api/mcp/tools/execute';
 
   /// URL base para AI Bot endpoints (conexión directa al MCP Server)
+  /// ✅ NO REQUIERE AUTENTICACIÓN - Todos los endpoints son públicos
   static const String aiBotBaseUrl = '$mcpDirectUrl/api/v1/ai-bot';
 
   /// URL para análisis comprehensivo con AI
-  static const String comprehensiveAnalysisUrl = '$aiBotBaseUrl/comprehensive-analysis';
+  /// ✅ NO REQUIERE AUTENTICACIÓN
+  static const String comprehensiveAnalysisUrl =
+      '$aiBotBaseUrl/comprehensive-analysis';
+
+  /// Health check del MCP Server
+  /// ✅ NO REQUIERE AUTENTICACIÓN
+  static const String mcpHealthUrl = '$mcpDirectUrl/health';
 
   /// URL para control del AI Bot
-  static const String aiBotControlUrl = '$aiBotBaseUrl';
+  static const String aiBotControlUrl = aiBotBaseUrl;
 
   /// URL para configuración dinámica del bot
   static const String aiBotConfigUrl = '$aiBotBaseUrl/config';
@@ -134,9 +142,9 @@ class ApiConfig {
 
   /// Headers por defecto para todas las peticiones
   static Map<String, String> get defaultHeaders => {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json',
-  };
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      };
 
   // ============================================================================
   // Configuración de Logging
@@ -195,6 +203,44 @@ class ApiConfig {
   /// Calcula el delay de reintento con backoff exponencial
   static int getRetryDelay(int attemptNumber) {
     return (retryDelay.inMilliseconds *
-            (retryBackoffMultiplier * attemptNumber)).round();
+            (retryBackoffMultiplier * attemptNumber))
+        .round();
+  }
+
+  /// Valida que todas las URLs estén correctamente configuradas
+  ///
+  /// Retorna true si todas las URLs son válidas, false en caso contrario
+  static bool validateConfiguration() {
+    try {
+      // Verificar que las URLs sean válidas
+      Uri.parse(gatewayBaseUrl);
+      Uri.parse(mcpDirectUrl);
+      Uri.parse(scalpingDirectUrl);
+      Uri.parse(comprehensiveAnalysisUrl);
+      Uri.parse(aiBotConfigUrl);
+      Uri.parse(aiBotBaseUrl);
+      Uri.parse(mcpToolsUrl);
+      Uri.parse(apiBaseUrl);
+
+      // Verificar que el server IP no esté vacío
+      if (serverIp.isEmpty) return false;
+
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Obtiene información de configuración para debugging
+  static Map<String, String> getConfigInfo() {
+    return {
+      'serverIp': serverIp,
+      'gatewayBaseUrl': gatewayBaseUrl,
+      'mcpDirectUrl': mcpDirectUrl,
+      'scalpingDirectUrl': scalpingDirectUrl,
+      'comprehensiveAnalysisUrl': comprehensiveAnalysisUrl,
+      'aiBotConfigUrl': aiBotConfigUrl,
+      'mcpToolsUrl': mcpToolsUrl,
+    };
   }
 }

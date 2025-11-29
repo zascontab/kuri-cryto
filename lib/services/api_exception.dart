@@ -353,12 +353,16 @@ class MarketClosedException extends ApiException {
 class ValidationException extends ApiException {
   final Map<String, List<String>>? fieldErrors;
 
-  ValidationException({
-    super.message = 'Validation failed',
-    super.code = 'VALIDATION_ERROR',
-    super.statusCode = 400,
+  ValidationException(
+    String message, {
+    String? code = 'VALIDATION_ERROR',
+    int? statusCode = 400,
     this.fieldErrors,
-  });
+  }) : super(
+          message: message,
+          code: code,
+          statusCode: statusCode,
+        );
 
   @override
   String toString() {
@@ -369,6 +373,30 @@ class ValidationException extends ApiException {
         buffer.write('\n  $field: ${errors.join(", ")}');
       });
     }
+    return buffer.toString();
+  }
+}
+
+/// Parsing exception (for invalid data from backend)
+class ParsingException extends ApiException {
+  final String? fieldName;
+  final dynamic invalidValue;
+
+  ParsingException(
+    String message, {
+    String? code = 'PARSING_ERROR',
+    this.fieldName,
+    this.invalidValue,
+  }) : super(
+          message: message,
+          code: code,
+        );
+
+  @override
+  String toString() {
+    final buffer = StringBuffer('ParsingException: $message');
+    if (fieldName != null) buffer.write(' (Field: $fieldName)');
+    if (invalidValue != null) buffer.write(' (Value: $invalidValue)');
     return buffer.toString();
   }
 }

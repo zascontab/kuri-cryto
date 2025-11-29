@@ -30,7 +30,8 @@ class AiBotConfig {
     return AiBotConfig(
       pair: json['pair'] as String? ?? 'DOGE-USDT',
       exchange: json['exchange'] as String? ?? 'kucoin',
-      confidenceThreshold: (json['confidence_threshold'] as num?)?.toDouble() ?? 0.70,
+      confidenceThreshold:
+          (json['confidence_threshold'] as num?)?.toDouble() ?? 0.70,
       tradeSizeUsd: (json['trade_size_usd'] as num?)?.toDouble() ?? 3.0,
       leverage: json['leverage'] as int? ?? 5,
       dryRun: json['dry_run'] as bool? ?? true,
@@ -84,5 +85,64 @@ class AiBotConfig {
       maxConsecutiveErrors: maxConsecutiveErrors ?? this.maxConsecutiveErrors,
       maxOpenPositions: maxOpenPositions ?? this.maxOpenPositions,
     );
+  }
+
+  // Validation methods
+
+  /// Validates if confidence threshold is within valid range (0.5 - 1.0)
+  bool isValidConfidenceThreshold() {
+    return confidenceThreshold >= 0.5 && confidenceThreshold <= 1.0;
+  }
+
+  /// Validates if leverage is within valid range (1 - 100)
+  bool isValidLeverage() {
+    return leverage >= 1 && leverage <= 100;
+  }
+
+  /// Validates if trade size is positive
+  bool isValidTradeSize() {
+    return tradeSizeUsd > 0;
+  }
+
+  /// Validates if max daily loss is positive
+  bool isValidMaxDailyLoss() {
+    return maxDailyLossUsd > 0;
+  }
+
+  /// Validates if max daily trades is positive
+  bool isValidMaxDailyTrades() {
+    return maxDailyTrades > 0;
+  }
+
+  /// Validates all configuration parameters
+  bool isValid() {
+    return isValidConfidenceThreshold() &&
+        isValidLeverage() &&
+        isValidTradeSize() &&
+        isValidMaxDailyLoss() &&
+        isValidMaxDailyTrades();
+  }
+
+  /// Returns validation errors as a list of messages
+  List<String> getValidationErrors() {
+    final errors = <String>[];
+
+    if (!isValidConfidenceThreshold()) {
+      errors.add('Confidence threshold must be between 0.5 and 1.0');
+    }
+    if (!isValidLeverage()) {
+      errors.add('Leverage must be between 1 and 100');
+    }
+    if (!isValidTradeSize()) {
+      errors.add('Trade size must be positive');
+    }
+    if (!isValidMaxDailyLoss()) {
+      errors.add('Max daily loss must be positive');
+    }
+    if (!isValidMaxDailyTrades()) {
+      errors.add('Max daily trades must be positive');
+    }
+
+    return errors;
   }
 }

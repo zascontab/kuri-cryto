@@ -33,8 +33,8 @@ class _StrategiesScreenState extends ConsumerState<StrategiesScreen> {
           SnackBar(
             content: Text(
               !currentValue
-                  ? l10n.strategyActivated(name: name)
-                  : l10n.strategyDeactivated(name: name),
+                  ? l10n.strategyActivated(name)
+                  : l10n.strategyDeactivated(name),
             ),
             backgroundColor: const Color(0xFF4CAF50),
             duration: const Duration(seconds: 2),
@@ -471,7 +471,7 @@ class _StrategyConfigContentState
     final l10n = context.l10n;
 
     return TikTokModal(
-      title: l10n.configureStrategy(name: widget.strategy.name),
+      title: l10n.configureStrategy(widget.strategy.name),
       content: Form(
         key: _formKey,
         child: Column(

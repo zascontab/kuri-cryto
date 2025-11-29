@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,7 +81,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
       HapticFeedback.heavyImpact();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(l10n.errorOccurred(error: e.toString())),
+          content: Text('${l10n.errorOccurred}: $e'),
           backgroundColor: const Color(0xFFF44336),
           duration: const Duration(seconds: 5),
           action: SnackBarAction(
@@ -330,7 +329,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
 
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(l10n.errorOccurred(error: e.toString())),
+                content: Text('${l10n.errorOccurred}: $e'),
                 backgroundColor: const Color(0xFFF44336),
               ),
             );
@@ -395,7 +394,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
         final l10n = context.l10n;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(l10n.riskModeChanged(mode: mode)),
+            content: Text(l10n.riskModeChanged(mode)),
             backgroundColor: color,
           ),
         );
@@ -656,8 +655,7 @@ class _RiskScreenState extends ConsumerState<RiskScreen> {
                                     riskState.maxTotalExposure,
                                     theme,
                                   ),
-                                ))
-                            ,
+                                )),
                       ],
                     ),
                   ),

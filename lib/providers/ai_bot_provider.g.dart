@@ -89,5 +89,31 @@ final aiBotPositionsProvider =
 );
 
 typedef _$AiBotPositions = AutoDisposeAsyncNotifier<List<AiPosition>>;
+String _$comprehensiveAnalysisNotifierHash() =>
+    r'42839356ebe19038f2a5beb9febe2cdff5242273';
+
+/// Provider for Comprehensive Market Analysis
+///
+/// Provides detailed market analysis including:
+/// - Price data
+/// - Technical indicators across multiple timeframes
+/// - Market scenarios with probabilities
+/// - AI-powered trading recommendations
+///
+/// Copied from [ComprehensiveAnalysisNotifier].
+@ProviderFor(ComprehensiveAnalysisNotifier)
+final comprehensiveAnalysisNotifierProvider = AutoDisposeAsyncNotifierProvider<
+    ComprehensiveAnalysisNotifier, ComprehensiveAnalysis?>.internal(
+  ComprehensiveAnalysisNotifier.new,
+  name: r'comprehensiveAnalysisNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : _$comprehensiveAnalysisNotifierHash,
+  dependencies: null,
+  allTransitiveDependencies: null,
+);
+
+typedef _$ComprehensiveAnalysisNotifier
+    = AutoDisposeAsyncNotifier<ComprehensiveAnalysis?>;
 // ignore_for_file: type=lint
 // ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member

@@ -24,7 +24,6 @@ class RecommendationWidget extends StatelessWidget {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final actionColor = _getActionColor();
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Card(
       elevation: 4,
@@ -55,7 +54,7 @@ class RecommendationWidget extends StatelessWidget {
                     return Transform.scale(
                       scale: 0.5 + (0.5 * animValue),
                       child: Opacity(
-                        opacity: animValue,
+                        opacity: animValue.clamp(0.0, 1.0),
                         child: child,
                       ),
                     );
@@ -120,7 +119,7 @@ class RecommendationWidget extends StatelessWidget {
                         child: LinearProgressIndicator(
                           value: animValue,
                           minHeight: 12,
-                          backgroundColor: colorScheme.surfaceVariant,
+                          backgroundColor: colorScheme.surfaceContainerHighest,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             actionColor,
                           ),
@@ -192,7 +191,7 @@ class RecommendationWidget extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
 
               // Price Levels (only show if not WAIT)
               if (!recommendation.isWait) ...[
@@ -211,7 +210,7 @@ class RecommendationWidget extends StatelessWidget {
                     children: [
                       _PriceLevel(
                         label: 'Entry Price',
-                        value: recommendation.entryPrice,
+                        value: recommendation.entry,
                         icon: Icons.flag,
                         color: actionColor,
                       ),
@@ -264,7 +263,7 @@ class RecommendationWidget extends StatelessWidget {
 /// Widget for displaying a price level with label, value, and icon
 class _PriceLevel extends StatelessWidget {
   final String label;
-  final double value;
+  final double? value;
   final IconData icon;
   final Color color;
 
@@ -306,7 +305,7 @@ class _PriceLevel extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                '\$${value.toStringAsFixed(2)}',
+                value != null ? '\$${value!.toStringAsFixed(2)}' : 'N/A',
                 style: theme.textTheme.titleMedium?.copyWith(
                   fontWeight: FontWeight.bold,
                   color: color,

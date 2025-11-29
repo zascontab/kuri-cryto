@@ -19,10 +19,22 @@ class FuturesService {
   /// - Lista de posiciones con toda la información
   /// - Contador de posiciones
   /// - PnL total no realizado
+  ///
+  /// [exchange]: Exchange name (default: 'kucoin')
+  /// [marketType]: Market type filter (optional, e.g., 'futures')
   Future<FuturesPositionsResponse> getPositions({
     String exchange = 'kucoin',
+    String? marketType,
   }) async {
     try {
+      final arguments = <String, dynamic>{
+        'exchange': exchange,
+      };
+
+      if (marketType != null) {
+        arguments['market_type'] = marketType;
+      }
+
       final response = await _dio.post(
         ApiConfig.mcpToolsUrl,
         data: {
@@ -30,13 +42,21 @@ class FuturesService {
           'method': 'tools/call',
           'params': {
             'name': 'get_futures_positions',
-            'arguments': {
-              'exchange': exchange,
-            }
+            'arguments': arguments,
           },
           'id': DateTime.now().millisecondsSinceEpoch,
         },
       );
+
+      // Check for JSON-RPC error
+      if (response.data['error'] != null) {
+        final error = response.data['error'];
+        throw ApiException(
+          message: error['message'] ?? 'Unknown error',
+          details: error['data'],
+          statusCode: error['code'],
+        );
+      }
 
       final result = response.data['result'] as Map<String, dynamic>;
       return FuturesPositionsResponse.fromJson(result);
@@ -275,7 +295,7 @@ class FuturesService {
   ///
   /// Ejemplo: DOGE-USDT → DOGEUSDTM
   String convertToFuturesSymbol(String spotPair) {
-    return spotPair.replaceAll('-', '') + 'M';
+    return '${spotPair.replaceAll('-', '')}M';
   }
 
   /// Convierte un símbolo futuros a formato spot

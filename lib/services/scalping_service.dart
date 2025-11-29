@@ -14,7 +14,6 @@ import '../models/health_status.dart';
 /// - Trading pair management
 class ScalpingService {
   final ApiClient _apiClient;
-  static const String _basePath = '';
 
   ScalpingService(this._apiClient);
 
@@ -34,9 +33,19 @@ class ScalpingService {
 
       final response = await _apiClient.get<Map<String, dynamic>>('/status');
 
+      // Backend returns data directly (not wrapped in success/data)
+      if (response.containsKey('status')) {
+        final status = SystemStatus.fromJson(response);
+        developer.log('System status retrieved successfully',
+            name: 'ScalpingService');
+        return status;
+      }
+
+      // Legacy format with success/data wrapper
       if (response['success'] == true && response['data'] != null) {
         final status = SystemStatus.fromJson(response['data']);
-        developer.log('System status retrieved successfully', name: 'ScalpingService');
+        developer.log('System status retrieved successfully',
+            name: 'ScalpingService');
         return status;
       }
 
@@ -45,7 +54,8 @@ class ScalpingService {
         code: 'INVALID_RESPONSE',
       );
     } catch (e) {
-      developer.log('Error getting status: $e', name: 'ScalpingService', error: e);
+      developer.log('Error getting status: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -66,9 +76,19 @@ class ScalpingService {
 
       final response = await _apiClient.get<Map<String, dynamic>>('/metrics');
 
+      // Backend returns data directly (not wrapped in success/data)
+      if (response.containsKey('total_trades')) {
+        final metrics = Metrics.fromJson(response);
+        developer.log('Metrics retrieved successfully',
+            name: 'ScalpingService');
+        return metrics;
+      }
+
+      // Legacy format with success/data wrapper
       if (response['success'] == true && response['data'] != null) {
         final metrics = Metrics.fromJson(response['data']);
-        developer.log('Metrics retrieved successfully', name: 'ScalpingService');
+        developer.log('Metrics retrieved successfully',
+            name: 'ScalpingService');
         return metrics;
       }
 
@@ -77,7 +97,8 @@ class ScalpingService {
         code: 'INVALID_RESPONSE',
       );
     } catch (e) {
-      developer.log('Error getting metrics: $e', name: 'ScalpingService', error: e);
+      developer.log('Error getting metrics: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -100,9 +121,19 @@ class ScalpingService {
 
       final response = await _apiClient.get<Map<String, dynamic>>('/health');
 
+      // Backend returns data directly (not wrapped in success/data)
+      if (response.containsKey('status') && response.containsKey('timestamp')) {
+        final health = HealthStatus.fromJson(response);
+        developer.log('Health status retrieved successfully',
+            name: 'ScalpingService');
+        return health;
+      }
+
+      // Legacy format with success/data wrapper
       if (response['success'] == true && response['data'] != null) {
         final health = HealthStatus.fromJson(response['data']);
-        developer.log('Health status retrieved successfully', name: 'ScalpingService');
+        developer.log('Health status retrieved successfully',
+            name: 'ScalpingService');
         return health;
       }
 
@@ -111,7 +142,8 @@ class ScalpingService {
         code: 'INVALID_RESPONSE',
       );
     } catch (e) {
-      developer.log('Error getting health: $e', name: 'ScalpingService', error: e);
+      developer.log('Error getting health: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -148,7 +180,8 @@ class ScalpingService {
         code: response['code'],
       );
     } catch (e) {
-      developer.log('Error starting engine: $e', name: 'ScalpingService', error: e);
+      developer.log('Error starting engine: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -185,7 +218,8 @@ class ScalpingService {
         code: response['code'],
       );
     } catch (e) {
-      developer.log('Error stopping engine: $e', name: 'ScalpingService', error: e);
+      developer.log('Error stopping engine: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -204,7 +238,8 @@ class ScalpingService {
   /// ```
   Future<bool> addPair(String exchange, String pair) async {
     try {
-      developer.log('Adding trading pair: $exchange/$pair', name: 'ScalpingService');
+      developer.log('Adding trading pair: $exchange/$pair',
+          name: 'ScalpingService');
 
       final response = await _apiClient.post<Map<String, dynamic>>(
         '/pairs/add',
@@ -243,7 +278,8 @@ class ScalpingService {
   /// ```
   Future<bool> removePair(String exchange, String pair) async {
     try {
-      developer.log('Removing trading pair: $exchange/$pair', name: 'ScalpingService');
+      developer.log('Removing trading pair: $exchange/$pair',
+          name: 'ScalpingService');
 
       final response = await _apiClient.post<Map<String, dynamic>>(
         '/pairs/remove',
@@ -263,7 +299,8 @@ class ScalpingService {
         code: response['code'],
       );
     } catch (e) {
-      developer.log('Error removing pair: $e', name: 'ScalpingService', error: e);
+      developer.log('Error removing pair: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -282,15 +319,18 @@ class ScalpingService {
   /// ```
   Future<List<Map<String, dynamic>>> getActivePairs() async {
     try {
-      developer.log('Fetching active trading pairs...', name: 'ScalpingService');
+      developer.log('Fetching active trading pairs...',
+          name: 'ScalpingService');
 
-      final response = await _apiClient.get<Map<String, dynamic>>('/pairs/active');
+      final response =
+          await _apiClient.get<Map<String, dynamic>>('/pairs/active');
 
       if (response['success'] == true && response['data'] != null) {
         final pairs = (response['data'] as List)
             .map((pair) => pair as Map<String, dynamic>)
             .toList();
-        developer.log('Active pairs retrieved: ${pairs.length}', name: 'ScalpingService');
+        developer.log('Active pairs retrieved: ${pairs.length}',
+            name: 'ScalpingService');
         return pairs;
       }
 
@@ -299,7 +339,8 @@ class ScalpingService {
         code: 'INVALID_RESPONSE',
       );
     } catch (e) {
-      developer.log('Error getting active pairs: $e', name: 'ScalpingService', error: e);
+      developer.log('Error getting active pairs: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
@@ -321,7 +362,8 @@ class ScalpingService {
   /// ```
   Future<List<Map<String, dynamic>>> getAvailablePairs(String exchange) async {
     try {
-      developer.log('Fetching available pairs for $exchange...', name: 'ScalpingService');
+      developer.log('Fetching available pairs for $exchange...',
+          name: 'ScalpingService');
 
       final response = await _apiClient.get<Map<String, dynamic>>(
         '/pairs/available',
@@ -332,7 +374,8 @@ class ScalpingService {
         final pairs = (response['data'] as List)
             .map((pair) => pair as Map<String, dynamic>)
             .toList();
-        developer.log('Available pairs retrieved: ${pairs.length}', name: 'ScalpingService');
+        developer.log('Available pairs retrieved: ${pairs.length}',
+            name: 'ScalpingService');
         return pairs;
       }
 
@@ -341,7 +384,8 @@ class ScalpingService {
         code: 'INVALID_RESPONSE',
       );
     } catch (e) {
-      developer.log('Error getting available pairs: $e', name: 'ScalpingService', error: e);
+      developer.log('Error getting available pairs: $e',
+          name: 'ScalpingService', error: e);
       rethrow;
     }
   }
