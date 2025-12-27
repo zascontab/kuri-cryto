@@ -498,7 +498,7 @@ class MCPService {
 ```dart
 class ApiConfig {
   // Existing configuration maintained
-  static const String serverIp = '192.168.100.145';
+  static const String serverIp = '192.168.1.6';
   static const String gatewayBaseUrl = 'http://$serverIp:9090';
   static const String mcpDirectUrl = 'http://$serverIp:10600';
   

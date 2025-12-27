@@ -355,13 +355,11 @@ class ValidationException extends ApiException {
 
   ValidationException(
     String message, {
-    String? code = 'VALIDATION_ERROR',
-    int? statusCode = 400,
+    super.code = 'VALIDATION_ERROR',
+    super.statusCode = 400,
     this.fieldErrors,
   }) : super(
           message: message,
-          code: code,
-          statusCode: statusCode,
         );
 
   @override
@@ -384,12 +382,11 @@ class ParsingException extends ApiException {
 
   ParsingException(
     String message, {
-    String? code = 'PARSING_ERROR',
+    super.code = 'PARSING_ERROR',
     this.fieldName,
     this.invalidValue,
   }) : super(
           message: message,
-          code: code,
         );
 
   @override

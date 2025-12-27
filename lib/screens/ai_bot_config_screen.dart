@@ -6,6 +6,7 @@ import '../config/app_theme.dart';
 import '../widgets/tiktok_modal.dart';
 import '../widgets/market_type_selector.dart';
 import '../models/market_type.dart';
+import '../models/bot_config.dart';
 import '../providers/ai_bot_provider.dart';
 import '../providers/trading_pairs_provider.dart';
 
@@ -70,24 +71,25 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
   }
 
   Future<void> _loadCurrentConfig() async {
-    final configAsync = ref.read(aiBotConfigNotifierProvider);
-    configAsync.whenData((config) {
+    final aiBotState = ref.read(aiBotProvider);
+    if (aiBotState.config != null) {
+      final config = aiBotState.config!;
       if (mounted) {
         setState(() {
           _isDryRun = config.dryRun;
-          _autoExecute = config.autoExecute;
           _confidenceThreshold = config.confidenceThreshold;
-          _leverage = config.leverage;
-          _selectedPair = config.pair;
-          _tradeSizeController.text = config.tradeSizeUsd.toString();
-          _maxDailyLossController.text = config.maxDailyLossUsd.toString();
-          _maxDailyTradesController.text = config.maxDailyTrades.toString();
-          _maxConsecutiveErrorsController.text =
-              config.maxConsecutiveErrors.toString();
-          _maxOpenPositionsController.text = config.maxOpenPositions.toString();
+          _maxOpenPositionsController.text = config.maxPositions.toString();
+          // Set default values for fields not in BotConfig
+          _autoExecute = false;
+          _leverage = 1;
+          _selectedPair = 'BTC-USDT';
+          _tradeSizeController.text = '100';
+          _maxDailyLossController.text = '500';
+          _maxDailyTradesController.text = '10';
+          _maxConsecutiveErrorsController.text = '3';
         });
       }
-    });
+    }
   }
 
   void _applyPreset(String preset) {
@@ -174,9 +176,16 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
         'max_open_positions': int.parse(_maxOpenPositionsController.text),
       };
 
-      await ref
-          .read(aiBotConfigNotifierProvider.notifier)
-          .updateConfig(updates);
+      // Convert updates to BotConfig and update
+      final botConfig = BotConfig(
+        dryRun: updates['dry_run'] as bool,
+        confidenceThreshold: updates['confidence_threshold'] as double,
+        maxPositions: updates['max_open_positions'] as int,
+        maxRiskPerTrade: 0.02, // Default 2% risk per trade
+        maxLeverage: (updates['leverage'] as int).toDouble(),
+      );
+
+      await ref.read(aiBotProvider.notifier).updateConfig(botConfig);
 
       if (mounted) {
         HapticFeedback.heavyImpact();
@@ -574,7 +583,7 @@ class _AiBotConfigScreenState extends ConsumerState<AiBotConfigScreen> {
                         },
                       ),
                       Text(
-                        'Trading leverage multiplier (1-${MarketType.fromString(_selectedMarketType).maxLeverage}x for ${_selectedMarketType})',
+                        'Trading leverage multiplier (1-${MarketType.fromString(_selectedMarketType).maxLeverage}x for $_selectedMarketType)',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onSurfaceVariant,
                         ),

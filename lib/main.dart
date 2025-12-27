@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'config/app_theme.dart';
+import 'config/environment.dart';
 import 'l10n/l10n_export.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart' as theme_provider;
@@ -32,7 +33,7 @@ void main() async {
   Hive.registerAdapter(SystemStatusAdapter());
 
   // Inicializar el servicio de caché
-  await CacheService().init();
+  await CacheService.instance.initialize();
 
   // Ejecutar la aplicación envuelta en ProviderScope para Riverpod
   runApp(
@@ -111,19 +112,26 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
   /// Inicializa la aplicación y navega a la pantalla correspondiente
   Future<void> _initializeApp() async {
-    // Simular carga de recursos (2 segundos)
-    await Future.delayed(const Duration(seconds: 2));
+    // Initialize environment configuration
+    Environment.printConfig();
 
     // TODO: Verificar si el usuario está autenticado
     // final isAuthenticated = await ref.read(authProvider).isAuthenticated();
 
-    // Navegar a la pantalla principal
+    // Wait a bit to ensure the splash screen is fully rendered
+    await Future.delayed(const Duration(milliseconds: 1500));
+
+    // Schedule navigation after the current build is complete
     if (mounted) {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (context) => const MainScreen(),
+            ),
+          );
+        }
+      });
     }
   }
 

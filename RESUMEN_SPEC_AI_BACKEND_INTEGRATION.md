@@ -372,7 +372,7 @@ Screens de IA:        ░░░░░░░░░░  0% (0/4)
 - **Ejemplos**: `lib/docs/flutter-team-final/07-EJEMPLOS-COMPLETOS.md`
 
 ### Endpoints Backend
-- **Base URL**: `http://192.168.100.145:10600`
+- **Base URL**: `http://192.168.1.6:10600`
 - **Análisis con IA**: `POST /api/v1/ai-bot/comprehensive-analysis`
 - **Estado de IA**: `GET /api/v1/ai/status`
 - **Costos**: `GET /api/v1/ai/costs`

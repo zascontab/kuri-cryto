@@ -18,7 +18,7 @@ Se verificó que el backend está devolviendo **exactamente los mismos valores**
 
 **Request**:
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -54,7 +54,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 **Request**:
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -286,19 +286,19 @@ Después de implementar los cambios, verificar:
 
 ```bash
 # Test 1: Filtrar por futures
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 # Esperado: pairs con market_type="futures" y símbolos como BTCUSDTM
 
 # Test 2: Filtrar por spot
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}'
 # Esperado: pairs con market_type="spot" y símbolos como BTC-USDT
 
 # Test 3: Sin filtro (todos los pares)
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin"}},"id":1}'
 # Esperado: pairs de todos los market types (74+ pares)

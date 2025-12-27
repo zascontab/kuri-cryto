@@ -2,7 +2,7 @@ V 📊 Scalping Endpoints Specification
 
 **Fecha**: 2025-11-27  
 **Estado**: ✅ Implementado  
-**Base URL**: `http://192.168.100.145:9090/api/scalping/api/v1/scalping`
+**Base URL**: `http://192.168.1.6:9090/api/scalping/api/v1/scalping`
 
 ---
 
@@ -11,7 +11,7 @@ V 📊 Scalping Endpoints Specification
 ### 1. Get Status
 
 **Endpoint**: `GET /status`  
-**Full URL**: `http://192.168.100.145:9090/api/scalping/api/v1/scalping/status`
+**Full URL**: `http://192.168.1.6:9090/api/scalping/api/v1/scalping/status`
 
 #### Response (200 OK)
 ```json
@@ -66,7 +66,7 @@ class ScalpingStatus {
 ### 2. Get Metrics
 
 **Endpoint**: `GET /metrics`  
-**Full URL**: `http://192.168.100.145:9090/api/scalping/api/v1/scalping/metrics`
+**Full URL**: `http://192.168.1.6:9090/api/scalping/api/v1/scalping/metrics`
 
 #### Response (200 OK)
 ```json
@@ -129,7 +129,7 @@ class ScalpingMetrics {
 ### 3. Get Health
 
 **Endpoint**: `GET /health`  
-**Full URL**: `http://192.168.100.145:9090/api/scalping/api/v1/scalping/health`
+**Full URL**: `http://192.168.1.6:9090/api/scalping/api/v1/scalping/health`
 
 #### Response (200 OK)
 ```json
@@ -198,13 +198,13 @@ Todos los endpoints retornan valores en **0** o **false** porque el sistema de s
 
 ```bash
 # Status
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/status
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/status
 
 # Metrics
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/metrics
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/metrics
 
 # Health
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/health
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/health
 ```
 
 ### Expected Behavior

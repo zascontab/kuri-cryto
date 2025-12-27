@@ -30,7 +30,7 @@ lib/docs/flutter-team-final/
 
 ### URLs del Backend
 ```dart
-const baseUrl = 'http://192.168.100.145:10600';
+const baseUrl = 'http://192.168.1.6:10600';
 ```
 
 ---

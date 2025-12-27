@@ -38,7 +38,7 @@ Pero el backend está devolviendo formato directo:
 ```
 [ApiClient] │ Body: {active: false, active_bots: 0, paused_bots: 0, status: running, stopped_bots: 0, timestamp: 2025-11-27T23:53:38-05:00, total_bots: 0}
 [ApiClient] ┌── Response ───────────────────────────────────────
-[ApiClient] │ 200 http://192.168.100.145:9090/api/scalping/api/v1/scalping/status
+[ApiClient] │ 200 http://192.168.1.6:9090/api/scalping/api/v1/scalping/status
 [ScalpingService] Error getting status: ApiException: Invalid response format (Code: INVALID_RESPONSE)
 ```
 
@@ -172,7 +172,7 @@ Eliminé el campo no usado `_basePath`.
 
 **Request**:
 ```bash
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/status
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/status
 ```
 
 **Response**:
@@ -196,7 +196,7 @@ curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/status
 
 **Request**:
 ```bash
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/metrics
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/metrics
 ```
 
 **Response**:
@@ -222,7 +222,7 @@ curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/metrics
 
 **Request**:
 ```bash
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/health
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/health
 ```
 
 **Response**:

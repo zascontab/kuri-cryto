@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:kuri_crypto/services/futures_service.dart';
 import 'package:kuri_crypto/config/api_config.dart';
 import 'package:kuri_crypto/models/futures_position.dart';
-import 'package:kuri_crypto/services/api_exception.dart';
 
 /// Pruebas de integración REALES para FuturesService
 void main() {

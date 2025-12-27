@@ -662,10 +662,10 @@ status.when(
 cat .kiro/specs/ai-backend-integration/README.md
 
 # 2. Verificar backend
-curl http://192.168.100.145:10600/health
+curl http://192.168.1.6:10600/health
 
 # 3. Probar endpoint de IA
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis \
   -H "Content-Type: application/json" \
   -d '{"symbol":"DOGE-USDT","exchange":"kucoin","enable_llm":true}'
 ```

@@ -19,7 +19,7 @@ El bot ahora permite **cambiar la configuración en tiempo real** sin necesidad 
 **Endpoint**: `GET /api/v1/ai-bot/config`
 
 ```bash
-curl http://192.168.100.145:10600/api/v1/ai-bot/config
+curl http://192.168.1.6:10600/api/v1/ai-bot/config
 ```
 
 **Respuesta**:
@@ -46,7 +46,7 @@ curl http://192.168.100.145:10600/api/v1/ai-bot/config
 ⚠️ **IMPORTANTE**: El bot debe estar detenido para cambiar la configuración.
 
 ```bash
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "dry_run": false,
@@ -76,10 +76,10 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
 
 ```bash
 # 1. Detener el bot si está corriendo
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
 # 2. Cambiar a modo LIVE
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "dry_run": false,
@@ -87,20 +87,20 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
   }'
 
 # 3. Verificar configuración
-curl http://192.168.100.145:10600/api/v1/ai-bot/config | jq '{dry_run, auto_execute}'
+curl http://192.168.1.6:10600/api/v1/ai-bot/config | jq '{dry_run, auto_execute}'
 
 # 4. Iniciar bot en modo LIVE
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ### Caso 2: Ajustar Parámetros de Trading
 
 ```bash
 # Detener bot
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
 # Ajustar parámetros
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "confidence_threshold": 0.80,
@@ -110,32 +110,32 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
   }'
 
 # Reiniciar bot con nueva configuración
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ### Caso 3: Cambiar Par de Trading
 
 ```bash
 # Detener bot
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
 # Cambiar a BTC-USDT
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "pair": "BTC-USDT"
   }'
 
 # Iniciar bot con nuevo par
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ### Caso 4: Modo Conservador
 
 ```bash
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "confidence_threshold": 0.85,
@@ -145,15 +145,15 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
     "max_daily_trades": 5
   }'
 
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ### Caso 5: Modo Agresivo
 
 ```bash
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "confidence_threshold": 0.65,
@@ -163,7 +163,7 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
     "max_daily_trades": 30
   }'
 
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ---
@@ -198,13 +198,13 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
 **Error: "cannot update config while bot is running"**
 ```bash
 # Solución: Detener el bot primero
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 ```
 
 **Error: "confidence_threshold must be between 0.5 and 1.0"**
 ```bash
 # Solución: Usar valor válido
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -d '{"confidence_threshold": 0.75}'
 ```
 
@@ -217,7 +217,7 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
 1. **Siempre probar en DRY RUN primero**
    ```bash
    # Configurar DRY RUN
-   curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+   curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
      -d '{"dry_run": true, "auto_execute": false}'
    ```
 
@@ -235,7 +235,7 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
 
 3. **Configurar límites conservadores**
    ```bash
-   curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+   curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
      -d '{
        "max_daily_loss_usd": 20.0,
        "max_daily_trades": 10,
@@ -251,13 +251,13 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
 
 ```bash
 # 1. Verificar configuración actual
-curl http://192.168.100.145:10600/api/v1/ai-bot/config | jq
+curl http://192.168.1.6:10600/api/v1/ai-bot/config | jq
 
 # 2. Detener bot si está corriendo
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
 # 3. Configurar modo LIVE con límites conservadores
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -H "Content-Type: application/json" \
   -d '{
     "dry_run": false,
@@ -270,10 +270,10 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
   }'
 
 # 4. Verificar que se aplicó
-curl http://192.168.100.145:10600/api/v1/ai-bot/config | jq '{dry_run, auto_execute}'
+curl http://192.168.1.6:10600/api/v1/ai-bot/config | jq '{dry_run, auto_execute}'
 
 # 5. Iniciar bot
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 
 # 6. Monitorear logs
 tail -f /var/log/trading/mcp-server.log | grep -E "Analysis|Signal|Trade"
@@ -283,14 +283,14 @@ tail -f /var/log/trading/mcp-server.log | grep -E "Analysis|Signal|Trade"
 
 ```bash
 # 1. Detener bot
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/stop
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/stop
 
 # 2. Volver a DRY RUN
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/config \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/config \
   -d '{"dry_run": true, "auto_execute": false}'
 
 # 3. Reiniciar en modo seguro
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/start
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/start
 ```
 
 ---

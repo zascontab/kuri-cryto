@@ -119,7 +119,7 @@ MarketsResponse.fromJson(result)
 
 ```bash
 # Verificar formato enhanced
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

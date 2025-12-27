@@ -22,7 +22,7 @@ class FuturesPositionsScreen extends ConsumerStatefulWidget {
 
 class _FuturesPositionsScreenState
     extends ConsumerState<FuturesPositionsScreen> {
-  String _selectedExchange = 'kucoin';
+  final String _selectedExchange = 'kucoin';
 
   Future<void> _onRefresh() async {
     await ref
@@ -579,7 +579,7 @@ class _FuturesPositionsScreenState
                       child: _buildDetailItem(
                         theme,
                         'Size',
-                        '${position.size.toStringAsFixed(0)}',
+                        position.size.toStringAsFixed(0),
                       ),
                     ),
                     Expanded(

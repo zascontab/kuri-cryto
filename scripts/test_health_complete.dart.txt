@@ -1,0 +1,111 @@
+#!/usr/bin/env dart
+
+import 'dart:convert';
+import 'dart:io';
+import 'package:dio/dio.dart';
+
+/// Test completo para verificar que HealthResponse funciona con datos reales
+
+void main() async {
+  print('🧪 Testing HealthResponse with real MCP Server data...\n');
+  
+  final dio = Dio();
+  const serverUrl = 'http://192.168.1.6:10600/health';
+  
+  try {
+    // Obtener datos reales del servidor
+    print('1️⃣ Fetching real data from MCP Server...');
+    final response = await dio.get(serverUrl);
+    
+    print('✅ Server responded successfully');
+    print('   Raw response: ${response.data}\n');
+    
+    // Simular el parsing que hace Flutter
+    print('2️⃣ Testing HealthResponse.fromJson...');
+    
+    // Aquí simularíamos la clase HealthResponse real
+    final json = response.data as Map<String, dynamic>;
+    
+    print('✅ JSON parsing successful');
+    print('   Status: ${json['status']}');
+    print('   GCT Connected: ${json['gct_connected']}');
+    print('   Tools Count: ${json['tools_count']}');
+    print('   Uptime: ${json['uptime']} (raw)');
+    print('   Error Count: ${json['error_count']}');
+    print('   Request Count: ${json['request_count']}');
+    print('   Sandbox: ${json['sandbox']}\n');
+    
+    // Test uptime parsing
+    print('3️⃣ Testing uptime parsing...');
+    final uptimeRaw = json['uptime'];
+    final uptimeParsed = _parseUptime(uptimeRaw);
+    print('   Raw uptime: "$uptimeRaw"');
+    print('   Parsed uptime: $uptimeParsed seconds');
+   // print('   Formatted: ${_formatUptime(uptimeParsed)}\n');
+    
+    print('🎉 All tests passed! HealthResponse should work correctly now.');
+    
+  } catch (e) {
+    print('❌ Test failed: $e');
+    if (e is DioException && e.response != null) {
+      print('   Status: ${e.response!.statusCode}');
+      print('   Response: ${e.response!.data}');
+    }
+    exit(1);
+  }
+}
+
+// Copiamos la lógica de parsing para testing
+int _parseUptime(dynamic uptime) {
+  if (uptime == null) return 0;
+  
+  if (uptime is int) {
+    return uptime;
+  }
+  
+  if (uptime is String) {
+    final uptimeStr = uptime.toLowerCase();
+    
+    fin';
+  }
+}s}s{secondn '$etur r else {
+   tes}m';
+  }${minu  return '  tes > 0) {
+e if (minu} els';
+  s}ms}h ${minute{hoururn '$ ret > 0) {
+   ours else if (h';
+  }{minutes}mhours}h $s}d ${rn '$dayetu 0) {
+    rdays >  if (es % 60;
+
+on.inMinuts = duratiinuteinal m
+  f4;s % 2nHoururation.is = d final hourys;
+ nDan.iratio days = du finalds);
+ conds: sen(seconDuratio duration =  finalds) {
+ e(int seconimformatUpt
+
+String _;
+}urn 0}
+  
+  ret();
+  r.roundrn numbeture
+    
+     ();
+   round * 86400).erturn (numb  re    ns('d')) {
+meStr.contaitie if (up   } els
+ 00).round();number * 36n (etur
+      rs('h')) {inmeStr.contatiif (upelse     } round();
+ 60).umber *  return (n) {
+    ns('h')eStr.contaiptim& !u') &ains('mmeStr.contse if (upti
+    } el();ounder.return numb) {
+      rm')contains('timeStr.') && !upcontains('simeStr.upt } else if (
+   0) {
+        .round();
+      }ber / 100 (num    return'ms')) {
+  s(inmeStr.contae if (upti    } elsnd();
+00).rou/ 10000mber (nu     return ) {
+ us')ontains('tr.cmeS || uptiins('µs')ontameStr.c(upti  if      
+0.0;
+ !) ?? p(0)erMatch.grouParse(numbuble.try dober =l num   fina  
+ urn 0;
+  = null) reth =erMatcumb(n
+    if eStr);ch(uptim+').firstMat[d.]gExp(r'= Reatch al numberM

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Este spec define la implementación completa de la integración con el backend Trading MCP Server según la documentación oficial enviada por el backend team. El objetivo es tener una integración completa, robusta y mantenible de todos los endpoints y funcionalidades disponibles.
+Este spec define la implementación completa de la integración con el backend Trading MCP Server v5.0 (AI Enhanced) según la documentación oficial enviada por el backend team. El objetivo es tener una integración completa, robusta y mantenible de todos los endpoints y funcionalidades disponibles, incluyendo las nuevas capacidades de Inteligencia Artificial.
 
 ## Glossary
 
@@ -154,3 +154,88 @@ Este spec define la implementación completa de la integración con el backend T
 5. THE Flutter App SHALL seguir convenciones de Dart/Flutter
 6. THE Flutter App SHALL usar nombres descriptivos para variables y métodos
 7. THE Flutter App SHALL tener changelog actualizado
+
+### Requirement 11: Análisis Comprehensivo con IA
+
+**User Story:** Como trader, quiero obtener análisis de mercado mejorados con IA que incluyan explicaciones detalladas y análisis de sentimiento para tomar mejores decisiones de trading.
+
+#### Acceptance Criteria
+
+1. WHEN el usuario solicita análisis con IA habilitada, THE Flutter App SHALL enviar parámetros `enable_llm: true` y `enable_sentiment: true`
+2. WHEN el backend responde con análisis LLM, THE Flutter App SHALL mostrar la explicación generada por IA
+3. THE Flutter App SHALL mostrar el proveedor de IA utilizado (Google, OpenAI, Anthropic)
+4. THE Flutter App SHALL mostrar el modelo específico usado (gemini-2.5-flash, gpt-4, claude-3)
+5. THE Flutter App SHALL mostrar los factores clave identificados por la IA
+6. THE Flutter App SHALL mostrar la evaluación de riesgo generada por IA
+7. THE Flutter App SHALL mostrar el nivel de confianza del análisis de IA
+8. WHEN hay análisis de sentimiento disponible, THE Flutter App SHALL mostrar el sentimiento general (bullish/bearish/neutral)
+9. THE Flutter App SHALL mostrar las fuentes del análisis de sentimiento (news, twitter, reddit)
+10. THE Flutter App SHALL proporcionar fallback automático a análisis técnico si la IA falla
+
+### Requirement 12: Estado y Monitoreo de IA
+
+**User Story:** Como usuario, quiero monitorear el estado de los servicios de IA y el consumo de recursos para entender la disponibilidad y costos.
+
+#### Acceptance Criteria
+
+1. THE Flutter App SHALL obtener el estado de IA mediante `/api/v1/ai/status`
+2. THE Flutter App SHALL mostrar si el LLM está habilitado y operacional
+3. THE Flutter App SHALL mostrar el proveedor y modelo de IA actualmente en uso
+4. THE Flutter App SHALL mostrar el número de llamadas realizadas hoy vs límite diario
+5. THE Flutter App SHALL mostrar el estado del análisis de sentimiento y sus fuentes
+6. THE Flutter App SHALL mostrar el presupuesto diario y gasto actual de IA
+7. THE Flutter App SHALL mostrar indicadores visuales del estado (operacional/error/límite alcanzado)
+8. THE Flutter App SHALL actualizar el estado automáticamente cada 30 segundos
+9. WHEN se alcanza el 80% del presupuesto diario, THE Flutter App SHALL mostrar advertencia
+10. WHEN se alcanza el límite de llamadas, THE Flutter App SHALL informar al usuario
+
+### Requirement 13: Gestión de Costos de IA
+
+**User Story:** Como usuario, quiero ver y controlar los costos de IA para mantener el presupuesto bajo control.
+
+#### Acceptance Criteria
+
+1. THE Flutter App SHALL obtener costos de IA mediante `/api/v1/ai/costs`
+2. THE Flutter App SHALL mostrar el costo total del día actual
+3. THE Flutter App SHALL mostrar el desglose de costos por proveedor (Google, OpenAI, Anthropic)
+4. THE Flutter App SHALL mostrar el número total de llamadas realizadas
+5. THE Flutter App SHALL mostrar el costo total del mes actual
+6. THE Flutter App SHALL mostrar la proyección de costo mensual
+7. THE Flutter App SHALL mostrar el costo promedio por llamada
+8. THE Flutter App SHALL mostrar progreso visual del presupuesto diario usado
+9. THE Flutter App SHALL permitir ver historial de costos (opcional)
+10. THE Flutter App SHALL alertar cuando se acerque al límite de presupuesto
+
+### Requirement 14: Notificaciones Inteligentes con IA
+
+**User Story:** Como trader, quiero recibir notificaciones de trading con explicaciones generadas por IA para entender mejor las decisiones automatizadas.
+
+#### Acceptance Criteria
+
+1. THE Flutter App SHALL obtener notificaciones mediante `/api/v1/ai/notifications`
+2. THE Flutter App SHALL mostrar lista de notificaciones de trading con IA
+3. THE Flutter App SHALL mostrar la explicación LLM para cada trade ejecutado
+4. THE Flutter App SHALL mostrar el análisis de mercado que motivó la decisión
+5. THE Flutter App SHALL mostrar la evaluación de riesgo de cada operación
+6. THE Flutter App SHALL mostrar el timestamp de cada notificación
+7. THE Flutter App SHALL permitir ver detalles completos de cada notificación
+8. THE Flutter App SHALL marcar notificaciones como leídas/no leídas
+9. THE Flutter App SHALL mostrar badge con número de notificaciones no leídas
+10. THE Flutter App SHALL actualizar notificaciones en tiempo real
+
+### Requirement 15: Configuración y Preferencias de IA
+
+**User Story:** Como usuario, quiero configurar las preferencias de IA según mis necesidades y presupuesto.
+
+#### Acceptance Criteria
+
+1. THE Flutter App SHALL permitir habilitar/deshabilitar análisis con IA
+2. THE Flutter App SHALL permitir habilitar/deshabilitar análisis de sentimiento
+3. THE Flutter App SHALL permitir seleccionar proveedor de IA preferido (si disponible)
+4. THE Flutter App SHALL permitir configurar presupuesto diario de IA
+5. THE Flutter App SHALL permitir configurar límite de llamadas diarias
+6. THE Flutter App SHALL permitir configurar duración de caché para análisis
+7. THE Flutter App SHALL persistir configuraciones usando SharedPreferences
+8. THE Flutter App SHALL aplicar cambios de configuración inmediatamente
+9. THE Flutter App SHALL validar configuraciones antes de guardar
+10. THE Flutter App SHALL mostrar configuración actual en pantalla de settings

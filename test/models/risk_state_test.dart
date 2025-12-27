@@ -224,7 +224,7 @@ void main() {
 
     test('should handle negative drawdowns', () {
       final riskState = RiskState(
-        currentDrawdownDaily: -4.0,
+        currentDrawdownDaily: -4.5, // 4.5/5.0 = 0.9 > 0.8
         currentDrawdownWeekly: -7.0,
         currentDrawdownMonthly: -10.0,
         lastUpdate: testTimestamp,
@@ -233,22 +233,22 @@ void main() {
         maxMonthlyDrawdown: 15.0,
       );
 
-      // Should use absolute values
+      // Should use absolute values and exceed threshold
       expect(riskState.isHighRisk(), true);
     });
 
     test('should handle custom limits', () {
       final riskState = RiskState(
-        currentDrawdownDaily: 8.0,
+        currentDrawdownDaily: 8.5, // 8.5/10.0 = 0.85 > 0.8
         totalExposure: 150.0,
-        consecutiveLosses: 5,
+        consecutiveLosses: 4, // 4 < 5, so can still trade
         lastUpdate: testTimestamp,
         maxDailyDrawdown: 10.0,
         maxTotalExposure: 200.0,
         maxConsecutiveLosses: 5,
       );
 
-      // Daily drawdown: 8/10 = 80% (high risk)
+      // Daily drawdown: 8.5/10 = 85% (high risk)
       expect(riskState.isHighRisk(), true);
 
       // But can still trade (not exceeded)

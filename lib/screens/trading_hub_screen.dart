@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/app_theme.dart';
 import '../providers/ai_bot_provider.dart';
 import '../providers/market_provider.dart';
+import '../providers/selected_symbol_provider.dart';
+import '../widgets/symbol_selector.dart';
 import 'comprehensive_analysis_screen.dart';
 import 'ai_bot_control_screen.dart';
 import 'futures_positions_screen.dart';
@@ -27,9 +29,7 @@ class TradingHubScreen extends ConsumerStatefulWidget {
 
 class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
     with SingleTickerProviderStateMixin {
-  // Current selections
-  String _selectedPair = 'BTC-USDT';
-  String _selectedExchange = 'kucoin';
+  // Current selections (using global providers for symbol/exchange)
   String _selectedTimeframe = '1h';
   MarketType _selectedMarketType = MarketType.futures;
 
@@ -62,9 +62,7 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
 
   void _onPairSelected(String pair) {
     HapticFeedback.lightImpact();
-    setState(() {
-      _selectedPair = pair;
-    });
+    ref.read(selectedSymbolProvider.notifier).setSymbol(pair);
   }
 
   void _onTimeframeSelected(String timeframe) {
@@ -74,34 +72,14 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
     });
   }
 
-  void _showPairSelector() {
-    HapticFeedback.mediumImpact();
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => _PairSelectorSheetWithProvider(
-        selectedPair: _selectedPair,
-        exchange: _selectedExchange,
-        marketType: _selectedMarketType,
-        onPairSelected: (pair) {
-          _onPairSelected(pair);
-          Navigator.pop(context);
-        },
-      ),
-    );
-  }
-
   void _showExchangeSelector() {
     HapticFeedback.mediumImpact();
     showModalBottomSheet(
       context: context,
       builder: (context) => _ExchangeSelectorSheet(
-        selectedExchange: _selectedExchange,
+        selectedExchange: ref.read(selectedExchangeProvider),
         onExchangeSelected: (exchange) {
-          setState(() {
-            _selectedExchange = exchange;
-          });
+          ref.read(selectedExchangeProvider.notifier).setExchange(exchange);
           Navigator.pop(context);
         },
       ),
@@ -129,7 +107,9 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final botStatus = ref.watch(aiBotStatusNotifierProvider);
+    final botStatus = ref.watch(aiBotProvider);
+    final selectedSymbol = ref.watch(selectedSymbolProvider);
+    final selectedExchange = ref.watch(selectedExchangeProvider);
 
     return Scaffold(
       body: CustomScrollView(
@@ -158,35 +138,24 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Pair Selector
-                        GestureDetector(
-                          onTap: _showPairSelector,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                        // Symbol Selector
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Theme(
+                            data: theme.copyWith(
+                              colorScheme: theme.colorScheme.copyWith(
+                                primaryContainer: Colors.white.withOpacity(0.3),
+                                onPrimaryContainer: Colors.white,
+                                secondaryContainer:
+                                    Colors.white.withOpacity(0.2),
+                                onSecondaryContainer: Colors.white,
+                              ),
                             ),
-                            decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(
-                                  _selectedPair,
-                                  style:
-                                      theme.textTheme.headlineSmall?.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
-                                const Icon(
-                                  Icons.keyboard_arrow_down,
-                                  color: Colors.white,
-                                ),
-                              ],
+                            child: const SymbolSelector(
+                              compact: true,
                             ),
                           ),
                         ),
@@ -238,7 +207,7 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
                                       ),
                                     ),
                                     const SizedBox(width: 4),
-                                    Icon(
+                                    const Icon(
                                       Icons.keyboard_arrow_down,
                                       color: Colors.white,
                                       size: 16,
@@ -270,7 +239,7 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      _selectedExchange.toUpperCase(),
+                                      selectedExchange.toUpperCase(),
                                       style:
                                           theme.textTheme.bodySmall?.copyWith(
                                         color: Colors.white,
@@ -360,8 +329,8 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
                               MaterialPageRoute(
                                 builder: (context) =>
                                     ComprehensiveAnalysisScreen(
-                                  symbol: _selectedPair,
-                                  exchange: _selectedExchange,
+                                  initialSymbol: selectedSymbol,
+                                  initialExchange: selectedExchange,
                                   marketType: _marketTypeValue,
                                 ),
                               ),
@@ -375,16 +344,13 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
                           icon: Icons.smart_toy,
                           label: 'AI Bot',
                           color: Colors.blue,
-                          badge: botStatus.maybeWhen(
-                            data: (status) => status.running ? 'ON' : null,
-                            orElse: () => null,
-                          ),
+                          badge: botStatus.status != null ? 'ON' : null,
                           onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    const AiBotControlScreen(),
+                                    const AIBotControlScreen(),
                               ),
                             );
                           },
@@ -419,8 +385,8 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: _MarketOverviewCard(
-                pair: _selectedPair,
-                exchange: _selectedExchange,
+                pair: selectedSymbol,
+                exchange: selectedExchange,
                 timeframe: _selectedTimeframe,
               ),
             ),
@@ -447,14 +413,14 @@ class _TradingHubScreenState extends ConsumerState<TradingHubScreen>
               controller: _tabController,
               children: [
                 _SignalsView(
-                  pair: _selectedPair,
-                  exchange: _selectedExchange,
+                  pair: selectedSymbol,
+                  exchange: selectedExchange,
                 ),
                 _IndicatorsView(
-                  pair: _selectedPair,
+                  pair: selectedSymbol,
                   timeframe: _selectedTimeframe,
                 ),
-                _NewsView(pair: _selectedPair),
+                _NewsView(pair: selectedSymbol),
               ],
             ),
           ),
@@ -724,14 +690,14 @@ class _SignalsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: const EdgeInsets.all(16),
-      children: [
+      children: const [
         _SignalCard(
           type: 'BUY',
           confidence: 0.85,
           reason: 'RSI oversold + MACD bullish crossover',
           timeframe: '1h',
         ),
-        const SizedBox(height: 12),
+        SizedBox(height: 12),
         _SignalCard(
           type: 'WAIT',
           confidence: 0.60,

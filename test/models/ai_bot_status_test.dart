@@ -38,7 +38,7 @@ void main() {
     });
 
     test('computed properties - uptime', () {
-      final status = AiBotStatus(
+      const status = AiBotStatus(
         running: true,
         paused: false,
         emergencyStop: false,
@@ -51,6 +51,8 @@ void main() {
         dailyTrades: 0,
         openPositions: 0,
         config: AiBotConfig(
+          pair: 'DOGE-USDT',
+          exchange: 'kucoin',
           dryRun: true,
           autoExecute: false,
           confidenceThreshold: 0.7,
@@ -58,6 +60,8 @@ void main() {
           leverage: 10,
           maxDailyLossUsd: 500,
           maxDailyTrades: 50,
+          maxConsecutiveErrors: 3,
+          maxOpenPositions: 2,
         ),
       );
 
@@ -66,7 +70,7 @@ void main() {
     });
 
     test('computed properties - isHealthy', () {
-      final healthyStatus = AiBotStatus(
+      const healthyStatus = AiBotStatus(
         running: true,
         paused: false,
         emergencyStop: false,
@@ -79,6 +83,8 @@ void main() {
         dailyTrades: 0,
         openPositions: 0,
         config: AiBotConfig(
+          pair: 'DOGE-USDT',
+          exchange: 'kucoin',
           dryRun: true,
           autoExecute: false,
           confidenceThreshold: 0.7,
@@ -86,6 +92,8 @@ void main() {
           leverage: 10,
           maxDailyLossUsd: 500,
           maxDailyTrades: 50,
+          maxConsecutiveErrors: 3,
+          maxOpenPositions: 2,
         ),
       );
 
@@ -96,7 +104,9 @@ void main() {
     });
 
     test('computed properties - hasReachedDailyLimit', () {
-      final config = AiBotConfig(
+      const config = AiBotConfig(
+        pair: 'DOGE-USDT',
+        exchange: 'kucoin',
         dryRun: true,
         autoExecute: false,
         confidenceThreshold: 0.7,
@@ -104,9 +114,11 @@ void main() {
         leverage: 10,
         maxDailyLossUsd: 500,
         maxDailyTrades: 50,
+        maxConsecutiveErrors: 3,
+        maxOpenPositions: 2,
       );
 
-      final statusWithinLimits = AiBotStatus(
+      const statusWithinLimits = AiBotStatus(
         running: true,
         paused: false,
         emergencyStop: false,
@@ -131,7 +143,7 @@ void main() {
     });
 
     test('success rate calculation', () {
-      final status = AiBotStatus(
+      const status = AiBotStatus(
         running: true,
         paused: false,
         emergencyStop: false,
@@ -144,6 +156,8 @@ void main() {
         dailyTrades: 0,
         openPositions: 0,
         config: AiBotConfig(
+          pair: 'DOGE-USDT',
+          exchange: 'kucoin',
           dryRun: true,
           autoExecute: false,
           confidenceThreshold: 0.7,
@@ -151,6 +165,8 @@ void main() {
           leverage: 10,
           maxDailyLossUsd: 500,
           maxDailyTrades: 50,
+          maxConsecutiveErrors: 3,
+          maxOpenPositions: 2,
         ),
       );
 

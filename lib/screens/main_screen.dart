@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../providers/health_provider.dart';
+import '../providers/ai_bot_provider.dart';
+import '../utils/error_handler.dart';
 import 'dashboard_screen.dart';
 import 'positions_screen.dart';
 import 'strategies_screen.dart';
@@ -19,24 +23,21 @@ import 'futures_positions_screen.dart';
 import 'trading_hub_screen.dart';
 import 'mcp_main_screen.dart';
 import 'market_type_demo_screen.dart';
+import 'ai_dashboard_screen.dart';
 import '../widgets/custom_app_bar.dart';
 import '../l10n/l10n_export.dart';
 
 /// Main screen with bottom navigation and PageView
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
 
   @override
-  State<MainScreen> createState() => _MainScreenState();
+  ConsumerState<MainScreen> createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   int _currentIndex = 0;
   late PageController _pageController;
-
-  // Mock data - replace with actual state management
-  final String _systemStatus = 'running';
-  final bool _isConnected = true;
 
   @override
   void initState() {
@@ -94,11 +95,31 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final connectivityStatus = ref.watch(connectivityStatusProvider);
+
+    // Listen for AI Bot errors and show snackbars
+    ref.listen<AIBotState>(aiBotProvider, (previous, current) {
+      if (current.error != null &&
+          (previous?.error != current.error) &&
+          mounted) {
+        showErrorSnackbar(context, current.userFriendlyError ?? current.error!);
+      }
+    });
+
+    // Determine connection status and system status from health data
+    final isConnected = connectivityStatus.isConnected;
+
+    final systemStatus = connectivityStatus == ConnectivityStatus.connected
+        ? 'running'
+        : connectivityStatus == ConnectivityStatus.checking
+            ? 'connecting'
+            : 'error';
+
     return Scaffold(
       appBar: CustomAppBar(
         title: _getAppBarTitle(context),
-        status: _systemStatus,
-        isConnected: _isConnected,
+        status: systemStatus,
+        isConnected: isConnected,
         onSettingsTap: _onSettingsTap,
       ),
       body: PageView(
@@ -155,13 +176,135 @@ class _MainScreenState extends State<MainScreen> {
       return ListView(
         padding: const EdgeInsets.all(16),
         children: [
+          // Nueva sección: Funcionalidades Avanzadas
           Card(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.auto_awesome,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Funcionalidades Avanzadas',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
+                ListTile(
+                  leading: const Icon(Icons.psychology),
+                  title: const Text('Dashboard de IA'),
+                  subtitle:
+                      const Text('Análisis inteligente y recomendaciones'),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.purple,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'AI',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AIDashboardScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.smart_toy),
+                  title: const Text('Bot Autónomo'),
+                  subtitle:
+                      const Text('Control y monitoreo del bot de trading'),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.orange,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'BOT',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AIBotControlScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.insights),
+                  title: const Text('Análisis Comprensivo'),
+                  subtitle:
+                      const Text('Análisis técnico multi-temporal con IA'),
+                  trailing: Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'PRO',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const ComprehensiveAnalysisScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.dashboard_customize),
                   title: const Text('Trading Hub'),
-                  subtitle: const Text('Unified trading interface'),
+                  subtitle: const Text('Interfaz unificada de trading'),
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 8,
@@ -188,6 +331,38 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     );
                   },
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Sección: Herramientas de Análisis
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.analytics,
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Herramientas de Análisis',
+                        style: Theme.of(context)
+                            .textTheme
+                            .titleMedium
+                            ?.copyWith(
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                      ),
+                    ],
+                  ),
                 ),
                 const Divider(height: 1),
                 ListTile(
@@ -294,44 +469,40 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                 ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.smart_toy),
-                  title: Text(l10n.aiBotTitle),
-                  subtitle: Text(l10n.aiBotStatus),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const AiBotControlScreen(),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Sección: Trading Avanzado
+          Card(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.trending_up,
+                        color: Theme.of(context).colorScheme.tertiary,
                       ),
-                    );
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.insights),
-                  title: Text(l10n.analysisTitle),
-                  subtitle: Text(l10n.analysisTechnical),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ComprehensiveAnalysisScreen(
-                          symbol: 'BTC-USDT',
-                          exchange: 'kucoin',
-                        ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Trading Avanzado',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
                       ),
-                    );
-                  },
+                    ],
+                  ),
                 ),
-                const Divider(height: 1),
                 ListTile(
                   leading: const Icon(Icons.account_balance),
-                  title: const Text('Futures Positions'),
-                  subtitle: const Text('View & manage futures positions'),
+                  title: const Text('Posiciones Futures'),
+                  subtitle: const Text('Gestión de posiciones de futuros'),
                   trailing: const Icon(Icons.chevron_right),
                   onTap: () {
                     HapticFeedback.lightImpact();
@@ -344,38 +515,8 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 const Divider(height: 1),
                 ListTile(
-                  leading: const Icon(Icons.analytics),
-                  title: const Text('MCP Trading'),
-                  subtitle: const Text('Signals & Analysis'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const MCPMainScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
-                  leading: const Icon(Icons.settings_suggest),
-                  title: const Text('Bot Configuration'),
-                  subtitle: const Text('Configure AI Bot Settings'),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    HapticFeedback.lightImpact();
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const AiBotConfigScreen(),
-                      ),
-                    );
-                  },
-                ),
-                const Divider(height: 1),
-                ListTile(
                   leading: const Icon(Icons.swap_horiz),
-                  title: const Text('Market Types'),
+                  title: const Text('Tipos de Mercado'),
                   subtitle: const Text('Spot, Futures, Margin, Options'),
                   trailing: Container(
                     padding: const EdgeInsets.symmetric(
@@ -404,13 +545,66 @@ class _MainScreenState extends State<MainScreen> {
                     );
                   },
                 ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.analytics),
+                  title: const Text('MCP Trading'),
+                  subtitle: const Text('Señales y análisis MCP'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const MCPMainScreen(),
+                      ),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.settings_suggest),
+                  title: const Text('Configuración del Bot'),
+                  subtitle: const Text('Configurar parámetros del bot de IA'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => const AiBotConfigScreen(),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
           ),
           const SizedBox(height: 16),
+
+          // Sección: Configuración
           Card(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.settings,
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        'Configuración',
+                        style:
+                            Theme.of(context).textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).colorScheme.outline,
+                                ),
+                      ),
+                    ],
+                  ),
+                ),
                 ListTile(
                   leading: const Icon(Icons.settings),
                   title: Text(l10n.settings),

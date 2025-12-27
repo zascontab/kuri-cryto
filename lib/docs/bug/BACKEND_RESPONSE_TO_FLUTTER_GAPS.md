@@ -77,7 +77,7 @@ sudo systemctl restart trading-mcp
 ### Paso 3: Verificar la Nueva Implementación
 
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -336,7 +336,7 @@ func GetMarketFeatures(marketType string) MarketFeatures {
 ### Test 1: Obtener Todos los Pares
 
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

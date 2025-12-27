@@ -9,7 +9,7 @@
 
 ### Test 1: Futures
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -32,7 +32,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ### Test 2: Spot
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -56,13 +56,13 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 ### Test 3: Comparar Respuestas
 ```bash
 # Guardar respuesta de futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   > /tmp/futures_response.json
 
 # Guardar respuesta de spot
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}' \
   > /tmp/spot_response.json
@@ -80,7 +80,7 @@ diff /tmp/futures_response.json /tmp/spot_response.json
 
 ### Test 1: Futures
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -103,7 +103,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ### Test 2: Spot
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -127,13 +127,13 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 ### Test 3: Comparar Respuestas
 ```bash
 # Guardar respuesta de futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   > /tmp/futures_pbt_response.json
 
 # Guardar respuesta de spot
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}' \
   > /tmp/spot_pbt_response.json
@@ -150,7 +150,7 @@ diff /tmp/futures_pbt_response.json /tmp/spot_pbt_response.json
 ### Test 4: Verificar Features
 ```bash
 # Futures features
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq '.result.features'
@@ -173,7 +173,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ```bash
 # Spot features
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}' \
   | jq '.result.features'
@@ -212,13 +212,13 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 ### Ver solo los pares (sin formato)
 ```bash
 # get_markets - futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq -r '.result.markets[]'
 
 # get_pairs_by_type - futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq -r '.result.pairs[]'
@@ -227,13 +227,13 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 ### Contar pares
 ```bash
 # get_markets
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq '.result.count'
 
 # get_pairs_by_type
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq '.result.count'
@@ -241,7 +241,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ### Verificar si tiene formato enhanced
 ```bash
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}' \
   | jq 'has("result") and (.result | has("pairs"))'
@@ -255,7 +255,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 ## 📝 Notas
 
 - Todos los comandos usan `jq` para formatear JSON (instalar con `apt install jq` o `brew install jq`)
-- La IP `192.168.100.145` es la del servidor backend
+- La IP `192.168.1.6` es la del servidor backend
 - El puerto `9090` es el API Gateway
 - Todos los tests fueron verificados el 2025-11-27
 

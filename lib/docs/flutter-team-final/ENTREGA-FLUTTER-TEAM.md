@@ -175,7 +175,7 @@ Posiciones abiertas.
 import 'package:dio/dio.dart';
 
 final dio = Dio()
-  ..options.baseUrl = 'http://192.168.100.145:10600';
+  ..options.baseUrl = 'http://192.168.1.6:10600';
 
 // Health Check
 final health = await dio.get('/health');
@@ -228,9 +228,9 @@ print(analysis.data['recommendation']['confidence']); // 0.0-1.0
 
 ### URLs
 ```
-Gateway:  http://192.168.100.145:9090
-MCP:      http://192.168.100.145:10600
-Scalping: http://192.168.100.145:8081
+Gateway:  http://192.168.1.6:9090
+MCP:      http://192.168.1.6:10600
+Scalping: http://192.168.1.6:8081
 ```
 
 ### Estado

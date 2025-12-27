@@ -334,7 +334,7 @@ class MarketService {
 
     // Futures pairs
     for (final pair in commonPairs) {
-      final futuresSymbol = pair.replaceAll('-', '') + 'M';
+      final futuresSymbol = '${pair.replaceAll('-', '')}M';
       pairs.add(MarketPair.fromJson({
         'symbol': futuresSymbol,
         'standard_symbol': pair,

@@ -193,6 +193,35 @@ class RecommendationWidget extends StatelessWidget {
                 );
               }),
 
+              // Reasoning
+              const SizedBox(height: 16),
+              ...recommendation.reasoning.map((reason) {
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 6),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(top: 8),
+                        width: 6,
+                        height: 6,
+                        decoration: BoxDecoration(
+                          color: actionColor,
+                          shape: BoxShape.circle,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          reason,
+                          style: theme.textTheme.bodyMedium,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+
               // Price Levels (only show if not WAIT)
               if (!recommendation.isWait) ...[
                 const SizedBox(height: 24),

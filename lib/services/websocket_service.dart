@@ -19,6 +19,7 @@ import 'package:logger/logger.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:web_socket_channel/status.dart' as status;
 import '../models/websocket_event.dart';
+import '../config/environment.dart';
 
 /// WebSocket Service for real-time backend communication
 class WebSocketService {
@@ -33,7 +34,7 @@ class WebSocketService {
       lineLength: 120,
       colors: true,
       printEmojis: true,
-      printTime: true,
+      dateTimeFormat: DateTimeFormat.onlyTimeAndSinceStart,
     ),
   );
 
@@ -72,36 +73,28 @@ class WebSocketService {
   final Set<String> _subscribedChannels = {};
 
   // Stream Controllers for event broadcasting
-  final _positionUpdateController =
-      StreamController<Position>.broadcast();
-  final _tradeExecutedController =
-      StreamController<Trade>.broadcast();
-  final _metricsUpdateController =
-      StreamController<Metrics>.broadcast();
+  final _positionUpdateController = StreamController<Position>.broadcast();
+  final _tradeExecutedController = StreamController<Trade>.broadcast();
+  final _metricsUpdateController = StreamController<Metrics>.broadcast();
   final _alertController = StreamController<AlertEvent>.broadcast();
-  final _killSwitchController =
-      StreamController<KillSwitchEvent>.broadcast();
+  final _killSwitchController = StreamController<KillSwitchEvent>.broadcast();
   final _connectionStateController =
       StreamController<WebSocketConnectionState>.broadcast();
 
   /// Stream of position updates
-  Stream<Position> get positionUpdates =>
-      _positionUpdateController.stream;
+  Stream<Position> get positionUpdates => _positionUpdateController.stream;
 
   /// Stream of executed trades
-  Stream<Trade> get tradeExecuted =>
-      _tradeExecutedController.stream;
+  Stream<Trade> get tradeExecuted => _tradeExecutedController.stream;
 
   /// Stream of metrics updates
-  Stream<Metrics> get metricsUpdates =>
-      _metricsUpdateController.stream;
+  Stream<Metrics> get metricsUpdates => _metricsUpdateController.stream;
 
   /// Stream of alerts
   Stream<AlertEvent> get alerts => _alertController.stream;
 
   /// Stream of kill switch events
-  Stream<KillSwitchEvent> get killSwitchEvents =>
-      _killSwitchController.stream;
+  Stream<KillSwitchEvent> get killSwitchEvents => _killSwitchController.stream;
 
   /// Stream of connection state changes
   Stream<WebSocketConnectionState> get connectionStateStream =>
@@ -116,9 +109,9 @@ class WebSocketService {
 
   /// Constructor
   WebSocketService({
-    this.url = 'ws://localhost:8081/ws',
-  }) {
-    _logger.i('WebSocketService initialized with URL: $url');
+    String? url,
+  }) : url = url ?? Environment.wsBaseUrl {
+    _logger.i('WebSocketService initialized with URL: ${this.url}');
   }
 
   /// Connect to WebSocket server
@@ -160,7 +153,8 @@ class WebSocketService {
         await _sendSubscriptionMessage(_subscribedChannels.toList());
       }
     } catch (e, stackTrace) {
-      _logger.e('WebSocket connection failed', error: e, stackTrace: stackTrace);
+      _logger.e('WebSocket connection failed',
+          error: e, stackTrace: stackTrace);
       _updateConnectionState(WebSocketConnectionState.error);
       _scheduleReconnect();
     }
@@ -280,7 +274,8 @@ class WebSocketService {
   void _handleMessage(dynamic message) {
     try {
       if (message is String) {
-        _logger.d('Received message: ${message.length > 200 ? '${message.substring(0, 200)}...' : message}');
+        _logger.d(
+            'Received message: ${message.length > 200 ? '${message.substring(0, 200)}...' : message}');
 
         final Map<String, dynamic> json = jsonDecode(message);
         final String type = json['type'] as String;
@@ -321,7 +316,8 @@ class WebSocketService {
       _logger.d('Position update: ${position.id} - ${position.symbol}');
       _positionUpdateController.add(position);
     } catch (e, stackTrace) {
-      _logger.e('Error parsing position update', error: e, stackTrace: stackTrace);
+      _logger.e('Error parsing position update',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -332,7 +328,8 @@ class WebSocketService {
       _logger.d('Trade executed: ${trade.id} - ${trade.symbol}');
       _tradeExecutedController.add(trade);
     } catch (e, stackTrace) {
-      _logger.e('Error parsing trade executed', error: e, stackTrace: stackTrace);
+      _logger.e('Error parsing trade executed',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -340,10 +337,12 @@ class WebSocketService {
   void _handleMetricsUpdate(Map<String, dynamic> json) {
     try {
       final metrics = Metrics.fromJson(json['data'] as Map<String, dynamic>);
-      _logger.d('Metrics update: totalPnl=${metrics.totalPnl}, winRate=${metrics.winRate}%');
+      _logger.d(
+          'Metrics update: totalPnl=${metrics.totalPnl}, winRate=${metrics.winRate}%');
       _metricsUpdateController.add(metrics);
     } catch (e, stackTrace) {
-      _logger.e('Error parsing metrics update', error: e, stackTrace: stackTrace);
+      _logger.e('Error parsing metrics update',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -361,11 +360,14 @@ class WebSocketService {
   /// Handle kill switch message
   void _handleKillSwitch(Map<String, dynamic> json) {
     try {
-      final killSwitch = KillSwitchEvent.fromJson(json['data'] as Map<String, dynamic>);
-      _logger.w('Kill switch event: active=${killSwitch.active}, reason=${killSwitch.reason}');
+      final killSwitch =
+          KillSwitchEvent.fromJson(json['data'] as Map<String, dynamic>);
+      _logger.w(
+          'Kill switch event: active=${killSwitch.active}, reason=${killSwitch.reason}');
       _killSwitchController.add(killSwitch);
     } catch (e, stackTrace) {
-      _logger.e('Error parsing kill switch event', error: e, stackTrace: stackTrace);
+      _logger.e('Error parsing kill switch event',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -432,9 +434,11 @@ class WebSocketService {
         'channels': channels,
       };
       _sendMessage(message);
-      _logger.i('Subscription message sent for channels: ${channels.join(', ')}');
+      _logger
+          .i('Subscription message sent for channels: ${channels.join(', ')}');
     } catch (e, stackTrace) {
-      _logger.e('Failed to send subscription message', error: e, stackTrace: stackTrace);
+      _logger.e('Failed to send subscription message',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -446,9 +450,11 @@ class WebSocketService {
         'channels': channels,
       };
       _sendMessage(message);
-      _logger.i('Unsubscription message sent for channels: ${channels.join(', ')}');
+      _logger.i(
+          'Unsubscription message sent for channels: ${channels.join(', ')}');
     } catch (e, stackTrace) {
-      _logger.e('Failed to send unsubscription message', error: e, stackTrace: stackTrace);
+      _logger.e('Failed to send unsubscription message',
+          error: e, stackTrace: stackTrace);
     }
   }
 
@@ -468,12 +474,14 @@ class WebSocketService {
 
     // Check if max reconnect attempts reached
     if (_reconnectAttempts >= _maxReconnectAttempts) {
-      _logger.w('Max reconnection attempts ($_maxReconnectAttempts) reached. WebSocket disabled. Call connect() manually to retry.');
+      _logger.w(
+          'Max reconnection attempts ($_maxReconnectAttempts) reached. WebSocket disabled. Call connect() manually to retry.');
       return;
     }
 
     _reconnectAttempts++;
-    _logger.i('Scheduling reconnection in ${_currentBackoffDelay}s (attempt $_reconnectAttempts/$_maxReconnectAttempts)');
+    _logger.i(
+        'Scheduling reconnection in ${_currentBackoffDelay}s (attempt $_reconnectAttempts/$_maxReconnectAttempts)');
 
     _reconnectTimer = Timer(
       Duration(seconds: _currentBackoffDelay),
@@ -484,7 +492,8 @@ class WebSocketService {
     );
 
     // Increase backoff delay for next attempt (exponential backoff)
-    _currentBackoffDelay = (_currentBackoffDelay * 2).clamp(1, _maxBackoffDelay);
+    _currentBackoffDelay =
+        (_currentBackoffDelay * 2).clamp(1, _maxBackoffDelay);
   }
 
   /// Cancel scheduled reconnection
@@ -509,7 +518,7 @@ class WebSocketServiceProvider {
   /// Initialize with custom URL
   static void initialize({String? url}) {
     _instance = WebSocketService(
-      url: url ?? 'ws://localhost:8081/ws',
+      url: url ?? Environment.wsBaseUrl,
     );
   }
 

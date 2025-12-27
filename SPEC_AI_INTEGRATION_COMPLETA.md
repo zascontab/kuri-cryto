@@ -446,7 +446,7 @@ Resultado: App completa con todas las features de IA
 - `lib/docs/flutter-team-final/AI-QUICK-START.md`
 
 ### Endpoints Backend
-- **Base URL**: `http://192.168.100.145:10600`
+- **Base URL**: `http://192.168.1.6:10600`
 - **Análisis con IA**: `POST /api/v1/ai-bot/comprehensive-analysis`
 - **Estado de IA**: `GET /api/v1/ai/status`
 - **Costos**: `GET /api/v1/ai/costs`
@@ -455,18 +455,18 @@ Resultado: App completa con todas las features de IA
 ### Probar Endpoints
 ```bash
 # Health check
-curl http://192.168.100.145:10600/health
+curl http://192.168.1.6:10600/health
 
 # Análisis con IA
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis \
   -H "Content-Type: application/json" \
   -d '{"symbol":"DOGE-USDT","exchange":"kucoin","enable_llm":true,"enable_sentiment":true}'
 
 # Estado de IA
-curl http://192.168.100.145:10600/api/v1/ai/status
+curl http://192.168.1.6:10600/api/v1/ai/status
 
 # Costos
-curl http://192.168.100.145:10600/api/v1/ai/costs
+curl http://192.168.1.6:10600/api/v1/ai/costs
 ```
 
 ---

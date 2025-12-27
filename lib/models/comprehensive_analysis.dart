@@ -4,6 +4,8 @@ import 'margin_data.dart';
 import 'options_data.dart';
 import 'key_levels.dart';
 import 'risk_assessment.dart';
+import 'llm_analysis.dart';
+import 'sentiment_analysis.dart';
 
 /// Comprehensive market analysis model
 ///
@@ -14,12 +16,16 @@ import 'risk_assessment.dart';
 /// - Futures: funding_rate, mark_price, liquidation_price
 /// - Margin: interest_rate, margin_level, borrowed_amount
 /// - Options: implied_volatility, greeks
+///
+/// NEW: AI-enhanced analysis:
+/// - LLM Analysis: Detailed explanations from Gemini/GPT/Claude
+/// - Sentiment Analysis: Market sentiment from news, social media
 class ComprehensiveAnalysis {
   final String symbol;
   final String exchange;
   final DateTime timestamp;
   final PriceData priceData;
-  final Map<String, TechnicalIndicators> technicalIndicators;
+  final Map<String, ComprehensiveTechnicalIndicators> technicalIndicators;
   final Map<String, Scenario> scenarios;
   final Recommendation recommendation;
 
@@ -41,6 +47,15 @@ class ComprehensiveAnalysis {
   /// Risk assessment
   final RiskAssessment? riskAssessment;
 
+  /// LLM analysis (AI-generated explanation and insights)
+  final LLMAnalysis? llmAnalysis;
+
+  /// Sentiment analysis (market sentiment from multiple sources)
+  final SentimentAnalysis? sentimentAnalysis;
+
+  /// Recent price movement data (for charting)
+  final List<PricePoint>? recentMovement;
+
   ComprehensiveAnalysis({
     required this.symbol,
     required this.exchange,
@@ -55,6 +70,9 @@ class ComprehensiveAnalysis {
     this.optionsData,
     this.keyLevels,
     this.riskAssessment,
+    this.llmAnalysis,
+    this.sentimentAnalysis,
+    this.recentMovement,
   });
 
   factory ComprehensiveAnalysis.fromJson(Map<String, dynamic> json) {
@@ -98,6 +116,18 @@ class ComprehensiveAnalysis {
           ? RiskAssessment.fromJson(
               json['risk_assessment'] as Map<String, dynamic>)
           : null,
+      llmAnalysis: json['llm_analysis'] != null
+          ? LLMAnalysis.fromJson(json['llm_analysis'] as Map<String, dynamic>)
+          : null,
+      sentimentAnalysis: json['sentiment_analysis'] != null
+          ? SentimentAnalysis.fromJson(
+              json['sentiment_analysis'] as Map<String, dynamic>)
+          : null,
+      recentMovement: json['recent_movement'] != null
+          ? (json['recent_movement'] as List)
+              .map((e) => PricePoint.fromJson(e as Map<String, dynamic>))
+              .toList()
+          : null,
     );
   }
 
@@ -120,15 +150,21 @@ class ComprehensiveAnalysis {
       if (optionsData != null) 'options_data': optionsData!.toJson(),
       if (keyLevels != null) 'key_levels': keyLevels!.toJson(),
       if (riskAssessment != null) 'risk_assessment': riskAssessment!.toJson(),
+      if (llmAnalysis != null) 'llm_analysis': llmAnalysis!.toJson(),
+      if (sentimentAnalysis != null)
+        'sentiment_analysis': sentimentAnalysis!.toJson(),
+      if (recentMovement != null)
+        'recent_movement': recentMovement!.map((e) => e.toJson()).toList(),
     };
   }
 
-  static Map<String, TechnicalIndicators> _parseTechnicalIndicators(
+  static Map<String, ComprehensiveTechnicalIndicators>
+      _parseTechnicalIndicators(
     dynamic data,
   ) {
     if (data == null || data is! Map) return {};
 
-    final Map<String, TechnicalIndicators> indicators = {};
+    final Map<String, ComprehensiveTechnicalIndicators> indicators = {};
     final dataMap = data as Map<String, dynamic>;
 
     for (var entry in dataMap.entries) {
@@ -141,7 +177,8 @@ class ComprehensiveAnalysis {
         if (!indicatorData.containsKey('timeframe')) {
           indicatorData['timeframe'] = entry.key;
         }
-        indicators[entry.key] = TechnicalIndicators.fromJson(indicatorData);
+        indicators[entry.key] =
+            ComprehensiveTechnicalIndicators.fromJson(indicatorData);
       }
     }
 
@@ -199,6 +236,15 @@ class ComprehensiveAnalysis {
       (a, b) => a.probability > b.probability ? a : b,
     );
   }
+
+  /// Indica si tiene análisis de LLM
+  bool get hasLLMAnalysis => llmAnalysis != null;
+
+  /// Indica si tiene análisis de sentimiento
+  bool get hasSentimentAnalysis => sentimentAnalysis != null;
+
+  /// Indica si tiene análisis completo de IA (LLM + Sentimiento)
+  bool get hasFullAIAnalysis => hasLLMAnalysis && hasSentimentAnalysis;
 }
 
 /// Price data for a trading pair
@@ -261,7 +307,7 @@ class PriceData {
 }
 
 /// Technical indicators for a specific timeframe
-class TechnicalIndicators {
+class ComprehensiveTechnicalIndicators {
   final String timeframe;
   final RSIData? rsi;
   final MACDData? macd;
@@ -269,7 +315,7 @@ class TechnicalIndicators {
   final EMAData? ema;
   final VolumeData? volume;
 
-  TechnicalIndicators({
+  ComprehensiveTechnicalIndicators({
     required this.timeframe,
     this.rsi,
     this.macd,
@@ -278,7 +324,7 @@ class TechnicalIndicators {
     this.volume,
   });
 
-  factory TechnicalIndicators.fromJson(Map<String, dynamic> json) {
+  factory ComprehensiveTechnicalIndicators.fromJson(Map<String, dynamic> json) {
     // Handle simplified API format where rsi is a number directly
     RSIData? rsiData;
     if (json['rsi'] != null) {
@@ -292,7 +338,7 @@ class TechnicalIndicators {
       }
     }
 
-    return TechnicalIndicators(
+    return ComprehensiveTechnicalIndicators(
       timeframe: json['timeframe'] as String? ?? '',
       rsi: rsiData,
       macd: json['macd'] != null
@@ -614,5 +660,34 @@ class Recommendation {
     final risk = (entry! - stopLoss!).abs();
     final reward = (takeProfit! - entry!).abs();
     return risk > 0 ? reward / risk : null;
+  }
+}
+
+/// Price point for charting recent movement
+class PricePoint {
+  final DateTime timestamp;
+  final double price;
+  final double volume;
+
+  PricePoint({
+    required this.timestamp,
+    required this.price,
+    required this.volume,
+  });
+
+  factory PricePoint.fromJson(Map<String, dynamic> json) {
+    return PricePoint(
+      timestamp: DateTime.parse(json['timestamp'] as String),
+      price: (json['price'] as num).toDouble(),
+      volume: (json['volume'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'timestamp': timestamp.toIso8601String(),
+      'price': price,
+      'volume': volume,
+    };
   }
 }

@@ -2,10 +2,10 @@
 
 **Version:** 1.1.0  
 **Last Updated:** 2025-11-16  
-**Base URL (API Gateway):** `http://192.168.100.145:9090` ⭐ **RECOMMENDED**  
-**Base URL (REST - Direct):** `http://192.168.100.145:8081/api/v1`  
-**Base URL (MCP - Direct):** `http://192.168.100.145:10600`  
-**Base URL (MCP via Gateway):** `http://192.168.100.145:9090/api/mcp`
+**Base URL (API Gateway):** `http://192.168.1.6:9090` ⭐ **RECOMMENDED**  
+**Base URL (REST - Direct):** `http://192.168.1.6:8081/api/v1`  
+**Base URL (MCP - Direct):** `http://192.168.1.6:10600`  
+**Base URL (MCP via Gateway):** `http://192.168.1.6:9090/api/mcp`
 
 ---
 
@@ -33,7 +33,7 @@ Ambas APIs comparten la misma lógica de negocio pero tienen diferentes interfac
 
 ### 🚀 API Gateway (Recommended)
 
-**Endpoint único para Flutter:** `http://192.168.100.145:9090`
+**Endpoint único para Flutter:** `http://192.168.1.6:9090`
 
 El API Gateway unifica todos los servicios en un solo puerto, simplificando la integración:
 
@@ -56,7 +56,7 @@ El API Gateway unifica todos los servicios en un solo puerto, simplificando la i
 
 ```dart
 // Configuración simple - un solo endpoint
-final String apiGatewayUrl = 'http://192.168.100.145:9090';
+final String apiGatewayUrl = 'http://192.168.1.6:9090';
 
 // Scalping API
 final scalpingHealth = await dio.get('$apiGatewayUrl/api/scalping/api/v1/scalping/health');
@@ -85,8 +85,8 @@ final mcpTools = await dio.get('$apiGatewayUrl/api/mcp/tools');
 
 ### Base URL
 
-**Via Gateway (Recommended):** `http://192.168.100.145:9090/api/scalping/api/v1/scalping`  
-**Direct:** `http://192.168.100.145:8081/api/v1/scalping`
+**Via Gateway (Recommended):** `http://192.168.1.6:9090/api/scalping/api/v1/scalping`  
+**Direct:** `http://192.168.1.6:8081/api/v1/scalping`
 
 ---
 

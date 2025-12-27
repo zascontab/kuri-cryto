@@ -135,7 +135,7 @@ curl -X POST http://localhost:10600/mcp \
 
 ### Test 4: Through Gateway (As Flutter Uses It) ✅
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -250,7 +250,7 @@ final spotPositions = await service.getPositions(
 3. **Test it:**
 ```bash
 # From your Flutter app, this should now work:
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

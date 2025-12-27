@@ -552,7 +552,7 @@ class MarginData {
 
 ```dart
 class TradingApiService {
-  final String baseUrl = 'http://192.168.100.145:10600';
+  final String baseUrl = 'http://192.168.1.6:10600';
   final Dio _dio;
   
   TradingApiService(this._dio);
@@ -1105,17 +1105,17 @@ Para testing rápido, usar estos endpoints sin auth:
 
 ```bash
 # Comprehensive Analysis
-curl -X POST http://192.168.100.145:10600/tools/comprehensive-analysis \
+curl -X POST http://192.168.1.6:10600/tools/comprehensive-analysis \
   -H "Content-Type: application/json" \
   -d '{"symbol":"BTC-USDT","market_type":"futures"}'
 
 # Get Markets
-curl -X POST http://192.168.100.145:10600/tools/call \
+curl -X POST http://192.168.1.6:10600/tools/call \
   -H "Content-Type: application/json" \
   -d '{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}}'
 
 # Get Market Types
-curl -X POST http://192.168.100.145:10600/tools/call \
+curl -X POST http://192.168.1.6:10600/tools/call \
   -H "Content-Type: application/json" \
   -d '{"name":"get_market_types","arguments":{}}'
 ```
@@ -1207,7 +1207,7 @@ void main() {
       );
       
       verify(mockDio.post(
-        'http://192.168.100.145:10600/tools/comprehensive-analysis',
+        'http://192.168.1.6:10600/tools/comprehensive-analysis',
         data: {
           'symbol': 'BTC-USDT',
           'exchange': 'kucoin',

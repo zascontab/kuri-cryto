@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/comprehensive_analysis.dart';
+import 'package:kuri_crypto/models/technical_indicators.dart';
 
 /// Widget that displays multi-timeframe analysis
 ///
@@ -135,38 +135,25 @@ class _TimeframeRow extends StatelessWidget {
             if (indicators.rsi != null)
               _IndicatorChip(
                 label: 'RSI',
-                value: indicators.rsi!.value.toStringAsFixed(1),
-                signal: indicators.rsi!.signal,
-                color: _getRSIColor(indicators.rsi!.value),
+                value: indicators.rsi!.toStringAsFixed(1),
+                signal: _getRSISignal(indicators.rsi!),
+                color: _getRSIColor(indicators.rsi!),
               ),
             if (indicators.macd != null)
               _IndicatorChip(
                 label: 'MACD',
-                value: indicators.macd!.trend,
-                signal: indicators.macd!.histogram > 0 ? 'bullish' : 'bearish',
+                value: indicators.macd!.tradingSignal,
+                signal: indicators.macd!.tradingSignal,
                 color: indicators.macd!.isBullish ? Colors.green : Colors.red,
               ),
             if (indicators.bollingerBands != null)
               _IndicatorChip(
                 label: 'BB',
-                value: indicators.bollingerBands!.position,
-                signal: indicators.bollingerBands!.position,
-                color: _getBBColor(indicators.bollingerBands!.position),
+                value: indicators.bollingerBands!.signal,
+                signal: indicators.bollingerBands!.signal,
+                color: _getBBColor(indicators.bollingerBands!.signal),
               ),
-            if (indicators.ema != null)
-              _IndicatorChip(
-                label: 'EMA',
-                value: indicators.ema!.trend,
-                signal: indicators.ema!.trend,
-                color: _getTrendColor(indicators.ema!.trend),
-              ),
-            if (indicators.volume != null)
-              _IndicatorChip(
-                label: 'Volume',
-                value: indicators.volume!.trend,
-                signal: indicators.volume!.trend,
-                color: _getTrendColor(indicators.volume!.trend),
-              ),
+            // Additional indicators can be added here when available
           ],
         ),
       ],
@@ -179,11 +166,17 @@ class _TimeframeRow extends StatelessWidget {
     return Colors.blue;
   }
 
-  Color _getBBColor(String position) {
-    switch (position.toLowerCase()) {
-      case 'above_upper':
+  String _getRSISignal(double rsi) {
+    if (rsi > 70) return 'SELL';
+    if (rsi < 30) return 'BUY';
+    return 'HOLD';
+  }
+
+  Color _getBBColor(String signal) {
+    switch (signal.toLowerCase()) {
+      case 'sell':
         return Colors.red;
-      case 'below_lower':
+      case 'buy':
         return Colors.green;
       default:
         return Colors.blue;

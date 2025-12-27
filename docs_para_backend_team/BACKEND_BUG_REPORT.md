@@ -17,7 +17,7 @@ El tool `get_futures_positions` causa **timeout** cuando se envía el parámetro
 
 ### Comportamiento Esperado:
 ```json
-POST http://192.168.100.145:9090/api/mcp/tools/execute
+POST http://192.168.1.6:9090/api/mcp/tools/execute
 {
   "jsonrpc": "2.0",
   "method": "tools/call",
@@ -45,7 +45,7 @@ POST http://192.168.100.145:9090/api/mcp/tools/execute
 
 ### Test 1: Health Check del Gateway
 ```bash
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 ```
 **Resultado**: ✅ **OK** (200, 0.85ms)
 ```json
@@ -61,7 +61,7 @@ curl http://192.168.100.145:9090/health
 
 ### Test 2: Health Check del MCP Server
 ```bash
-curl http://192.168.100.145:10600/health
+curl http://192.168.1.6:10600/health
 ```
 **Resultado**: ✅ **OK** (200, 1.07ms)
 ```json
@@ -76,7 +76,7 @@ curl http://192.168.100.145:10600/health
 
 ### Test 3: get_futures_positions CON market_type
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -96,7 +96,7 @@ curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
 
 ### Test 4: get_futures_positions SIN market_type
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -143,7 +143,7 @@ curl -X POST http://192.168.100.145:10600/mcp \
 
 ### Test 5: Otros tools (get_ticker)
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -266,7 +266,7 @@ if market_type and market_type not in ['spot', 'futures', 'margin', 'options']:
 
 ### Request que FALLA:
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -286,7 +286,7 @@ curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
 
 ### Request que FUNCIONA:
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -326,7 +326,7 @@ Una vez corregido el bug, verificar que:
 
 1. **Request con market_type responde en < 2s**:
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

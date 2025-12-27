@@ -7,8 +7,8 @@
 ## 🌐 URLs
 
 ```dart
-const BASE_URL = 'http://192.168.100.145:10600';
-const GATEWAY_URL = 'http://192.168.100.145:9090';
+const BASE_URL = 'http://192.168.1.6:10600';
+const GATEWAY_URL = 'http://192.168.1.6:9090';
 ```
 
 ---
@@ -46,7 +46,7 @@ GET /api/v1/ai-bot/positions
 ```dart
 import 'package:dio/dio.dart';
 
-final dio = Dio()..options.baseUrl = 'http://192.168.100.145:10600';
+final dio = Dio()..options.baseUrl = 'http://192.168.1.6:10600';
 
 // Health
 final health = await dio.get('/health');
@@ -141,10 +141,10 @@ try {
 
 ```bash
 # Health
-curl http://192.168.100.145:10600/health
+curl http://192.168.1.6:10600/health
 
 # Análisis
-curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis \
+curl -X POST http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis \
   -H "Content-Type: application/json" \
   -d '{"symbol":"BTC-USDT","exchange":"kucoin"}'
 ```
@@ -166,7 +166,7 @@ curl -X POST http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis \
 
 ```dart
 final dio = Dio()
-  ..options.baseUrl = 'http://192.168.100.145:10600'
+  ..options.baseUrl = 'http://192.168.1.6:10600'
   ..options.connectTimeout = Duration(seconds: 30)
   ..options.receiveTimeout = Duration(seconds: 30)
   ..options.headers = {'Content-Type': 'application/json'};

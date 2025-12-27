@@ -8,7 +8,7 @@ import '../models/scalping_health.dart';
 /// Service for interacting with the Scalping API endpoints.
 /// Based on SCALPING_ENDPOINTS_SPEC.md specification.
 ///
-/// Base URL: http://192.168.100.145:9090/api/scalping/api/v1/scalping
+/// Base URL: Configured via Environment variables
 class ScalpingApiService {
   final Dio _dio;
 

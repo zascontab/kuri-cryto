@@ -219,9 +219,9 @@ AlertService alertService(AlertServiceRef ref) {
 /// - Market analysis with AI
 /// - Emergency stop
 @riverpod
-AiBotService aiBotService(AiBotServiceRef ref) {
+AIBotService aiBotService(AiBotServiceRef ref) {
   final dio = ref.watch(dioProvider);
-  return AiBotService(dio);
+  return AIBotService(dio);
 }
 
 /// Provider for Comprehensive Analysis Service
@@ -366,7 +366,8 @@ IntegratedAnalysisService integratedAnalysisService(
   IntegratedAnalysisServiceRef ref,
 ) {
   final marketDataService = ref.watch(marketDataServiceProvider);
-  final technicalIndicatorsService = ref.watch(technicalIndicatorsServiceProvider);
+  final technicalIndicatorsService =
+      ref.watch(technicalIndicatorsServiceProvider);
   return IntegratedAnalysisService(
     marketDataService,
     technicalIndicatorsService,

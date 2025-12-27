@@ -5,6 +5,10 @@ import '../l10n/l10n_export.dart';
 import '../widgets/metric_card.dart';
 import '../widgets/tiktok_modal.dart';
 import '../providers/system_provider.dart';
+import '../screens/ai_dashboard_screen.dart';
+import '../screens/ai_bot_control_screen.dart';
+import '../screens/comprehensive_analysis_screen.dart';
+import '../screens/trading_hub_screen.dart';
 
 /// Dashboard screen showing system status and key metrics
 class DashboardScreen extends ConsumerStatefulWidget {
@@ -43,9 +47,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
           text: isRunning ? l10n.stop : l10n.start,
           isPrimary: true,
           icon: isRunning ? Icons.stop_circle : Icons.play_circle_filled,
-          backgroundColor: isRunning
-              ? const Color(0xFFF44336)
-              : const Color(0xFF4CAF50),
+          backgroundColor:
+              isRunning ? const Color(0xFFF44336) : const Color(0xFF4CAF50),
           onPressed: () {
             Navigator.pop(context);
             _performEngineToggle(isRunning);
@@ -79,9 +82,7 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-              isRunning
-                  ? l10n.engineStoppedSuccess
-                  : l10n.engineStartedSuccess,
+              isRunning ? l10n.engineStoppedSuccess : l10n.engineStartedSuccess,
             ),
             backgroundColor: const Color(0xFF4CAF50),
             duration: const Duration(seconds: 2),
@@ -169,11 +170,13 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           l10n.scalpingEngine,
-                                          style: theme.textTheme.titleLarge?.copyWith(
+                                          style: theme.textTheme.titleLarge
+                                              ?.copyWith(
                                             fontWeight: FontWeight.bold,
                                           ),
                                           overflow: TextOverflow.ellipsis,
@@ -183,7 +186,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                           isEngineRunning
                                               ? l10n.running
                                               : l10n.stopped,
-                                          style: theme.textTheme.bodyMedium?.copyWith(
+                                          style: theme.textTheme.bodyMedium
+                                              ?.copyWith(
                                             color: colorScheme.onSurfaceVariant,
                                           ),
                                         ),
@@ -201,7 +205,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                   vertical: 6,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: _getHealthColor(health.status).withValues(alpha: 0.2),
+                                  color: _getHealthColor(health.status)
+                                      .withValues(alpha: 0.2),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: Row(
@@ -218,7 +223,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                                     const SizedBox(width: 6),
                                     Text(
                                       health.status.toUpperCase(),
-                                      style: theme.textTheme.labelSmall?.copyWith(
+                                      style:
+                                          theme.textTheme.labelSmall?.copyWith(
                                         color: _getHealthColor(health.status),
                                         fontWeight: FontWeight.bold,
                                       ),
@@ -229,9 +235,11 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                               loading: () => const SizedBox(
                                 width: 16,
                                 height: 16,
-                                child: CircularProgressIndicator(strokeWidth: 2),
+                                child:
+                                    CircularProgressIndicator(strokeWidth: 2),
                               ),
-                              error: (_, __) => const Icon(Icons.error, color: Colors.red),
+                              error: (_, __) =>
+                                  const Icon(Icons.error, color: Colors.red),
                             ),
                           ],
                         ),
@@ -276,6 +284,10 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                     ),
                   ),
                 ),
+                const SizedBox(height: 20),
+
+                // Quick Access Card
+                _buildQuickAccessCard(context),
                 const SizedBox(height: 20),
 
                 // Metrics Grid
@@ -330,7 +342,8 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
                       MetricCard(
                         icon: Icons.speed,
                         title: l10n.avgLatency,
-                        value: '${metrics.avgLatencyMs.toStringAsFixed(0)}${l10n.ms}',
+                        value:
+                            '${metrics.avgLatencyMs.toStringAsFixed(0)}${l10n.ms}',
                         change: metrics.avgLatencyMs < 100
                             ? l10n.excellent
                             : l10n.good,
@@ -439,15 +452,15 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
         ),
         floatingActionButton: systemStatusAsync.maybeWhen(
           data: (systemStatus) => FloatingActionButton.extended(
+            heroTag: "dashboard_fab", // Unique hero tag to prevent conflicts
             onPressed: _isTogglingEngine
                 ? null
                 : () => _toggleEngine(systemStatus.running),
             icon: Icon(
               systemStatus.running ? Icons.stop : Icons.play_arrow,
             ),
-            label: Text(systemStatus.running
-                ? l10n.stopEngine
-                : l10n.startEngine),
+            label:
+                Text(systemStatus.running ? l10n.stopEngine : l10n.startEngine),
             backgroundColor: systemStatus.running
                 ? const Color(0xFFF44336)
                 : const Color(0xFF4CAF50),
@@ -485,6 +498,160 @@ class _DashboardScreenState extends ConsumerState<DashboardScreen> {
             maxLines: 1,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildQuickAccessCard(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.flash_on,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  'Acceso Rápido',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Grid de accesos rápidos
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              mainAxisSpacing: 12,
+              crossAxisSpacing: 12,
+              childAspectRatio: 2.5,
+              children: [
+                _buildQuickAccessButton(
+                  context,
+                  icon: Icons.psychology,
+                  label: 'Dashboard IA',
+                  color: Colors.purple,
+                  onTap: () => _navigateToAIDashboard(context),
+                ),
+                _buildQuickAccessButton(
+                  context,
+                  icon: Icons.smart_toy,
+                  label: 'Bot Autónomo',
+                  color: Colors.orange,
+                  onTap: () => _navigateToBotControl(context),
+                ),
+                _buildQuickAccessButton(
+                  context,
+                  icon: Icons.insights,
+                  label: 'Análisis Pro',
+                  color: Colors.blue,
+                  onTap: () => _navigateToAnalysis(context),
+                ),
+                _buildQuickAccessButton(
+                  context,
+                  icon: Icons.dashboard_customize,
+                  label: 'Trading Hub',
+                  color: Colors.green,
+                  onTap: () => _navigateToTradingHub(context),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickAccessButton(
+    BuildContext context, {
+    required IconData icon,
+    required String label,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return Material(
+      color: color.withValues(alpha: 0.1),
+      borderRadius: BorderRadius.circular(12),
+      child: InkWell(
+        onTap: () {
+          HapticFeedback.lightImpact();
+          onTap();
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: color.withValues(alpha: 0.3),
+              width: 1,
+            ),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: color,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: color,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _navigateToAIDashboard(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AIDashboardScreen(),
+      ),
+    );
+  }
+
+  void _navigateToBotControl(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const AIBotControlScreen(),
+      ),
+    );
+  }
+
+  void _navigateToAnalysis(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ComprehensiveAnalysisScreen(),
+      ),
+    );
+  }
+
+  void _navigateToTradingHub(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const TradingHubScreen(),
       ),
     );
   }

@@ -88,8 +88,8 @@ La aplicación Flutter actualmente consume las APIs del backend de trading, pero
 
 #### Acceptance Criteria
 
-1. WHEN THE Flutter_App inicia, THE System SHALL validar que ApiConfig.mcpDirectUrl apunte a `http://192.168.100.145:10600`
-2. WHEN THE Flutter_App inicia, THE System SHALL validar que ApiConfig.gatewayBaseUrl apunte a `http://192.168.100.145:9090`
+1. WHEN THE Flutter_App inicia, THE System SHALL validar que ApiConfig.mcpDirectUrl apunte a `http://192.168.1.6:10600`
+2. WHEN THE Flutter_App inicia, THE System SHALL validar que ApiConfig.gatewayBaseUrl apunte a `http://192.168.1.6:9090`
 3. WHEN THE Flutter_App hace llamadas al AI Bot, THE System SHALL usar mcpDirectUrl (puerto 10600)
 4. WHEN THE Flutter_App hace llamadas a herramientas MCP, THE System SHALL usar gatewayBaseUrl con path `/api/mcp/tools/execute`
 5. WHEN THE configuración de URL es incorrecta, THE System SHALL fallar rápidamente con mensaje descriptivo

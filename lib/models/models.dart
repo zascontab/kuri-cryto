@@ -20,6 +20,29 @@ export 'ai_bot_status.dart';
 export 'ai_analysis.dart';
 //export 'ai_position.dart';
 
+// AI Enhanced Analysis (NEW)
+export 'llm_analysis.dart';
+export 'sentiment_analysis.dart';
+export 'ai_status.dart';
+export 'ai_costs.dart';
+export 'ai_notification.dart';
+
+// Technical Analysis (NEW)
+export 'multi_timeframe_analysis.dart';
+export 'technical_analysis.dart';
+
+// Bot Management (NEW)
+export 'bot_status.dart';
+export 'bot_config.dart';
+export 'bot_action_response.dart';
+
+// Positions (NEW)
+export 'trading_position.dart';
+export 'positions_response.dart';
+
+// Health Check (NEW)
+export 'health_response.dart';
+
 // Comprehensive Analysis
 export 'comprehensive_analysis.dart';
 
@@ -55,3 +78,20 @@ export 'key_levels.dart';
 export 'scalping_status.dart';
 export 'scalping_metrics.dart';
 export 'scalping_health.dart';
+
+// Enhanced MATP Integration Models
+export 'auth_state.dart';
+export 'technical_indicators.dart';
+export 'complete_analysis.dart';
+export 'enhanced_llm_analysis.dart';
+export 'enhanced_bot_state.dart';
+export 'mcp_backtest_models.dart';
+
+// Backward Compatibility
+export 'adapters/backward_compatibility_adapter.dart';
+
+// Request Models
+export 'request_models.dart';
+
+// Response Models
+export 'response_models.dart';

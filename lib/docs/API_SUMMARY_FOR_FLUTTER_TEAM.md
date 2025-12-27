@@ -16,7 +16,7 @@ El backend está desarrollando funciones avanzadas de trading en **4 fases** dur
 
 ### ✅ Base URL (API Gateway)
 ```
-http://192.168.100.145:9090
+http://192.168.1.6:9090
 ```
 
 **Ventajas:**
@@ -40,7 +40,7 @@ http://192.168.100.145:9090
 ```dart
 class ApiConfig {
   // ⭐ USAR ESTO - Un solo endpoint
-  static const String baseUrl = 'http://192.168.100.145:9090';
+  static const String baseUrl = 'http://192.168.1.6:9090';
   
   // Rutas
   static const String gatewayHealth = '/health';
@@ -58,17 +58,17 @@ class ApiConfig {
 
 **Via Gateway (Recommended):**
 ```
-http://192.168.100.145:9090/api/scalping/api/v1/scalping
+http://192.168.1.6:9090/api/scalping/api/v1/scalping
 ```
 
 **Direct (Alternative):**
 ```
-http://192.168.100.145:8081/api/v1/scalping
+http://192.168.1.6:8081/api/v1/scalping
 ```
 
 ### ✅ WebSocket URL
 ```
-ws://192.168.100.145:8081/ws
+ws://192.168.1.6:8081/ws
 ```
 
 **Note:** WebSocket aún no está disponible via Gateway. Usar conexión directa.
@@ -581,19 +581,19 @@ class MockApiClient {
 ### 2. Development Server (Week 1)
 Connect to API Gateway:
 ```
-http://192.168.100.145:9090
+http://192.168.1.6:9090
 ```
 
 **Verificar conectividad:**
 ```bash
 # Health check
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 
 # Gateway info
-curl http://192.168.100.145:9090/api/gateway/info
+curl http://192.168.1.6:9090/api/gateway/info
 
 # Scalping health
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/health
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/health
 ```
 
 ### 3. Staging Server (Week 3)
@@ -611,7 +611,7 @@ Production deployment
 
 ### IP Address
 ```
-Local Network: 192.168.100.145
+Local Network: 192.168.1.6
 ```
 
 ### Ports
@@ -628,7 +628,7 @@ Asegúrate de que tu dispositivo móvil/tablet pueda acceder al puerto 9090 en l
 ### Testing from Mobile Device
 ```bash
 # Desde tu dispositivo móvil (usando Termux o similar)
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 ```
 
 ---
@@ -659,7 +659,7 @@ curl http://192.168.100.145:9090/health
 - [ ] Read `API-GATEWAY.md` ⭐ NEW
 - [ ] Read `FLUTTER_INTEGRATION_GUIDE.md`
 - [ ] Setup Flutter project with recommended packages
-- [ ] Configure API Gateway endpoint: `http://192.168.100.145:9090`
+- [ ] Configure API Gateway endpoint: `http://192.168.1.6:9090`
 - [ ] Test gateway connectivity from mobile device
 - [ ] Implement API client with Dio
 - [ ] Test gateway health check endpoint
@@ -891,7 +891,7 @@ IconData getRiskModeIcon(String riskMode) {
 ./test-scripts/test-risk-sentinel.sh
 
 # Test manual
-curl http://192.168.100.145:8081/api/v1/scalping/risk/sentinel/state
+curl http://192.168.1.6:8081/api/v1/scalping/risk/sentinel/state
 ```
 
 **Ver documentación completa:** `docs/RISK-SENTINEL-ENDPOINTS-FIXED.md`
@@ -1183,7 +1183,7 @@ test('handles network error correctly', () async {
 ./scripts/show-network-info.sh
 
 # Verificar gateway
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 
 # Ver logs del servidor
 tail -f logs/mcp-server-gateway.log | grep -i gateway

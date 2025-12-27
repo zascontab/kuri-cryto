@@ -45,10 +45,10 @@ void main() {
     });
 
     test('fromJson with missing optional fields', () {
-      final json = {
+      final json = <String, dynamic>{
         'exchange': 'kucoin',
-        'current_price': {},
-        'recommendation': {
+        'current_price': <String, dynamic>{},
+        'recommendation': <String, dynamic>{
           'action': 'WAIT',
           'confidence': 0.5,
         },
@@ -62,10 +62,10 @@ void main() {
     });
 
     test('computed properties', () {
-      final json = {
+      final json = <String, dynamic>{
         'exchange': 'kucoin',
-        'current_price': {},
-        'recommendation': {
+        'current_price': <String, dynamic>{},
+        'recommendation': <String, dynamic>{
           'action': 'BUY',
           'confidence': 0.85,
         },

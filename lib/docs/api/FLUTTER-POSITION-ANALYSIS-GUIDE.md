@@ -46,7 +46,7 @@ Tool: calculate_rsi, calculate_macd, calculate_ema
 ```dart
 class PositionService {
   final Dio dio;
-  static const baseUrl = 'http://192.168.100.145:10600';
+  static const baseUrl = 'http://192.168.1.6:10600';
   
   PositionService(this.dio);
   

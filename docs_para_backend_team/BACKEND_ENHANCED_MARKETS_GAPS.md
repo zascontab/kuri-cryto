@@ -29,7 +29,7 @@ Se ha detectado una **discrepancia significativa** entre la documentación del e
 
 **Request**:
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -231,13 +231,13 @@ type MarketFeatures struct {
 **Evidencia** (Verificado 2025-11-27):
 ```bash
 # Request CON market_type="spot"
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}'
 # Response: {"count":3,"exchange":"kucoin","markets":["BTC-USDT","ETH-USDT","SHIB-USDT"]}
 
 # Request CON market_type="futures"
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 # Response: {"count":3,"exchange":"kucoin","markets":["BTC-USDT","ETH-USDT","SHIB-USDT"]}  # ❌ EXACTAMENTE EL MISMO RESULTADO

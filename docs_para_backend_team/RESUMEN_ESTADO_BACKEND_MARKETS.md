@@ -61,7 +61,7 @@ Flutter implementó un **fallback local** que:
 
 ### Request con market_type="futures"
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 ```
@@ -82,7 +82,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ### Request con market_type="spot"
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}'
 ```
@@ -109,7 +109,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 #### Request con market_type="futures" usando get_pairs_by_type
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 ```
@@ -136,7 +136,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 #### Request con market_type="spot" usando get_pairs_by_type
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}'
 ```

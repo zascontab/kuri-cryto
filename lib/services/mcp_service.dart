@@ -1,6 +1,7 @@
 import 'dart:developer' as developer;
 import 'package:dio/dio.dart';
 import '../config/api_config.dart';
+import '../config/environment.dart';
 import 'api_exception.dart';
 
 /// Servicio genérico para llamadas MCP Tools via JSON-RPC 2.0
@@ -97,7 +98,7 @@ class MCPService {
         },
       );
 
-      // Validar respuesta JSON-RPC
+      // Validar respuesta JSON-RPC 2.0
       if (response.data == null) {
         throw ApiException(
           message: 'Empty response from MCP server',
@@ -218,16 +219,19 @@ class MCPService {
 
   /// Obtiene la lista de herramientas disponibles
   ///
-  /// NOTA: Este método asume que existe una herramienta 'list_tools'.
-  /// Verificar con la documentación del backend si está disponible.
+  /// Usa el endpoint /tools del MCP Server que devuelve la lista completa
   Future<List<String>> getAvailableTools() async {
     try {
-      final result = await callTool(
-        toolName: 'list_tools',
-        arguments: {},
-      );
+      final response = await _dio.get(ApiConfig.mcpToolsUrl);
 
-      return (result['tools'] as List).cast<String>();
+      if (response.data == null) {
+        return [];
+      }
+
+      final data = response.data as Map<String, dynamic>;
+      final tools = data['tools'] as List;
+
+      return tools.map((tool) => tool['name'] as String).toList();
     } catch (e) {
       developer.log(
         'Could not fetch available tools: $e',
@@ -280,7 +284,7 @@ class MCPService {
       return ApiException(
         message: 'Connection timeout - check network connection',
         code: 'TIMEOUT',
-        details: 'Verify server is running at ${ApiConfig.serverIp}',
+        details: 'Verify server is running at ${Environment.serverIp}',
       );
     }
 

@@ -27,7 +27,7 @@ final comprehensiveAnalysisServiceProvider =
 typedef ComprehensiveAnalysisServiceRef
     = AutoDisposeProviderRef<ComprehensiveAnalysisService>;
 String _$comprehensiveAnalysisNotifierHash() =>
-    r'9befd648b392b66a79103b74a96ed55887740cee';
+    r'0e3356bc1dcacaab0e43f0fe437e517ce67e4768';
 
 /// Copied from Dart SDK
 class _SystemHash {

@@ -383,7 +383,7 @@ Antes de empezar, asegúrate de:
 - [ ] Revisar modelos de ejemplo
 - [ ] Probar endpoints con curl
 - [ ] Configurar entorno de desarrollo
-- [ ] Tener acceso al backend (192.168.100.145:10600)
+- [ ] Tener acceso al backend (192.168.1.6:10600)
 
 ---
 

@@ -106,7 +106,7 @@ import 'package:dio/dio.dart';
 
 Future<void> testConnection() async {
   final dio = Dio();
-  final response = await dio.get('http://192.168.100.145:9090/health');
+  final response = await dio.get('http://192.168.1.6:9090/health');
   print('✅ Connected: ${response.data}');
 }
 ```
@@ -175,9 +175,9 @@ PriceWidget(pair: 'BTC-USDT')
 
 ### Endpoints
 ```
-Gateway:     http://192.168.100.145:9090
-MCP Server:  http://192.168.100.145:10600
-Scalping:    http://192.168.100.145:8081
+Gateway:     http://192.168.1.6:9090
+MCP Server:  http://192.168.1.6:10600
+Scalping:    http://192.168.1.6:8081
 
 New Endpoints:
 - /api/v1/ai-bot/comprehensive-analysis ⭐ NEW
@@ -185,7 +185,7 @@ New Endpoints:
 
 ### Health Check
 ```bash
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 # Response: {"status":"ok","services":["mcp_server","scalping_api"]}
 ```
 
@@ -246,9 +246,9 @@ final response = await dio.get(
 ### Network Setup
 ```dart
 class ApiConfig {
-  static const String baseUrl = 'http://192.168.100.145:9090';
-  static const String mcpServerUrl = 'http://192.168.100.145:10600';
-  static const String scalpingUrl = 'http://192.168.100.145:8081';
+  static const String baseUrl = 'http://192.168.1.6:9090';
+  static const String mcpServerUrl = 'http://192.168.1.6:10600';
+  static const String scalpingUrl = 'http://192.168.1.6:8081';
 }
 ```
 
@@ -327,16 +327,16 @@ final dio = Dio(BaseOptions(
 - **Implementation Spec**: `../IMPLEMENTATION-SPEC.md`
 
 ### Server Info
-- **IP**: 192.168.100.145
+- **IP**: 192.168.1.6
 - **Ports**: 9090 (Gateway), 10600 (MCP), 8081 (Scalping)
 - **Status**: Active 24/7 (systemd managed)
 - **Uptime**: Auto-restart on failure
 
 ### Health Endpoints
 ```
-http://192.168.100.145:9090/health
-http://192.168.100.145:10600/health
-http://192.168.100.145:10600/api/v1/ai-bot/status
+http://192.168.1.6:9090/health
+http://192.168.1.6:10600/health
+http://192.168.1.6:10600/api/v1/ai-bot/status
 ```
 
 ---
@@ -434,7 +434,7 @@ DONE! 🎉
 
 Before starting development:
 - [ ] Read FLUTTER-QUICK-START.md
-- [ ] Verify server is accessible (ping 192.168.100.145)
+- [ ] Verify server is accessible (ping 192.168.1.6)
 - [ ] Test health endpoint
 - [ ] Add Dio to pubspec.yaml
 - [ ] Create ApiConfig class

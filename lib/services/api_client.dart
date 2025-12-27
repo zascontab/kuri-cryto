@@ -285,7 +285,8 @@ class _RetryInterceptor extends Interceptor {
     }
 
     // Don't retry if max retries exceeded
-    final retriesLeft = options.extra['retries_left'] as int? ?? ApiConfig.maxRetries;
+    final retriesLeft =
+        options.extra['retries_left'] as int? ?? ApiConfig.maxRetries;
     if (retriesLeft <= 0) {
       return handler.next(err);
     }
@@ -393,7 +394,8 @@ class _ErrorInterceptor extends Interceptor {
               response: err.response,
               type: err.type,
               error: RateLimitException(
-                retryAfter: retryAfter != null ? int.tryParse(retryAfter) : null,
+                retryAfter:
+                    retryAfter != null ? int.tryParse(retryAfter) : null,
               ),
             ),
           );
@@ -424,7 +426,8 @@ class _ErrorInterceptor extends Interceptor {
                     response: err.response,
                     type: err.type,
                     error: RiskLimitExceededException(
-                      currentValue: data['details']?['current_drawdown']?.toDouble(),
+                      currentValue:
+                          data['details']?['current_drawdown']?.toDouble(),
                       maxValue: data['details']?['max_drawdown']?.toDouble(),
                     ),
                   ),
@@ -486,6 +489,7 @@ class _ErrorInterceptor extends Interceptor {
                     response: err.response,
                     type: err.type,
                     error: ValidationException(
+                      'Invalid data',
                       fieldErrors: data['details']?['field_errors'] != null
                           ? Map<String, List<String>>.from(
                               (data['details']['field_errors'] as Map).map(

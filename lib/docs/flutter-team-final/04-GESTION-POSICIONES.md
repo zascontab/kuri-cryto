@@ -118,7 +118,7 @@ class PositionsScreen extends StatelessWidget {
 | EMA | POST /tools/call | `calculate_ema` |
 | Precio | POST /tools/call | `get_ticker` |
 
-**Base URL:** `http://192.168.100.145:10600`
+**Base URL:** `http://192.168.1.6:10600`
 
 ---
 
@@ -293,9 +293,9 @@ Todos los widgets incluyen:
 5. [flutter/API-ENDPOINTS-REFERENCE.md](flutter/API-ENDPOINTS-REFERENCE.md) - API
 
 ### Server Status:
-- URL: http://192.168.100.145:10600
+- URL: http://192.168.1.6:10600
 - Status: ✅ Online 24/7
-- Health: http://192.168.100.145:10600/health
+- Health: http://192.168.1.6:10600/health
 
 ---
 

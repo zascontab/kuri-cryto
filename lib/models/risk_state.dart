@@ -95,7 +95,8 @@ class RiskState {
     final dailyRisk = currentDrawdownDaily.abs() / maxDailyDrawdown;
     final weeklyRisk = currentDrawdownWeekly.abs() / maxWeeklyDrawdown;
     final monthlyRisk = currentDrawdownMonthly.abs() / maxMonthlyDrawdown;
-    final lossRisk = consecutiveLosses / maxConsecutiveLosses;
+    final lossRisk =
+        consecutiveLosses.toDouble() / maxConsecutiveLosses.toDouble();
     final exposureRisk = totalExposure / maxTotalExposure;
 
     return dailyRisk > threshold ||
@@ -135,7 +136,8 @@ class RiskState {
   double getRiskLevel() {
     final dailyRisk = (currentDrawdownDaily.abs() / maxDailyDrawdown) * 100;
     final weeklyRisk = (currentDrawdownWeekly.abs() / maxWeeklyDrawdown) * 100;
-    final monthlyRisk = (currentDrawdownMonthly.abs() / maxMonthlyDrawdown) * 100;
+    final monthlyRisk =
+        (currentDrawdownMonthly.abs() / maxMonthlyDrawdown) * 100;
     final lossRisk = (consecutiveLosses / maxConsecutiveLosses) * 100;
     final exposureRisk = (totalExposure / maxTotalExposure) * 100;
 
@@ -258,8 +260,10 @@ class RiskState {
   }) {
     return RiskState(
       currentDrawdownDaily: currentDrawdownDaily ?? this.currentDrawdownDaily,
-      currentDrawdownWeekly: currentDrawdownWeekly ?? this.currentDrawdownWeekly,
-      currentDrawdownMonthly: currentDrawdownMonthly ?? this.currentDrawdownMonthly,
+      currentDrawdownWeekly:
+          currentDrawdownWeekly ?? this.currentDrawdownWeekly,
+      currentDrawdownMonthly:
+          currentDrawdownMonthly ?? this.currentDrawdownMonthly,
       totalExposure: totalExposure ?? this.totalExposure,
       exposureBySymbol: exposureBySymbol ?? this.exposureBySymbol,
       consecutiveLosses: consecutiveLosses ?? this.consecutiveLosses,
@@ -307,15 +311,15 @@ class RiskState {
     if (identical(this, other)) return true;
 
     return other is RiskState &&
-      other.currentDrawdownDaily == currentDrawdownDaily &&
-      other.currentDrawdownWeekly == currentDrawdownWeekly &&
-      other.currentDrawdownMonthly == currentDrawdownMonthly &&
-      other.totalExposure == totalExposure &&
-      _mapEquals(other.exposureBySymbol, exposureBySymbol) &&
-      other.consecutiveLosses == consecutiveLosses &&
-      other.riskMode == riskMode &&
-      other.killSwitchActive == killSwitchActive &&
-      other.lastUpdate == lastUpdate;
+        other.currentDrawdownDaily == currentDrawdownDaily &&
+        other.currentDrawdownWeekly == currentDrawdownWeekly &&
+        other.currentDrawdownMonthly == currentDrawdownMonthly &&
+        other.totalExposure == totalExposure &&
+        _mapEquals(other.exposureBySymbol, exposureBySymbol) &&
+        other.consecutiveLosses == consecutiveLosses &&
+        other.riskMode == riskMode &&
+        other.killSwitchActive == killSwitchActive &&
+        other.lastUpdate == lastUpdate;
   }
 
   @override
@@ -325,7 +329,8 @@ class RiskState {
       currentDrawdownWeekly,
       currentDrawdownMonthly,
       totalExposure,
-      Object.hashAll(exposureBySymbol.entries.map((e) => Object.hash(e.key, e.value))),
+      Object.hashAll(
+          exposureBySymbol.entries.map((e) => Object.hash(e.key, e.value))),
       consecutiveLosses,
       riskMode,
       killSwitchActive,

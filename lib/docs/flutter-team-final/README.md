@@ -168,7 +168,7 @@ import 'package:dio/dio.dart';
 
 class TradingApiClient {
   final Dio dio = Dio();
-  final String baseUrl = 'http://192.168.100.145:10600';
+  final String baseUrl = 'http://192.168.1.6:10600';
 
   TradingApiClient() {
     dio.options.baseUrl = baseUrl;

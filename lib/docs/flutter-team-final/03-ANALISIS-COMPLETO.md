@@ -23,7 +23,7 @@
 
 ```dart
 final response = await dio.post(
-  'http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis',
+  'http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis',
   data: {
     'symbol': 'DOGE-USDT',
     'exchange': 'kucoin', // opcional, default: kucoin
@@ -780,7 +780,7 @@ class _ComprehensiveAnalysisScreenState extends State<ComprehensiveAnalysisScree
     
     try {
       final response = await dio.post(
-        'http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis',
+        'http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis',
         data: {
           'symbol': widget.symbol,
           'exchange': 'kucoin',

@@ -21,7 +21,7 @@ El sistema de gestión de posiciones de futuros funciona correctamente. Esta gu�
 **Endpoint**: `get_futures_positions`
 
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -84,7 +84,7 @@ curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
 **Endpoint**: `close_futures_position`
 
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -195,7 +195,7 @@ close_futures_position → cierra los 3 restantes
 Future<List<Map<String, dynamic>>> getFuturesPositions() async {
   final dio = Dio();
   final response = await dio.post(
-    'http://192.168.100.145:9090/api/mcp/tools/execute',
+    'http://192.168.1.6:9090/api/mcp/tools/execute',
     data: {
       'jsonrpc': '2.0',
       'method': 'tools/call',
@@ -221,7 +221,7 @@ Future<List<Map<String, dynamic>>> getFuturesPositions() async {
 Future<Map<String, dynamic>> closeFuturesPosition(String symbol) async {
   final dio = Dio();
   final response = await dio.post(
-    'http://192.168.100.145:9090/api/mcp/tools/execute',
+    'http://192.168.1.6:9090/api/mcp/tools/execute',
     data: {
       'jsonrpc': '2.0',
       'method': 'tools/call',

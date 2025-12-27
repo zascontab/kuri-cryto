@@ -307,7 +307,7 @@ class MarketTypeDemoScreen extends ConsumerWidget {
             const SizedBox(height: 12),
             LinearProgressIndicator(
               value: riskLevel / 100,
-              backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+              backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
               color: riskColor,
               minHeight: 8,
             ),

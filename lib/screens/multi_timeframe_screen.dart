@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/analysis.dart';
 import '../providers/analysis_provider.dart';
+import '../providers/selected_symbol_provider.dart' as symbol_provider;
+import '../widgets/symbol_selector.dart';
 import '../l10n/l10n_export.dart';
 
 /// Multi-Timeframe Analysis Screen
@@ -20,7 +22,6 @@ class MultiTimeframeScreen extends ConsumerStatefulWidget {
 class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  String _selectedSymbol = 'BTCUSDT';
 
   final List<String> _availableSymbols = [
     'BTCUSDT',
@@ -54,8 +55,9 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
   }
 
   void _performAnalysis() {
+    final selectedSymbol = ref.read(symbol_provider.selectedSymbolProvider);
     ref.read(multiTimeframeAnalysisNotifierProvider.notifier).analyze(
-          _selectedSymbol,
+          selectedSymbol,
           timeframes: _timeframes.map((t) => t.value).toList(),
         );
   }
@@ -147,32 +149,12 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
           ),
           const SizedBox(width: 16),
           Expanded(
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              decoration: BoxDecoration(
-                border: Border.all(color: theme.colorScheme.outline),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: DropdownButton<String>(
-                value: _selectedSymbol,
-                isExpanded: true,
-                underline: const SizedBox(),
-                items: _availableSymbols.map((symbol) {
-                  return DropdownMenuItem(
-                    value: symbol,
-                    child: Text(symbol),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  if (value != null) {
-                    setState(() {
-                      _selectedSymbol = value;
-                    });
-                    HapticFeedback.selectionClick();
-                    _performAnalysis();
-                  }
-                },
-              ),
+            child: SymbolSelector(
+              compact: true,
+              onSymbolChanged: () {
+                HapticFeedback.selectionClick();
+                _performAnalysis();
+              },
             ),
           ),
         ],
@@ -361,7 +343,8 @@ class _MultiTimeframeScreenState extends ConsumerState<MultiTimeframeScreen>
                       width: 100,
                       child: LinearProgressIndicator(
                         value: analysis.strength,
-                        backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                        backgroundColor:
+                            theme.colorScheme.surfaceContainerHighest,
                         color: signalColor,
                         minHeight: 8,
                       ),

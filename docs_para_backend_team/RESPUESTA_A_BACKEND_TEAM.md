@@ -20,7 +20,7 @@ Ejecutamos las verificaciones y confirmamos:
 
 ```bash
 # Test Futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -56,7 +56,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 ```bash
 # Test Futures
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -159,7 +159,7 @@ ls -la internal/mcp-trading/tools/marketdata/market_features.go
 
 ```bash
 # Verificar si tiene campo "pairs" (formato nuevo)
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -206,7 +206,7 @@ ls -la bin/trading-mcp
 sleep 5
 
 # 8. Verificar con nuestro comando
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -301,7 +301,7 @@ echo "🔍 Verificando get_markets..."
 
 # Test 1: Verificar formato
 echo -n "Test 1 - Formato enhanced (debe tener 'pairs'): "
-HAS_PAIRS=$(curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+HAS_PAIRS=$(curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -321,11 +321,11 @@ fi
 
 # Test 2: Verificar filtrado
 echo -n "Test 2 - Filtrado por market_type: "
-SPOT_RESPONSE=$(curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+SPOT_RESPONSE=$(curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"spot"}},"id":1}')
 
-FUTURES_RESPONSE=$(curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+FUTURES_RESPONSE=$(curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_markets","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}')
 
@@ -337,7 +337,7 @@ fi
 
 # Test 3: Verificar features
 echo -n "Test 3 - Incluye features: "
-HAS_FEATURES=$(curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+HAS_FEATURES=$(curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -357,7 +357,7 @@ fi
 
 # Test 4: Verificar version
 echo -n "Test 4 - Version 2.0: "
-VERSION=$(curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+VERSION=$(curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

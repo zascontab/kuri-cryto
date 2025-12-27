@@ -18,9 +18,9 @@ Todos los endpoints funcionan **sin headers de autenticación**. Simplemente hac
 ### ✅ Lo que YA Está Correcto
 
 1. **URLs Configuradas Correctamente** ✅
-   - `mcpDirectUrl`: `http://192.168.100.145:10600` ✅
-   - `aiBotBaseUrl`: `http://192.168.100.145:10600/api/v1/ai-bot` ✅
-   - `comprehensiveAnalysisUrl`: `http://192.168.100.145:10600/api/v1/ai-bot/comprehensive-analysis` ✅
+   - `mcpDirectUrl`: `http://192.168.1.6:10600` ✅
+   - `aiBotBaseUrl`: `http://192.168.1.6:10600/api/v1/ai-bot` ✅
+   - `comprehensiveAnalysisUrl`: `http://192.168.1.6:10600/api/v1/ai-bot/comprehensive-analysis` ✅
 
 2. **No Estamos Usando Autenticación** ✅
    - Búsqueda en código: NO se llama a `setAuthToken()` en ningún lugar
@@ -41,7 +41,7 @@ Todos los endpoints funcionan **sin headers de autenticación**. Simplemente hac
 ```dart
 class TradingApiClient {
   final Dio dio = Dio();
-  final String baseUrl = 'http://192.168.100.145:10600';
+  final String baseUrl = 'http://192.168.1.6:10600';
 
   TradingApiClient() {
     dio.options.baseUrl = baseUrl;

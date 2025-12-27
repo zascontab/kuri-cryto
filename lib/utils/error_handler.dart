@@ -114,9 +114,7 @@ String _getApiExceptionMessage(ApiException exception) {
 
   if (exception is PositionNotFoundException) {
     final posId = exception.positionId;
-    return posId != null
-        ? 'Position $posId not found.'
-        : 'Position not found.';
+    return posId != null ? 'Position $posId not found.' : 'Position not found.';
   }
 
   if (exception is StrategyNotFoundException) {
@@ -265,7 +263,6 @@ String _getDioExceptionMessage(DioException exception) {
       return 'No internet connection. Please check your network.';
 
     case DioExceptionType.unknown:
-    default:
       return 'Network error. Please check your connection.';
   }
 }
@@ -640,7 +637,7 @@ Future<T?> withErrorHandling<T>(
   } catch (e, stackTrace) {
     logError(e, stackTrace);
 
-    if (showSnackbar && context != null) {
+    if (showSnackbar && context != null && context.mounted) {
       showErrorSnackbar(context, e);
     }
 

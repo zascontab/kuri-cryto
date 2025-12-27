@@ -1,3 +1,5 @@
+import '../config/environment.dart';
+
 /// User-friendly error messages for common error codes
 class ErrorMessages {
   // Constructor privado para prevenir instanciación
@@ -106,7 +108,7 @@ class ErrorMessages {
   }
 
   static String _getServerInfo() {
-    return '192.168.100.145 (Gateway: 9090, MCP: 10600)';
+    return '${Environment.serverIp} (Gateway: ${Environment.gatewayPort}, MCP: ${Environment.mcpPort})';
   }
 
   /// Check if error is recoverable (user can retry)

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/ai_bot_provider.dart';
+import '../providers/comprehensive_analysis_provider.dart';
 import '../models/comprehensive_analysis.dart';
+import '../models/technical_indicators.dart';
 import '../widgets/scenarios_widget.dart';
 import '../widgets/recommendation_widget.dart';
 import '../widgets/multi_timeframe_widget.dart';
@@ -32,16 +33,15 @@ class _McpSignalsScreenState extends ConsumerState<McpSignalsScreen> {
   }
 
   void _loadAnalysis() {
-    ref.read(comprehensiveAnalysisNotifierProvider.notifier).loadAnalysis(
-          symbol: widget.pair,
-          exchange: widget.exchange,
-        );
+    // El provider se carga automáticamente cuando se observa
+    ref.invalidate(comprehensiveAnalysisNotifierProvider(widget.pair));
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final analysisAsync = ref.watch(comprehensiveAnalysisNotifierProvider);
+    final analysisAsync =
+        ref.watch(comprehensiveAnalysisNotifierProvider(widget.pair));
 
     return Scaffold(
       appBar: AppBar(
@@ -55,29 +55,6 @@ class _McpSignalsScreenState extends ConsumerState<McpSignalsScreen> {
       ),
       body: analysisAsync.when(
         data: (analysis) {
-          if (analysis == null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.info_outline,
-                    size: 64,
-                    color: theme.colorScheme.onSurfaceVariant,
-                  ),
-                  const SizedBox(height: 16),
-                  const Text('No analysis available'),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: _loadAnalysis,
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Load Analysis'),
-                  ),
-                ],
-              ),
-            );
-          }
-
           return RefreshIndicator(
             onRefresh: () async {
               _loadAnalysis();
@@ -99,7 +76,8 @@ class _McpSignalsScreenState extends ConsumerState<McpSignalsScreen> {
                   ),
                   const SizedBox(height: 16),
                   MultiTimeframeWidget(
-                    technicalIndicators: analysis.technicalIndicators,
+                    technicalIndicators: _convertTechnicalIndicators(
+                        analysis.technicalIndicators),
                   ),
                 ],
               ),
@@ -243,5 +221,44 @@ class _McpSignalsScreenState extends ConsumerState<McpSignalsScreen> {
         ),
       ],
     );
+  }
+
+  /// Convert ComprehensiveTechnicalIndicators to TechnicalIndicators
+  Map<String, TechnicalIndicators> _convertTechnicalIndicators(
+      Map<String, ComprehensiveTechnicalIndicators> comprehensive) {
+    final converted = <String, TechnicalIndicators>{};
+
+    for (final entry in comprehensive.entries) {
+      final comp = entry.value;
+      converted[entry.key] = TechnicalIndicators(
+        rsi: comp.rsi?.value,
+        bollingerBands: comp.bollingerBands != null
+            ? BollingerBands(
+                upper: comp.bollingerBands!.upper,
+                middle: comp.bollingerBands!.middle,
+                lower: comp.bollingerBands!.lower,
+                bandwidth:
+                    (comp.bollingerBands!.upper - comp.bollingerBands!.lower) /
+                        comp.bollingerBands!.middle,
+                percentB: (comp.bollingerBands!.currentPrice -
+                        comp.bollingerBands!.lower) /
+                    (comp.bollingerBands!.upper - comp.bollingerBands!.lower),
+              )
+            : null,
+        macd: comp.macd != null
+            ? MACD(
+                macd: comp.macd!.macd,
+                signal: comp.macd!.signal,
+                histogram: comp.macd!.histogram,
+                trend: comp.macd!.trend ?? 'neutral',
+              )
+            : null,
+        timestamp: DateTime.now(),
+        symbol: '${widget.exchange}:${widget.pair}',
+        timeframe: comp.timeframe,
+      );
+    }
+
+    return converted;
   }
 }

@@ -281,7 +281,7 @@ final alertServiceProvider = AutoDisposeProvider<AlertService>.internal(
 );
 
 typedef AlertServiceRef = AutoDisposeProviderRef<AlertService>;
-String _$aiBotServiceHash() => r'6a2aa91de7e08b68cb719febd331dc4783b13a77';
+String _$aiBotServiceHash() => r'efcef304233c03e8d56757bf844e9803ac8c6cbe';
 
 /// Provider for AI Bot Service
 ///
@@ -295,7 +295,7 @@ String _$aiBotServiceHash() => r'6a2aa91de7e08b68cb719febd331dc4783b13a77';
 ///
 /// Copied from [aiBotService].
 @ProviderFor(aiBotService)
-final aiBotServiceProvider = AutoDisposeProvider<AiBotService>.internal(
+final aiBotServiceProvider = AutoDisposeProvider<AIBotService>.internal(
   aiBotService,
   name: r'aiBotServiceProvider',
   debugGetCreateSourceHash:
@@ -304,7 +304,7 @@ final aiBotServiceProvider = AutoDisposeProvider<AiBotService>.internal(
   allTransitiveDependencies: null,
 );
 
-typedef AiBotServiceRef = AutoDisposeProviderRef<AiBotService>;
+typedef AiBotServiceRef = AutoDisposeProviderRef<AIBotService>;
 String _$comprehensiveAnalysisServiceHash() =>
     r'bfb2ef700251c6796261e425d578991a7fd85af3';
 

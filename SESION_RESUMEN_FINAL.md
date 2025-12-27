@@ -49,7 +49,7 @@ return await service.getPositions(
 ### 5. 📊 Verificación Final (Flutter Team)
 **Test realizado**:
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_futures_positions","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 ```
@@ -143,7 +143,7 @@ curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
 ## 📌 Notas Técnicas
 
 ### Configuración del Backend
-- **URL**: `http://192.168.100.145:9090`
+- **URL**: `http://192.168.1.6:9090`
 - **Endpoint**: `/api/mcp/tools/execute`
 - **Exchange probado**: KuCoin
 - **Market type**: futures

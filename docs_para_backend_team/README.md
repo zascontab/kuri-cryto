@@ -137,7 +137,7 @@ Esta carpeta contiene toda la documentación relacionada con los problemas ident
 
 **Request Futures**:
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -d '{"name":"get_markets","arguments":{"market_type":"futures"}}'
 ```
 
@@ -145,7 +145,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 **Request Spot**:
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -d '{"name":"get_markets","arguments":{"market_type":"spot"}}'
 ```
 
@@ -157,7 +157,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 **Request Futures**:
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -d '{"name":"get_pairs_by_type","arguments":{"market_type":"futures"}}'
 ```
 
@@ -165,7 +165,7 @@ curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 **Request Spot**:
 ```bash
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -d '{"name":"get_pairs_by_type","arguments":{"market_type":"spot"}}'
 ```
 

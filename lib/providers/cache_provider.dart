@@ -1,85 +1,57 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/cache_service.dart';
-import '../models/position.dart';
-import '../models/trade.dart';
-import '../models/strategy.dart';
-import '../models/risk_state.dart';
-import '../models/metrics.dart';
-import '../models/system_status.dart';
 
 /// Provider for CacheService singleton
 final cacheServiceProvider = Provider<CacheService>((ref) {
-  return CacheService();
-});
-
-/// Provider for cached positions with auto-refresh
-final cachedPositionsProvider = FutureProvider<List<Position>>((ref) async {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getAllPositions();
-});
-
-/// Provider for cached open positions
-final cachedOpenPositionsProvider = Provider<List<Position>>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getOpenPositions();
-});
-
-/// Provider for cached strategies
-final cachedStrategiesProvider = Provider<List<Strategy>>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getAllStrategies();
-});
-
-/// Provider for cached active strategies
-final cachedActiveStrategiesProvider = Provider<List<Strategy>>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getActiveStrategies();
-});
-
-/// Provider for cached trades
-final cachedTradesProvider = Provider<List<Trade>>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getAllTrades();
-});
-
-/// Provider for recent cached trades (last 24h)
-final cachedRecentTradesProvider = Provider<List<Trade>>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getRecentTrades();
-});
-
-/// Provider for cached risk state
-final cachedRiskStateProvider = Provider<RiskState?>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getRiskState();
-});
-
-/// Provider for cached metrics
-final cachedMetricsProvider = Provider<Metrics?>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getMetrics();
-});
-
-/// Provider for cached system status
-final cachedSystemStatusProvider = Provider<SystemStatus?>((ref) {
-  final cache = ref.watch(cacheServiceProvider);
-  return cache.getSystemStatus();
+  return CacheService.instance;
 });
 
 /// Provider for cache statistics
-final cacheStatsProvider = Provider<Map<String, dynamic>>((ref) {
+final cacheStatsProvider = Provider<CacheStats>((ref) {
   final cache = ref.watch(cacheServiceProvider);
-  return cache.getCacheStats();
+  return cache.getStats();
 });
 
-/// Provider to check if cache needs sync for a specific data type
-final cacheNeedsSyncProvider = Provider.family<bool, String>((ref, dataType) {
+/// Provider to check if a key exists in cache
+final cacheHasKeyProvider = Provider.family<bool, String>((ref, key) {
   final cache = ref.watch(cacheServiceProvider);
-  return cache.needsSync(dataType);
+  return cache.has(key);
 });
 
-/// Provider to check if cache is fresh for a specific data type
-final cacheIsFreshProvider = Provider.family<bool, String>((ref, dataType) {
+/// Provider to get cached data by key
+final cachedDataProvider = Provider.family<dynamic, String>((ref, key) {
   final cache = ref.watch(cacheServiceProvider);
-  return cache.isCacheFresh(dataType);
+  return cache.get(key);
+});
+
+/// Provider for comprehensive analysis cache
+final cachedAnalysisProvider =
+    Provider.family<Map<String, dynamic>?, String>((ref, symbol) {
+  final cache = ref.watch(cacheServiceProvider);
+  final cacheKey = CacheKeys.comprehensiveAnalysisKey(symbol);
+  return cache.get<Map<String, dynamic>>(cacheKey);
+});
+
+/// Provider for bot status cache
+final cachedBotStatusProvider = Provider<Map<String, dynamic>?>((ref) {
+  final cache = ref.watch(cacheServiceProvider);
+  return cache.get<Map<String, dynamic>>(CacheKeys.botStatus);
+});
+
+/// Provider for bot config cache
+final cachedBotConfigProvider = Provider<Map<String, dynamic>?>((ref) {
+  final cache = ref.watch(cacheServiceProvider);
+  return cache.get<Map<String, dynamic>>(CacheKeys.botConfig);
+});
+
+/// Provider for bot positions cache
+final cachedBotPositionsProvider = Provider<Map<String, dynamic>?>((ref) {
+  final cache = ref.watch(cacheServiceProvider);
+  return cache.get<Map<String, dynamic>>(CacheKeys.botPositions);
+});
+
+/// Provider for health check cache
+final cachedHealthCheckProvider = Provider<Map<String, dynamic>?>((ref) {
+  final cache = ref.watch(cacheServiceProvider);
+  return cache.get<Map<String, dynamic>>(CacheKeys.healthCheck);
 });

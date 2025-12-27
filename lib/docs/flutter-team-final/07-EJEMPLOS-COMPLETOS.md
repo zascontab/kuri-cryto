@@ -44,7 +44,7 @@ class TradingApiClient {
   
   TradingApiClient({String? baseUrl}) 
       : _dio = Dio(BaseOptions(
-          baseUrl: baseUrl ?? 'http://192.168.100.145:10600',
+          baseUrl: baseUrl ?? 'http://192.168.1.6:10600',
           connectTimeout: Duration(seconds: 30),
           receiveTimeout: Duration(seconds: 30),
           headers: {'Content-Type': 'application/json'},

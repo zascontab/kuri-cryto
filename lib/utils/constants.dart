@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../config/environment.dart';
 
 /// Constantes de la aplicación
 ///
@@ -14,9 +15,13 @@ import 'package:flutter/material.dart';
 class ApiEndpoints {
   ApiEndpoints._(); // Constructor privado para prevenir instanciación
 
-  // Base URLs (via Gateway - deprecated, use ApiConfig instead)
-  static const String baseUrl = 'http://localhost:9090/api/scalping/api/v1';
-  static const String wsBaseUrl = 'ws://localhost:9090/ws';
+  // Base URLs (deprecated, use ApiConfig and Environment instead)
+  @Deprecated('Use ApiConfig.apiBaseUrl instead')
+  static String get baseUrl =>
+      '${Environment.gatewayBaseUrl}/api/scalping/api/v1';
+
+  @Deprecated('Use Environment.wsBaseUrl instead')
+  static String get wsBaseUrl => Environment.wsBaseUrl;
 
   // Autenticación
   static const String authLogin = '/auth/login';

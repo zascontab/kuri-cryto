@@ -123,10 +123,13 @@ class ErrorDisplay extends StatelessWidget {
     if (errorString.contains('TIMEOUT')) return 'TIMEOUT';
     if (errorString.contains('CONNECTION')) return 'CONNECTION_ERROR';
     if (errorString.contains('NETWORK')) return 'NETWORK_ERROR';
-    if (errorString.contains('INSUFFICIENT_BALANCE'))
+    if (errorString.contains('INSUFFICIENT_BALANCE')) {
       return 'INSUFFICIENT_BALANCE';
+    }
     if (errorString.contains('BOT_RUNNING') ||
-        errorString.contains('bot is already running')) return 'BOT_RUNNING';
+        errorString.contains('bot is already running')) {
+      return 'BOT_RUNNING';
+    }
     if (errorString.contains('POSITION_NOT_FOUND')) return 'POSITION_NOT_FOUND';
     if (errorString.contains('UNAUTHORIZED')) return 'UNAUTHORIZED';
     if (errorString.contains('FORBIDDEN')) return 'FORBIDDEN';
@@ -206,10 +209,13 @@ String? _extractErrorCode(Object error) {
   if (errorString.contains('TIMEOUT')) return 'TIMEOUT';
   if (errorString.contains('CONNECTION')) return 'CONNECTION_ERROR';
   if (errorString.contains('NETWORK')) return 'NETWORK_ERROR';
-  if (errorString.contains('INSUFFICIENT_BALANCE'))
+  if (errorString.contains('INSUFFICIENT_BALANCE')) {
     return 'INSUFFICIENT_BALANCE';
+  }
   if (errorString.contains('BOT_RUNNING') ||
-      errorString.contains('bot is already running')) return 'BOT_RUNNING';
+      errorString.contains('bot is already running')) {
+    return 'BOT_RUNNING';
+  }
   if (errorString.contains('POSITION_NOT_FOUND')) return 'POSITION_NOT_FOUND';
   if (errorString.contains('UNAUTHORIZED')) return 'UNAUTHORIZED';
   if (errorString.contains('FORBIDDEN')) return 'FORBIDDEN';

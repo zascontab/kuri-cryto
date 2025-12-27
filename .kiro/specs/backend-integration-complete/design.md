@@ -466,22 +466,217 @@ class ValidationException extends TradingApiException {
 - Integration tests
 - Documentation
 
+## AI Integration Architecture
+
+### AI-Specific Components
+
+#### AI Models
+```dart
+// LLM Analysis
+class LLMAnalysis {
+  final String provider;           // "google", "openai", "anthropic"
+  final String model;              // "gemini-2.5-flash", "gpt-4", "claude-3"
+  final String explanation;        // Explicación detallada del LLM
+  final List<String> keyFactors;   // Factores clave identificados
+  final String riskAssessment;     // "low", "medium", "high"
+  final double confidence;         // 0.0 - 1.0
+}
+
+// Sentiment Analysis
+class SentimentAnalysis {
+  final double overall;            // -1.0 (bearish) to 1.0 (bullish)
+  final String trend;              // "bullish", "bearish", "neutral"
+  final List<String> sources;     // ["news", "twitter", "reddit"]
+  final double confidence;         // 0.0 - 1.0
+}
+
+// AI Costs
+class AICosts {
+  final DailyCosts today;
+  final MonthlyCosts thisMonth;
+}
+
+// AI Status
+class AIStatus {
+  final LLMStatus llm;
+  final SentimentStatus sentiment;
+  final CostManagement costManagement;
+}
+```
+
+#### AI Services
+```dart
+class AIService {
+  Future<AIStatus> getAIStatus();
+  Future<AICosts> getAICosts();
+  Future<List<AINotification>> getAINotifications();
+  Future<ComprehensiveAnalysis> getAIAnalysis({
+    required String symbol,
+    required String exchange,
+    bool enableLLM = true,
+    bool enableSentiment = true,
+  });
+}
+
+class AIFallbackService {
+  Future<ComprehensiveAnalysis> getAnalysisWithFallback({
+    required String symbol,
+    required String exchange,
+    bool enableLLM = true,
+    bool enableSentiment = true,
+  });
+}
+```
+
+#### AI Providers
+```dart
+@riverpod
+class AIStatusNotifier extends _$AIStatusNotifier {
+  // Auto-refresh every 30 seconds
+  // Handle loading/error states
+  // Cache for 30 seconds
+}
+
+@riverpod
+class AICostsNotifier extends _$AICostsNotifier {
+  // Track daily usage
+  // Budget alerts
+  // Cache for 10 minutes
+}
+
+@riverpod
+class AINotificationsNotifier extends _$AINotificationsNotifier {
+  // Real-time notifications
+  // Mark as read functionality
+  // Unread count
+}
+```
+
+#### AI UI Components
+```dart
+class AIAnalysisCard extends StatelessWidget {
+  // Display LLM explanation
+  // Show confidence level
+  // Display key factors
+  // Risk assessment
+}
+
+class AIStatusIndicator extends ConsumerWidget {
+  // Compact and full modes
+  // LLM status
+  // Usage progress
+  // Budget tracking
+}
+
+class SentimentIndicator extends StatelessWidget {
+  // Visual sentiment display
+  // Trend indicators
+  // Source information
+}
+```
+
+### Enhanced Existing Components
+
+#### ComprehensiveAnalysis (Enhanced)
+```dart
+class ComprehensiveAnalysis {
+  // ... existing fields ...
+  
+  // NEW AI FIELDS
+  final LLMAnalysis? llmAnalysis;
+  final SentimentAnalysis? sentimentAnalysis;
+  
+  // Helpers
+  bool get hasLLMAnalysis => llmAnalysis != null;
+  bool get hasSentimentAnalysis => sentimentAnalysis != null;
+  bool get isAIEnhanced => hasLLMAnalysis || hasSentimentAnalysis;
+}
+```
+
+#### ComprehensiveAnalysisService (Enhanced)
+```dart
+class ComprehensiveAnalysisService {
+  Future<ComprehensiveAnalysis> getComprehensiveAnalysis({
+    required String symbol,
+    required String exchange,
+    bool enableLLM = true,
+    bool enableSentiment = true,
+    bool fallbackOnError = true,
+  });
+}
+```
+
+### AI Error Handling
+
+#### AI-Specific Exceptions
+```dart
+abstract class AIException implements Exception {
+  final String message;
+  final String? details;
+}
+
+class AIBudgetExceededException extends AIException {
+  final double currentSpent;
+  final double dailyBudget;
+}
+
+class AILimitReachedException extends AIException {
+  final int currentCalls;
+  final int dailyLimit;
+}
+
+class AIProviderUnavailableException extends AIException {
+  final String provider;
+}
+```
+
+#### Fallback Strategy
+1. **Try AI Analysis First**: If enableLLM or enableSentiment is true
+2. **Handle Specific Errors**:
+   - Budget exceeded → Inform user, continue with regular analysis
+   - Limit reached → Inform user, continue with regular analysis
+   - Provider unavailable → Silent fallback to regular analysis
+   - Other errors → Log and fallback to regular analysis
+3. **Always Provide Analysis**: Never fail completely, always return some analysis
+
+### AI Caching Strategy
+- **AI Analysis**: 5 minutes (balance between freshness and cost)
+- **AI Status**: 30 seconds (frequent updates for monitoring)
+- **AI Costs**: 10 minutes (moderate frequency)
+- **Notifications**: No cache (real-time updates)
+
+### AI Performance Considerations
+- **Smart Caching**: Reduce redundant AI calls
+- **Fallback First**: Show regular analysis immediately, enhance with AI
+- **Budget Monitoring**: Proactive warnings at 80% budget usage
+- **Circuit Breaker**: Stop AI calls when budget/limits reached
+- **Background Loading**: Load AI data in background threads
+
 ## Migration Plan
 
 ### Existing Code
 - ✅ ComprehensiveAnalysisService existe
 - ✅ ComprehensiveAnalysis model existe (con market types)
 - ✅ MarketService existe (con solución híbrida)
-- ⚠️ Necesita refactoring para nuevos campos
+- ⚠️ Necesita refactoring para nuevos campos de IA
 
-### New Code
+### New AI Code
+- ❌ AIService (crear)
+- ❌ AIFallbackService (crear)
+- ❌ Modelos de IA (crear)
+- ❌ Providers de IA (crear)
+- ❌ Pantallas de IA (crear)
+- ❌ Componentes UI de IA (crear)
+
+### Existing Code to Enhance
 - ❌ AIBotService (crear)
 - ❌ HealthService (crear)
-- ❌ Nuevos modelos (crear)
-- ❌ Nuevos providers (crear)
-- ❌ Nuevas screens (crear)
+- ❌ Nuevos modelos base (crear)
+- ❌ Nuevos providers base (crear)
+- ❌ Nuevas screens base (crear)
 
 ### Refactoring Needed
-- ⚠️ ComprehensiveAnalysis model (agregar campos)
-- ⚠️ ComprehensiveAnalysisService (agregar market type support completo)
-- ⚠️ ComprehensiveAnalysisScreen (mejorar UI)
+- ⚠️ ComprehensiveAnalysis model (agregar campos de IA)
+- ⚠️ ComprehensiveAnalysisService (agregar soporte completo de IA)
+- ⚠️ ComprehensiveAnalysisScreen (integrar componentes de IA)
+- ⚠️ CacheService (agregar estrategias de caché de IA)

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 /// Custom AppBar with status badge and connection indicator
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final String status; // 'running', 'stopped', 'error'
+  final String status; // 'running', 'stopped', 'error', 'connecting'
   final bool isConnected;
   final VoidCallback? onSettingsTap;
 
@@ -18,26 +18,45 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Color _getStatusColor() {
     switch (status.toLowerCase()) {
       case 'running':
-        return const Color(0xFF4CAF50); // Green
+        return const Color(0xFF10B981); // Green
+      case 'connecting':
+        return const Color(0xFF6B7280); // Gray
       case 'stopped':
-        return Colors.grey;
+        return const Color(0xFF6B7280); // Gray
       case 'error':
-        return const Color(0xFFF44336); // Red
+        return const Color(0xFFEF4444); // Red
       default:
-        return Colors.grey;
+        return const Color(0xFF6B7280); // Gray
     }
   }
 
   IconData _getStatusIcon() {
     switch (status.toLowerCase()) {
       case 'running':
-        return Icons.play_circle_filled;
+        return Icons.check_circle;
+      case 'connecting':
+        return Icons.sync;
       case 'stopped':
         return Icons.stop_circle;
       case 'error':
-        return Icons.error;
+        return Icons.error_outline;
       default:
-        return Icons.help;
+        return Icons.help_outline;
+    }
+  }
+
+  String _getConnectionText() {
+    if (!isConnected) return 'Disconnected';
+
+    switch (status.toLowerCase()) {
+      case 'running':
+        return 'Connected';
+      case 'connecting':
+        return 'Connecting...';
+      case 'error':
+        return 'Error';
+      default:
+        return 'Unknown';
     }
   }
 
@@ -59,14 +78,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 width: 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: isConnected
-                      ? const Color(0xFF4CAF50)
-                      : const Color(0xFFF44336),
+                  color: _getStatusColor(),
                   shape: BoxShape.circle,
-                  boxShadow: isConnected
+                  boxShadow: isConnected && status.toLowerCase() == 'running'
                       ? [
                           BoxShadow(
-                            color: const Color(0xFF4CAF50).withValues(alpha: 0.5),
+                            color: _getStatusColor().withValues(alpha: 0.5),
                             blurRadius: 8,
                             spreadRadius: 2,
                           ),
@@ -76,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
               const SizedBox(width: 6),
               Text(
-                isConnected ? 'Connected' : 'Disconnected',
+                _getConnectionText(),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: colorScheme.onSurfaceVariant,
                 ),

@@ -250,28 +250,28 @@ get_markets(exchange)               // nuevo: todos los pares
 
 #### Test 1: WITH market_type (Antes causaba timeout) ✅
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_futures_positions","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 ```
 **Resultado**: ✅ 200 OK en 0.675 segundos (antes: 10+ seg timeout)
 
 #### Test 2: WITHOUT market_type (Backwards Compatibility) ✅
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_futures_positions","arguments":{"exchange":"kucoin"}},"id":1}'
 ```
 **Resultado**: ✅ 200 OK en < 1 segundo
 
 #### Test 3: Invalid market_type (Validación) ✅
 ```bash
-curl -X POST http://192.168.100.145:10600/mcp \
+curl -X POST http://192.168.1.6:10600/mcp \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_futures_positions","arguments":{"exchange":"kucoin","market_type":"invalid"}},"id":1}'
 ```
 **Resultado**: ✅ Error inmediato con mensaje claro (no timeout)
 
 #### Test 4: Through Gateway (Como lo usa Flutter) ✅
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -d '{"jsonrpc":"2.0","method":"tools/call","params":{"name":"get_futures_positions","arguments":{"exchange":"kucoin","market_type":"futures"}},"id":1}'
 ```
 **Resultado**: ✅ 200 OK en 0.526 segundos

@@ -1,3 +1,5 @@
+import 'environment.dart';
+
 /// Configuración de la API y constantes de la aplicación
 ///
 /// Este archivo contiene todas las configuraciones relacionadas con la API,
@@ -11,59 +13,78 @@ class ApiConfig {
   // ============================================================================
 
   // ============================================================================
-  // Network Configuration
+  // Network Configuration - Using Environment Variables
   // ============================================================================
 
-  /// IP del servidor backend
-  static const String serverIp = '192.168.100.145';
+  /// ⭐ RECOMENDADO - API Gateway
+  /// Enruta al Scalping API y MCP Server
+  static String get gatewayBaseUrl => Environment.gatewayBaseUrl;
 
-  /// ⭐ RECOMENDADO - API Gateway (puerto 9090)
-  /// Enruta al Scalping API (8081) y MCP Server (10600)
-  static const String gatewayBaseUrl = 'http://$serverIp:9090';
+  /// MATP Kong Gateway base URL
+  /// Sistema principal de trading con autenticación JWT y niveles progresivos
+  static String get matpKongGatewayUrl => Environment.matpKongGatewayUrl;
 
-  /// URL base del Scalping API (conexión directa al puerto 8081)
-  static const String scalpingDirectUrl = 'http://$serverIp:8081';
+  /// MATP API directa - para desarrollo
+  static String get matpDirectUrl => Environment.matpDirectUrl;
 
-  /// URL base del MCP Server (conexión directa al puerto 10600)
-  static const String mcpDirectUrl = 'http://$serverIp:10600';
+  /// URL base del Scalping API (conexión directa)
+  static String get scalpingDirectUrl => Environment.scalpingDirectUrl;
+
+  /// URL base del MCP Server (conexión directa)
+  static String get mcpDirectUrl => Environment.mcpDirectUrl;
 
   /// ⭐ URL base para ApiClient - Scalping API via Gateway
   /// Incluye el path completo hasta /scalping para que los servicios
   /// puedan usar paths relativos simples
-  static const String apiBaseUrl =
+  static String get apiBaseUrl =>
       '$gatewayBaseUrl/api/scalping/api/v1/scalping';
 
   // ============================================================================
   // MCP Server - AI Bot & Trading Tools Endpoints
   // ============================================================================
 
-  /// URL base para MCP Server tools execution (via Gateway)
-  static const String mcpToolsUrl = '$gatewayBaseUrl/api/mcp/tools/execute';
+  /// URL base para MCP Server tools execution
+  /// FIXED: El MCP Server usa JSON-RPC 2.0 en el endpoint raíz
+  static String get mcpToolsUrl {
+    return mcpDirectUrl; // Endpoint raíz del MCP Server
+  }
 
   /// URL base para AI Bot endpoints (conexión directa al MCP Server)
   /// ✅ NO REQUIERE AUTENTICACIÓN - Todos los endpoints son públicos
-  static const String aiBotBaseUrl = '$mcpDirectUrl/api/v1/ai-bot';
+  static String get aiBotBaseUrl => '$mcpDirectUrl/api/v1/ai-bot';
 
   /// URL para análisis comprehensivo con AI
   /// ✅ NO REQUIERE AUTENTICACIÓN
-  static const String comprehensiveAnalysisUrl =
+  static String get comprehensiveAnalysisUrl =>
       '$aiBotBaseUrl/comprehensive-analysis';
 
   /// Health check del MCP Server
   /// ✅ NO REQUIERE AUTENTICACIÓN
-  static const String mcpHealthUrl = '$mcpDirectUrl/health';
+  static String get mcpHealthUrl => '$mcpDirectUrl/health';
 
   /// URL para control del AI Bot
-  static const String aiBotControlUrl = aiBotBaseUrl;
+  static String get aiBotControlUrl => aiBotBaseUrl;
 
   /// URL para configuración dinámica del bot
-  static const String aiBotConfigUrl = '$aiBotBaseUrl/config';
+  static String get aiBotConfigUrl => '$aiBotBaseUrl/config';
+
+  /// URL para estado del bot
+  static String get aiBotStatusUrl => '$aiBotBaseUrl/status';
+
+  /// URL para iniciar el bot
+  static String get aiBotStartUrl => '$aiBotBaseUrl/start';
+
+  /// URL para detener el bot
+  static String get aiBotStopUrl => '$aiBotBaseUrl/stop';
+
+  /// URL para obtener posiciones del bot
+  static String get aiBotPositionsUrl => '$aiBotBaseUrl/positions';
 
   /// Alternativa: URL base para conexión directa (sin Gateway)
-  static const String apiBaseUrlDirect = '$scalpingDirectUrl/api/v1/scalping';
+  static String get apiBaseUrlDirect => '$scalpingDirectUrl/api/v1/scalping';
 
   /// URL base de WebSocket (conexión directa - WebSocket aún no disponible vía Gateway)
-  static const String wsBaseUrl = 'ws://$serverIp:8081/ws';
+  static String get wsBaseUrl => Environment.wsBaseUrl;
 
   // ============================================================================
   // Gateway Endpoints (paths absolutos desde gateway root)
@@ -195,6 +216,22 @@ class ApiConfig {
     }
   }
 
+  /// Get MATP base URL for environment
+  static String getMATPBaseUrl(String environment) {
+    switch (environment) {
+      case 'production':
+        return matpKongGatewayUrl;
+      case 'development':
+      default:
+        return matpKongGatewayUrl; // Use Kong Gateway by default
+    }
+  }
+
+  /// Get MCP gateway URL for JSON-RPC calls
+  static String getMCPGatewayUrl() {
+    return gatewayBaseUrl; // Port 9090 gateway for MCP tools
+  }
+
   /// Construye la URL completa para un WebSocket channel
   static String getWsUrl(String channel) {
     return wsBaseUrl; // Ya incluye /ws, no necesita channel
@@ -223,8 +260,19 @@ class ApiConfig {
       Uri.parse(apiBaseUrl);
 
       // Verificar que el server IP no esté vacío
-      if (serverIp.isEmpty) return false;
+      if (Environment.serverIp.isEmpty) return false;
 
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /// Valida que las URLs del sistema MATP estén correctamente configuradas
+  static bool validateMATPConfiguration() {
+    try {
+      Uri.parse(matpKongGatewayUrl);
+      Uri.parse(matpDirectUrl);
       return true;
     } catch (e) {
       return false;
@@ -234,13 +282,15 @@ class ApiConfig {
   /// Obtiene información de configuración para debugging
   static Map<String, String> getConfigInfo() {
     return {
-      'serverIp': serverIp,
+      'serverIp': Environment.serverIp,
       'gatewayBaseUrl': gatewayBaseUrl,
       'mcpDirectUrl': mcpDirectUrl,
       'scalpingDirectUrl': scalpingDirectUrl,
       'comprehensiveAnalysisUrl': comprehensiveAnalysisUrl,
       'aiBotConfigUrl': aiBotConfigUrl,
       'mcpToolsUrl': mcpToolsUrl,
+      'matpKongGatewayUrl': matpKongGatewayUrl,
+      'matpDirectUrl': matpDirectUrl,
     };
   }
 }

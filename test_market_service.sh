@@ -7,7 +7,7 @@ echo "================================================"
 # Test get_pairs_by_type - Futures
 echo ""
 echo "📊 Test: get_pairs_by_type - Futures"
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",
@@ -21,7 +21,7 @@ curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
 
 echo ""
 echo "📊 Test: get_pairs_by_type - Spot"
-curl -s -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -s -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

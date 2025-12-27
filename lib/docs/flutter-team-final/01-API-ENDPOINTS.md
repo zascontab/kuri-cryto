@@ -7,7 +7,7 @@
 
 ## 🎯 Información General
 
-**Base URL**: `http://192.168.100.145:10600`  
+**Base URL**: `http://192.168.1.6:10600`  
 **Autenticación**: ❌ NO requerida  
 **Formato**: JSON  
 **Protocolo**: HTTP
@@ -164,7 +164,7 @@ import 'package:dio/dio.dart';
 
 class TradingApiClient {
   final Dio dio = Dio();
-  final String baseUrl = 'http://192.168.100.145:10600';
+  final String baseUrl = 'http://192.168.1.6:10600';
 
   // Constructor
   TradingApiClient() {
@@ -292,7 +292,7 @@ try {
 ```bash
 #!/bin/bash
 
-BASE_URL="http://192.168.100.145:10600"
+BASE_URL="http://192.168.1.6:10600"
 
 echo "1. Health Check"
 curl -s "$BASE_URL/health" | jq '.status'
@@ -384,8 +384,8 @@ systemctl status trading-mcp-server
 
 **Solución**: Verificar conectividad de red
 ```bash
-ping 192.168.100.145
-curl http://192.168.100.145:10600/health
+ping 192.168.1.6
+curl http://192.168.1.6:10600/health
 ```
 
 ### Problema: 500 Error

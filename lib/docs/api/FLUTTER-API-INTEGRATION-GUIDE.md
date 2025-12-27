@@ -30,19 +30,19 @@ This guide provides complete API integration details for the Flutter mobile app 
 ```dart
 class ApiConfig {
   // Main API Gateway (recommended)
-  static const String baseUrl = 'http://192.168.100.145:9090';
+  static const String baseUrl = 'http://192.168.1.6:9090';
   
   // MCP Server Direct (for AI endpoints)
-  static const String mcpServerUrl = 'http://192.168.100.145:10600';
+  static const String mcpServerUrl = 'http://192.168.1.6:10600';
   
   // Scalping API Direct
-  static const String scalpingUrl = 'http://192.168.100.145:8081';
+  static const String scalpingUrl = 'http://192.168.1.6:8081';
 }
 ```
 
 ### Network Requirements
 - Ensure device is on the same network as the server
-- Server IP: `192.168.100.145`
+- Server IP: `192.168.1.6`
 - Ports: `9090` (Gateway), `10600` (MCP), `8081` (Scalping)
 
 ---

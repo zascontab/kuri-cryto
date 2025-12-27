@@ -161,8 +161,8 @@ export 'key_levels.dart';
    - Los servicios hacen peticiones directas sin headers de auth
 
 2. **URLs correctas** ✅
-   - `mcpDirectUrl`: `http://192.168.100.145:10600` ✅
-   - `aiBotBaseUrl`: `http://192.168.100.145:10600/api/v1/ai-bot` ✅
+   - `mcpDirectUrl`: `http://192.168.1.6:10600` ✅
+   - `aiBotBaseUrl`: `http://192.168.1.6:10600/api/v1/ai-bot` ✅
    - `comprehensiveAnalysisUrl`: Correcta ✅
 
 3. **Servicios funcionales** ✅

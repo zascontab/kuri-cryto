@@ -10,7 +10,7 @@
 ### Endpoint Único
 
 ```dart
-static const String baseUrl = 'http://192.168.100.145:9090';
+static const String baseUrl = 'http://192.168.1.6:9090';
 ```
 
 **¡Eso es todo!** Un solo endpoint para toda la aplicación.
@@ -23,13 +23,13 @@ static const String baseUrl = 'http://192.168.100.145:9090';
 
 ```bash
 # Health check del gateway
-curl http://192.168.100.145:9090/health
+curl http://192.168.1.6:9090/health
 
 # Información del gateway
-curl http://192.168.100.145:9090/api/gateway/info
+curl http://192.168.1.6:9090/api/gateway/info
 
 # Health del scalping
-curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/health
+curl http://192.168.1.6:9090/api/scalping/api/v1/scalping/health
 ```
 
 ### Desde Flutter
@@ -38,7 +38,7 @@ curl http://192.168.100.145:9090/api/scalping/api/v1/scalping/health
 import 'package:dio/dio.dart';
 
 final dio = Dio(BaseOptions(
-  baseUrl: 'http://192.168.100.145:9090',
+  baseUrl: 'http://192.168.1.6:9090',
 ));
 
 // Test de conectividad
@@ -66,7 +66,7 @@ dependencies:
 ```dart
 // lib/config/api_config.dart
 class ApiConfig {
-  static const String baseUrl = 'http://192.168.100.145:9090';
+  static const String baseUrl = 'http://192.168.1.6:9090';
   
   // Gateway endpoints
   static const String gatewayHealth = '/health';
@@ -349,7 +349,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 ### Configuración Actual
 
 ```
-IP Local:        192.168.100.145
+IP Local:        192.168.1.6
 Puerto Gateway:  9090
 ```
 
@@ -357,7 +357,7 @@ Puerto Gateway:  9090
 
 1. Conecta tu dispositivo a la misma red WiFi
 2. Abre un navegador en el dispositivo
-3. Visita: `http://192.168.100.145:9090/health`
+3. Visita: `http://192.168.1.6:9090/health`
 4. Deberías ver: `{"status":"ok","gateway":"running"}`
 
 ### Troubleshooting
@@ -371,7 +371,7 @@ Puerto Gateway:  9090
    ```
 3. Ping al servidor:
    ```bash
-   ping 192.168.100.145
+   ping 192.168.1.6
    ```
 
 ---

@@ -21,7 +21,7 @@ Todos los endpoints funcionan **sin headers de autenticación**. Simplemente hac
 
 ```dart
 // ✅ Así de simple
-final response = await dio.get('http://192.168.100.145:10600/api/v1/ai-bot/status');
+final response = await dio.get('http://192.168.1.6:10600/api/v1/ai-bot/status');
 ```
 
 ---
@@ -31,7 +31,7 @@ final response = await dio.get('http://192.168.100.145:10600/api/v1/ai-bot/statu
 ### Base URL
 
 ```
-http://192.168.100.145:10600
+http://192.168.1.6:10600
 ```
 
 ### Endpoints Principales
@@ -57,7 +57,7 @@ import 'package:dio/dio.dart';
 
 class TradingApiClient {
   final Dio dio = Dio();
-  final String baseUrl = 'http://192.168.100.145:10600';
+  final String baseUrl = 'http://192.168.1.6:10600';
 
   TradingApiClient() {
     dio.options.baseUrl = baseUrl;
@@ -412,7 +412,7 @@ try {
 Si tienen preguntas o problemas:
 
 1. **Revisar documentación**: `docs/API_ENDPOINTS_GUIDE.md`
-2. **Probar endpoints**: `curl http://192.168.100.145:10600/api/v1/ai-bot/status`
+2. **Probar endpoints**: `curl http://192.168.1.6:10600/api/v1/ai-bot/status`
 3. **Ver logs del servidor**: `journalctl -u trading-mcp-server -f`
 4. **Contactar backend team** para soporte
 

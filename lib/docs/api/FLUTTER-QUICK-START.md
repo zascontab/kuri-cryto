@@ -9,7 +9,7 @@
 ## 📋 Prerequisites
 
 1. Flutter app on same network as server
-2. Server IP: `192.168.100.145`
+2. Server IP: `192.168.1.6`
 3. Dio package installed: `dio: ^5.0.0`
 
 ---
@@ -34,9 +34,9 @@ dev_dependencies:
 ```dart
 // lib/config/api_config.dart
 class ApiConfig {
-  static const String baseUrl = 'http://192.168.100.145:9090';
-  static const String mcpServerUrl = 'http://192.168.100.145:10600';
-  static const String scalpingUrl = 'http://192.168.100.145:8081';
+  static const String baseUrl = 'http://192.168.1.6:9090';
+  static const String mcpServerUrl = 'http://192.168.1.6:10600';
+  static const String scalpingUrl = 'http://192.168.1.6:8081';
 }
 ```
 
@@ -679,7 +679,7 @@ class _TradingHomePageState extends State<TradingHomePage> {
     try {
       // Get price
       final priceResponse = await dio.post(
-        'http://192.168.100.145:9090/api/mcp/tools/execute',
+        'http://192.168.1.6:9090/api/mcp/tools/execute',
         data: {
           'jsonrpc': '2.0',
           'method': 'tools/call',
@@ -696,7 +696,7 @@ class _TradingHomePageState extends State<TradingHomePage> {
       
       // Get RSI
       final rsiResponse = await dio.post(
-        'http://192.168.100.145:9090/api/mcp/tools/execute',
+        'http://192.168.1.6:9090/api/mcp/tools/execute',
         data: {
           'jsonrpc': '2.0',
           'method': 'tools/call',
@@ -715,7 +715,7 @@ class _TradingHomePageState extends State<TradingHomePage> {
       
       // Get AI analysis
       final aiResponse = await dio.post(
-        'http://192.168.100.145:10600/api/v1/ai-bot/analyze',
+        'http://192.168.1.6:10600/api/v1/ai-bot/analyze',
         data: {
           'pair': selectedPair,
           'exchange': 'kucoin',
@@ -900,10 +900,10 @@ class _TradingHomePageState extends State<TradingHomePage> {
 ### Can't connect to server
 ```dart
 // Test with curl first
-// curl http://192.168.100.145:9090/health
+// curl http://192.168.1.6:9090/health
 
 // Check if device is on same network
-// Ping: ping 192.168.100.145
+// Ping: ping 192.168.1.6
 ```
 
 ### Timeout errors
@@ -923,7 +923,7 @@ Not applicable - server has CORS enabled
 
 - **Full API Docs**: `docs/FLUTTER-API-INTEGRATION-GUIDE.md`
 - **Test Results**: `docs/ENDPOINT-TEST-RESULTS.md`
-- **Server Status**: http://192.168.100.145:9090/health
+- **Server Status**: http://192.168.1.6:9090/health
 
 ---
 

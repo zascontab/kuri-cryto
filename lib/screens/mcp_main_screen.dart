@@ -19,7 +19,7 @@ class _MCPMainScreenState extends ConsumerState<MCPMainScreen>
   late TabController _tabController;
   String _selectedExchange = 'kucoin';
   String _selectedPair = 'BTC-USDT';
-  MarketType _selectedMarketType = MarketType.futures;
+  final MarketType _selectedMarketType = MarketType.futures;
 
   final List<String> _exchanges = ['kucoin', 'binance', 'bybit'];
 
@@ -36,7 +36,9 @@ class _MCPMainScreenState extends ConsumerState<MCPMainScreen>
   }
 
   Future<void> _onRefresh() async {
-    await Future.delayed(const Duration(milliseconds: 500));
+    // Refresh all providers
+    ref.invalidate(availablePairsProvider);
+    // Refresh other relevant providers as needed
   }
 
   @override
@@ -175,14 +177,14 @@ class _MCPMainScreenState extends ConsumerState<MCPMainScreen>
           controller: _tabController,
           children: [
             ComprehensiveAnalysisScreen(
-              symbol: _selectedPair,
-              exchange: _selectedExchange,
+              initialSymbol: _selectedPair,
+              initialExchange: _selectedExchange,
             ),
             McpSignalsScreen(
               exchange: _selectedExchange,
               pair: _selectedPair,
             ),
-            Center(
+            const Center(
               child: Text('Portfolio - Coming Soon'),
             ),
           ],

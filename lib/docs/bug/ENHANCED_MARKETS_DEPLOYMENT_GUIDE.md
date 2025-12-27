@@ -98,7 +98,7 @@ sudo systemctl start trading-mcp
 ### Test 1: Verificar Formato Enhanced
 
 ```bash
-curl -X POST http://192.168.100.145:9090/api/mcp/tools/execute \
+curl -X POST http://192.168.1.6:9090/api/mcp/tools/execute \
   -H "Content-Type: application/json" \
   -d '{
     "jsonrpc": "2.0",

@@ -204,9 +204,9 @@ proyecto/
 - `internal/mcp/remaining_tools.go` - Actualización de schema
 
 ### Endpoints Relevantes:
-- `http://192.168.100.145:9090/api/mcp/tools/execute` - Gateway
-- `http://192.168.100.145:10600/mcp` - MCP Server directo
-- `http://192.168.100.145:10600/health` - Health check
+- `http://192.168.1.6:9090/api/mcp/tools/execute` - Gateway
+- `http://192.168.1.6:10600/mcp` - MCP Server directo
+- `http://192.168.1.6:10600/health` - Health check
 
 ---
 

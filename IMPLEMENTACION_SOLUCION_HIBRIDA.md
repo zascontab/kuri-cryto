@@ -53,7 +53,7 @@ getMarkets(exchange: 'kucoin', marketType: 'futures')
 
 ```bash
 # Test Futures
-curl -X POST "http://192.168.100.145:9090/api/mcp/tools/execute" \
+curl -X POST "http://192.168.1.6:9090/api/mcp/tools/execute" \
   -d '{"name":"get_pairs_by_type","arguments":{"exchange":"kucoin","market_type":"futures"}}'
 ```
 
