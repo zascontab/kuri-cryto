@@ -6,7 +6,9 @@ import 'config/environment.dart';
 import 'l10n/l10n_export.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart' as theme_provider;
+import 'providers/auth_provider.dart';
 import 'screens/main_screen.dart';
+import 'screens/login_screen.dart';
 import 'models/adapters/position_adapter.dart';
 import 'models/adapters/trade_adapter.dart';
 import 'models/adapters/strategy_adapter.dart';
@@ -14,6 +16,7 @@ import 'models/adapters/risk_state_adapter.dart';
 import 'models/adapters/metrics_adapter.dart';
 import 'models/adapters/system_status_adapter.dart';
 import 'services/cache_service.dart';
+import 'services/auth_service.dart';
 
 /// Punto de entrada principal de la aplicación Kuri Crypto
 void main() async {
@@ -34,6 +37,9 @@ void main() async {
 
   // Inicializar el servicio de caché
   await CacheService.instance.initialize();
+
+  // Inicializar el servicio de autenticación
+  await AuthService().initialize();
 
   // Ejecutar la aplicación envuelta en ProviderScope para Riverpod
   runApp(
@@ -115,19 +121,20 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     // Initialize environment configuration
     Environment.printConfig();
 
-    // TODO: Verificar si el usuario está autenticado
-    // final isAuthenticated = await ref.read(authProvider).isAuthenticated();
-
     // Wait a bit to ensure the splash screen is fully rendered
     await Future.delayed(const Duration(milliseconds: 1500));
 
-    // Schedule navigation after the current build is complete
+    // Verificar si el usuario está autenticado
     if (mounted) {
+      final isAuthenticated = ref.read(isAuthenticatedProvider);
+      
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
-              builder: (context) => const MainScreen(),
+              builder: (context) => isAuthenticated 
+                  ? const MainScreen() 
+                  : const LoginScreen(),
             ),
           );
         }
