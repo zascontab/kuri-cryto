@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'firebase_options.dart';
 import 'config/app_theme.dart';
 import 'config/environment.dart';
 import 'l10n/l10n_export.dart';
 import 'providers/locale_provider.dart';
 import 'providers/theme_provider.dart' as theme_provider;
+import 'providers/firebase_messaging_provider.dart';
 import 'screens/main_screen.dart';
 import 'models/adapters/position_adapter.dart';
 import 'models/adapters/trade_adapter.dart';
@@ -15,10 +19,25 @@ import 'models/adapters/metrics_adapter.dart';
 import 'models/adapters/system_status_adapter.dart';
 import 'services/cache_service.dart';
 
+/// Handler para mensajes en background de FCM
+@pragma('vm:entry-point')
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  debugPrint('📩 Background message: ${message.messageId}');
+}
+
 /// Punto de entrada principal de la aplicación Kuri Crypto
 void main() async {
   // Asegurar que los bindings de Flutter estén inicializados
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Inicializar Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Configurar handler de mensajes en background
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   // Inicializar Hive para almacenamiento local
   await Hive.initFlutter();
@@ -51,6 +70,26 @@ class KuriCryptoApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(localeProvider);
     final themeMode = ref.watch(theme_provider.themeProvider);
+
+    // Inicializar Firebase Messaging
+    ref.watch(fcmInitializationProvider);
+
+    // Escuchar el token FCM solo en logs (para desarrollo/debug)
+    ref.listen(fcmTokenProvider, (previous, next) {
+      next.whenData((token) {
+        if (token != null) {
+          debugPrint('🔥 FCM Token: $token');
+        }
+      });
+    });
+
+    // Escuchar notificaciones recibidas
+    ref.listen(notificationsStreamProvider, (previous, next) {
+      next.whenData((notification) {
+        debugPrint('🔔 Notificación recibida: ${notification.title}');
+        // Aquí puedes agregar lógica adicional como mostrar SnackBar o navegar
+      });
+    });
 
     // Convertir nuestro ThemeMode al ThemeMode de Flutter
     final flutterThemeMode = _convertThemeMode(themeMode);

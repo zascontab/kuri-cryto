@@ -1,5 +1,5 @@
 {
-    "dart.flutterSdkPath": "/home/development/flutter",
+    "dart.flutterSdkPath": "C:\\Users\\inti\\flutter",
     "dart.devToolsTheme": "dark",
     "dart.openDevTools": "flutter",
     "dart.flutterCreateAndroidLanguage": "kotlin",
@@ -14,5 +14,6 @@
         "**/.dart_tool": true,
         "**/build": true
     },
-    "kiroAgent.configureMCP": "Disabled"
+    "kiroAgent.configureMCP": "Disabled",
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

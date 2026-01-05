@@ -42,6 +42,10 @@ dependencies:
   logger: ^2.0.2+1
   collection: ^1.18.0
 
+  # Firebase & Push Notifications
+  firebase_core: ^2.24.2
+  firebase_messaging: ^14.7.9
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

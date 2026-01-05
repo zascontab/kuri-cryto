@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1059556951172",
+    "project_id": "kuri-crypto",
+    "storage_bucket": "kuri-crypto.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1059556951172:android:2b1b9607c52ff92a71eed1",
+        "android_client_info": {
+          "package_name": "com.example.kuri_crypto"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-ceJDM4404KkOlYtNL3Ldrm019eh-AFM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
